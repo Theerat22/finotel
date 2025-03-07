@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { type LucideIcon } from 'lucide-react';
-// import Link from 'next/link';
+import Link from 'next/link';
 import { FaHotel } from 'react-icons/fa';import { 
   Home, 
   BarChart, 
@@ -40,10 +40,10 @@ const Navbar: React.FC<NavbarProps> = ({ activePage, setActivePage }) => {
         <div className="flex items-center justify-between h-16">
           {/* Logo Section */}
           <div className="flex items-center">
-            <div className="flex items-center">
+            <Link href={'/dashboard'} className="flex items-center">
               <FaHotel className="text-blue-600 text-3xl mr-2" />
               <span className="text-2xl font-bold text-blue-600">Finotel</span>
-            </div>
+            </Link>
         </div>
 
           {/* Mobile Menu Button */}

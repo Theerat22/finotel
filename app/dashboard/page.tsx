@@ -2,8 +2,7 @@
 
 import React, { useState } from 'react';
 import Navbar from '@/app/components/Navbar';
-import OverviewPage from '@/app/dashboard/page/Overview';
-// import HotelDashboard from '@/app/pages/hotel';
+import OverviewPage from '@/app/dashboard/pages/Overview';
 
 const Dashboard: React.FC = () => {
   const [activePage, setActivePage] = useState('overview');

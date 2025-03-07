@@ -16,10 +16,10 @@ export default function Home() {
       <header className="fixed w-full bg-white shadow-md z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <div className="flex items-center">
+            <Link href={'/'} className="flex items-center">
               <FaHotel className="text-blue-600 text-3xl mr-2" />
               <span className="text-2xl font-bold text-blue-600">Finotel</span>
-            </div>
+            </Link>
             <nav className="hidden md:flex space-x-8">
               <Link href="#features" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
                 คุณสมบัติ
@@ -66,7 +66,7 @@ export default function Home() {
                   เพื่อช่วยให้คุณตัดสินใจทางการเงินได้แม่นยำยิ่งขึ้น
                 </p>
                 <Link 
-                  href="/page/onboarding/step1" 
+                  href="get-start" 
                   className="px-8 py-4 bg-blue-600 text-white rounded-lg font-medium text-lg hover:bg-blue-700 transition-colors inline-flex items-center"
                 >
                   เริ่มต้นใช้งาน
