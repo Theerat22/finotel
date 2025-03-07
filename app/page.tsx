@@ -1,100 +1,240 @@
-import Image from "next/image";
+import { useState } from 'react';
+import Head from 'next/head';
+import Image from 'next/image';
+import Link from 'next/link';
+import { FaChartLine, FaHotel, FaMoneyBillWave, FaRobot } from 'react-icons/fa';
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-blue-50">
+      <Head>
+        <title>Finotel | ระบบจัดการการเงินของโรงแรมด้วย AI</title>
+        <meta name="description" content="ระบบจัดการการเงินของโรงแรมที่ใช้ AI/ML เพื่อวิเคราะห์แนวโน้มรายได้ ต้นทุน และราคาห้องพัก" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <header className="fixed w-full bg-white shadow-md z-50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center">
+              <FaHotel className="text-blue-600 text-3xl mr-2" />
+              <span className="text-2xl font-bold text-blue-600">Finotel</span>
+            </div>
+            <nav className="hidden md:flex space-x-8">
+              <Link href="#features" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+                คุณสมบัติ
+              </Link>
+              <Link href="#pricing" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+                ราคา
+              </Link>
+              <Link href="#testimonials" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+                ความคิดเห็น
+              </Link>
+              <Link href="#contact" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+                ติดต่อ
+              </Link>
+            </nav>
+            <div className="hidden md:flex space-x-4">
+              <Link href="/login" className="px-4 py-2 text-blue-600 font-medium">
+                เข้าสู่ระบบ
+              </Link>
+              <Link href="/register" className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                ลงทะเบียน
+              </Link>
+            </div>
+            <button className="md:hidden text-gray-700">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
         </div>
+      </header>
+
+      <main>
+        {/* Hero Section */}
+        <section className="pt-32 pb-20">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col md:flex-row items-center">
+              <div className="md:w-1/2 mb-10 md:mb-0">
+                <h1 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight mb-6">
+                  จัดการการเงินโรงแรมของคุณด้วย
+                  <span className="text-blue-600"> AI</span>
+                </h1>
+                <p className="text-xl text-gray-600 mb-8">
+                  ระบบจัดการการเงินที่ช่วยวิเคราะห์แนวโน้มรายได้ ต้นทุน และราคาห้องพัก
+                  เพื่อช่วยให้คุณตัดสินใจทางการเงินได้แม่นยำยิ่งขึ้น
+                </p>
+                <Link 
+                  href="/page/onboarding/step1" 
+                  className="px-8 py-4 bg-blue-600 text-white rounded-lg font-medium text-lg hover:bg-blue-700 transition-colors inline-flex items-center"
+                >
+                  เริ่มต้นใช้งาน
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </Link>
+              </div>
+              <div className="md:w-1/2">
+                <div className="relative h-64 md:h-96 w-full">
+                  <Image 
+                    src="/api/placeholder/600/400" 
+                    alt="Finotel Dashboard" 
+                    layout="fill"
+                    objectFit="contain"
+                    className="rounded-lg shadow-xl"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section id="features" className="py-20 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold text-gray-800 mb-4">คุณสมบัติหลัก</h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                ระบบของเราถูกออกแบบมาเพื่อทำให้การจัดการการเงินของโรงแรมเป็นเรื่องง่าย
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="bg-gray-50 p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <div className="text-blue-600 text-4xl mb-4">
+                  <FaChartLine />
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-gray-800">วิเคราะห์แนวโน้มรายได้</h3>
+                <p className="text-gray-600">
+                  ใช้ AI วิเคราะห์ข้อมูลรายได้ในอดีตเพื่อคาดการณ์แนวโน้มในอนาคตและช่วยในการตัดสินใจที่ดีขึ้น
+                </p>
+              </div>
+              <div className="bg-gray-50 p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <div className="text-blue-600 text-4xl mb-4">
+                  <FaMoneyBillWave />
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-gray-800">จัดการต้นทุนอัตโนมัติ</h3>
+                <p className="text-gray-600">
+                  ระบบติดตามและวิเคราะห์ต้นทุนทั้งหมดเพื่อระบุโอกาสในการประหยัดและเพิ่มกำไร
+                </p>
+              </div>
+              <div className="bg-gray-50 p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <div className="text-blue-600 text-4xl mb-4">
+                  <FaRobot />
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-gray-800">ปรับราคาห้องพักอัจฉริยะ</h3>
+                <p className="text-gray-600">
+                  ใช้ ML เพื่อปรับราคาห้องพักตามความต้องการของตลาด ฤดูกาล และอัตราการจองในปัจจุบัน
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works */}
+        <section className="py-20 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold text-gray-800 mb-4">วิธีการเริ่มต้นใช้งาน</h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                เริ่มต้นใช้งาน Finotel ได้ง่ายๆ เพียง 3 ขั้นตอน
+              </p>
+            </div>
+            <div className="max-w-4xl mx-auto">
+              <div className="flex flex-col md:flex-row items-center mb-12">
+                <div className="md:w-1/3 flex justify-center mb-6 md:mb-0">
+                  <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold">1</div>
+                </div>
+                <div className="md:w-2/3">
+                  <h3 className="text-xl font-bold mb-2 text-gray-800">หน้าเริ่มต้น</h3>
+                  <p className="text-gray-600">คลิกปุ่ม "เริ่มต้นใช้งาน" เพื่อเริ่มการตั้งค่าระบบสำหรับโรงแรมของคุณ</p>
+                </div>
+              </div>
+              <div className="flex flex-col md:flex-row items-center mb-12">
+                <div className="md:w-1/3 flex justify-center mb-6 md:mb-0">
+                  <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold">2</div>
+                </div>
+                <div className="md:w-2/3">
+                  <h3 className="text-xl font-bold mb-2 text-gray-800">กรอกข้อมูลโรงแรม</h3>
+                  <p className="text-gray-600">กรอกชื่อโรงแรมและเลือกประเภทของโรงแรมเพื่อปรับแต่งระบบให้เหมาะกับธุรกิจของคุณ</p>
+                </div>
+              </div>
+              <div className="flex flex-col md:flex-row items-center">
+                <div className="md:w-1/3 flex justify-center mb-6 md:mb-0">
+                  <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold">3</div>
+                </div>
+                <div className="md:w-2/3">
+                  <h3 className="text-xl font-bold mb-2 text-gray-800">ระบุตำแหน่งที่ตั้ง</h3>
+                  <p className="text-gray-600">ใช้ Google Maps เพื่อกำหนดตำแหน่งที่ตั้งของโรงแรม ช่วยให้ระบบวิเคราะห์ข้อมูลตามทำเลที่ตั้งได้แม่นยำยิ่งขึ้น</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-16 bg-blue-600">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-3xl font-bold text-white mb-6">พร้อมที่จะเพิ่มประสิทธิภาพการจัดการการเงินของโรงแรมคุณหรือยัง?</h2>
+            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+              เริ่มใช้งาน Finotel วันนี้และดูการเปลี่ยนแปลงที่ระบบ AI/ML ของเราสามารถทำให้กับธุรกิจของคุณ
+            </p>
+            <Link 
+              href="/onboarding" 
+              className="px-8 py-4 bg-white text-blue-600 rounded-lg font-medium text-lg hover:bg-gray-100 transition-colors inline-flex items-center"
+            >
+              เริ่มต้นใช้งานฟรี
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </Link>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer className="bg-gray-800 text-white py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center mb-4">
+                <FaHotel className="text-blue-400 text-2xl mr-2" />
+                <span className="text-xl font-bold">Finotel</span>
+              </div>
+              <p className="text-gray-400">
+                ระบบจัดการการเงินของโรงแรมที่ใช้ AI/ML เพื่อเพิ่มกำไรและลดต้นทุน
+              </p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-4">เมนูหลัก</h3>
+              <ul className="space-y-2">
+                <li><Link href="#features" className="text-gray-400 hover:text-white transition-colors">คุณสมบัติ</Link></li>
+                <li><Link href="#pricing" className="text-gray-400 hover:text-white transition-colors">ราคา</Link></li>
+                <li><Link href="#testimonials" className="text-gray-400 hover:text-white transition-colors">ความคิดเห็น</Link></li>
+                <li><Link href="#contact" className="text-gray-400 hover:text-white transition-colors">ติดต่อ</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-4">เกี่ยวกับเรา</h3>
+              <ul className="space-y-2">
+                <li><Link href="/about" className="text-gray-400 hover:text-white transition-colors">เกี่ยวกับ Finotel</Link></li>
+                <li><Link href="/team" className="text-gray-400 hover:text-white transition-colors">ทีมงาน</Link></li>
+                <li><Link href="/careers" className="text-gray-400 hover:text-white transition-colors">ร่วมงานกับเรา</Link></li>
+                <li><Link href="/blog" className="text-gray-400 hover:text-white transition-colors">บล็อก</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-4">ติดต่อ</h3>
+              <ul className="space-y-2">
+                <li className="text-gray-400">support@finotel.com</li>
+                <li className="text-gray-400">+66 2 123 4567</li>
+                <li className="text-gray-400">กรุงเทพมหานคร, ประเทศไทย</li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-gray-700 mt-12 pt-8 text-center text-gray-400">
+            <p>&copy; {new Date().getFullYear()} Finotel. สงวนลิขสิทธิ์ทั้งหมด.</p>
+          </div>
+        </div>
       </footer>
     </div>
   );
