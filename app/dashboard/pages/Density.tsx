@@ -348,7 +348,7 @@ const HotelFinancialForecast: React.FC = () => {
       </Head>
       
       <div className="container mx-auto px-4 py-6">
-        <h1 className="text-3xl font-bold text-blue-600 text-center mb-6">แดชบอร์ดการจองโรงแรม</h1>
+        <h1 className="text-3xl font-bold text-blue-600 text-center mb-6">อัตราการเข้าพักของโรงแรม</h1>
         
         {/* ปุ่มแท็บ */}
         <div className="mb-6 flex flex-wrap justify-center gap-2">
@@ -356,31 +356,19 @@ const HotelFinancialForecast: React.FC = () => {
             className={`px-4 py-2 rounded-lg ${selectedTab === 'monthly' ? 'bg-blue-600 text-white font-bold' : 'bg-gray-200 text-gray-800'}`}
             onClick={() => setSelectedTab('monthly')}
           >
-            ข้อมูลรายเดือน
+            รายเดือน
           </button>
           <button 
             className={`px-4 py-2 rounded-lg ${selectedTab === 'weekly' ? 'bg-blue-600 text-white font-bold' : 'bg-gray-200 text-gray-800'}`}
             onClick={() => setSelectedTab('weekly')}
           >
-            แนวโน้มรายสัปดาห์
+            รายสัปดาห์
           </button>
           <button 
             className={`px-4 py-2 rounded-lg ${selectedTab === 'heatmap' ? 'bg-blue-600 text-white font-bold' : 'bg-gray-200 text-gray-800'}`}
             onClick={() => setSelectedTab('heatmap')}
           >
-            แผนภูมิความร้อนรายวัน
-          </button>
-          <button 
-            className={`px-4 py-2 rounded-lg ${selectedTab === 'revenue' ? 'bg-blue-600 text-white font-bold' : 'bg-gray-200 text-gray-800'}`}
-            onClick={() => setSelectedTab('revenue')}
-          >
-            แผนรายได้
-          </button>
-          <button 
-            className={`px-4 py-2 rounded-lg ${selectedTab === 'promotion' ? 'bg-blue-600 text-white font-bold' : 'bg-gray-200 text-gray-800'}`}
-            onClick={() => setSelectedTab('promotion')}
-          >
-            แผนโปรโมชั่น
+            รายวัน
           </button>
         </div>
         
@@ -391,7 +379,7 @@ const HotelFinancialForecast: React.FC = () => {
             <div className="space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-gray-600">อัตราการเข้าพักเฉลี่ย (2022):</span>
-                <span className="text-lg font-bold">{averageActualOccupancy}%</span>
+                <span className="text-lg font-bold text-blue-600">{averageActualOccupancy}%</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-gray-600">อัตราการเข้าพักที่คาดการณ์ (2023):</span>
@@ -435,7 +423,7 @@ const HotelFinancialForecast: React.FC = () => {
             <ul className="space-y-1 text-gray-700">
               <li className="flex items-start">
                 <span className="text-blue-500 mr-2">•</span>
-                <span>เพิ่มราคาห้องในช่วง {peakMonth.month} (ช่วงฤดูสูง)</span>
+                <span>เพิ่มราคาห้องในช่วง {peakMonth.month} (ช่วง High Season)</span>
               </li>
               <li className="flex items-start">
                 <span className="text-blue-500 mr-2">•</span>
@@ -607,7 +595,7 @@ const HotelFinancialForecast: React.FC = () => {
                               className={`p-1 border text-center ${bgColorClass} ${textColorClass}`}
                               title={`${data.occupancyRate.toFixed(1)}% | ${data.dynamicPrice} บาท${data.is_holiday ? ' | ' + data.holiday_name : ''}`}
                             >
-                              {data.occupancyRate.toFixed(0)}{symbol}
+                              {symbol}
                             </td>
                           );
                         })}
@@ -633,217 +621,6 @@ const HotelFinancialForecast: React.FC = () => {
                   <div className="flex items-center">
                     <span className="text-blue-500 mr-2">⭐</span>
                     <span className="text-gray-700">ฤดูกาลท่องเที่ยวสูง</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        
-        {/* แท็บรายได้ */}
-        {selectedTab === 'revenue' && (
-          <div className="space-y-8">
-            <div className="bg-white rounded-lg shadow-md p-4">
-              <h2 className="text-xl font-semibold mb-4 text-center">การพยากรณ์รายได้รายเดือน (บาท)</h2>
-              <ResponsiveContainer width="100%" height={300}>
-                <ComposedChart data={revenueData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip formatter={(value) => [`${value.toLocaleString()} บาท`, 'รายได้']} />
-                  <Legend />
-                  <Bar dataKey="estimatedRevenue" name="รายได้ที่คาดการณ์" fill="#8884d8" />
-                  <Line type="monotone" dataKey="target_revenue" name="เป้าหมายรายได้" stroke="#ff7300" />
-                </ComposedChart>
-              </ResponsiveContainer>
-            </div>
-            
-            <div className="bg-white rounded-lg shadow-md p-4">
-              <h2 className="text-xl font-semibold mb-4 text-center">กลยุทธ์การกำหนดราคาแบบไดนามิก</h2>
-              <ResponsiveContainer width="100%" height={300}>
-                <ComposedChart data={revenueData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis yAxisId="left" orientation="left" />
-                  <YAxis yAxisId="right" orientation="right" domain={[0, 100]} />
-                  <Tooltip />
-                  <Legend />
-                  <Bar yAxisId="left" dataKey="dynamicPrice" name="ราคาเฉลี่ย (บาท)" fill="#8884d8" />
-                  <Line yAxisId="right" type="monotone" dataKey="forecastOccupancy" name="อัตราการเข้าพัก (%)" stroke="#ff7300" />
-                </ComposedChart>
-              </ResponsiveContainer>
-            </div>
-            
-            <div className="bg-white rounded-lg shadow-md p-4">
-              <h2 className="text-xl font-semibold mb-4">รายงานการจัดการรายได้</h2>
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr className="bg-blue-50">
-                      <th className="p-2 border">เดือน</th>
-                      <th className="p-2 border">อัตราการเข้าพัก</th>
-                      <th className="p-2 border">ราคาเฉลี่ย</th>
-                      <th className="p-2 border">รายได้ที่คาดการณ์</th>
-                      <th className="p-2 border">เป้าหมาย</th>
-                      <th className="p-2 border">ช่องว่าง</th>
-                      <th className="p-2 border">กลยุทธ์</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {revenueData.map((item, index) => {
-                      const gap = (item.target_revenue || 0) - item.estimatedRevenue;
-                      let strategy = "";
-                      
-                      if (gap > 0) {
-                        if (item.forecastOccupancy < 50) {
-                          strategy = "เพิ่มอัตราการเข้าพักด้วยโปรโมชั่น";
-                        } else {
-                          strategy = "เพิ่มราคาห้องพัก";
-                        }
-                      } else {
-                        strategy = "รักษากลยุทธ์ปัจจุบัน";
-                      }
-                      
-                      return (
-                        <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                          <td className="p-2 border font-medium">{item.month}</td>
-                          <td className="p-2 border">{item.forecastOccupancy}%</td>
-                          <td className="p-2 border">{item.dynamicPrice.toLocaleString()} บาท</td>
-                          <td className="p-2 border">{item.estimatedRevenue.toLocaleString()} บาท</td>
-                          <td className="p-2 border">{(item.target_revenue || 0).toLocaleString()} บาท</td>
-                          <td className={`p-2 border ${gap > 0 ? 'text-red-600' : 'text-green-600'}`}>
-                            {gap > 0 ? '-' : '+'}{Math.abs(gap).toLocaleString()} บาท
-                          </td>
-                          <td className="p-2 border text-sm">{strategy}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                  <tfoot>
-                    <tr className="bg-blue-100 font-bold">
-                      <td className="p-2 border">รวม</td>
-                      <td className="p-2 border">{averageForecastOccupancy}%</td>
-                      <td className="p-2 border">-</td>
-                      <td className="p-2 border">{totalYearlyRevenue.toLocaleString()} บาท</td>
-                      <td className="p-2 border">{targetYearlyRevenue.toLocaleString()} บาท</td>
-                      <td className="p-2 border">
-                        {(targetYearlyRevenue - totalYearlyRevenue > 0 ? '-' : '+')}{Math.abs(targetYearlyRevenue - totalYearlyRevenue).toLocaleString()} บาท
-                      </td>
-                      <td className="p-2 border">-</td>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
-            </div>
-          </div>
-        )}
-        
-        {/* แท็บโปรโมชั่น */}
-        {selectedTab === 'promotion' && (
-          <div className="space-y-8">
-            <div className="bg-white rounded-lg shadow-md p-4">
-              <h2 className="text-xl font-semibold mb-4 text-center">แผนโปรโมชั่นสำหรับเดือนที่มีอัตราการเข้าพักต่ำ</h2>
-              
-              {promotionPlan.length > 0 ? (
-                <div className="overflow-x-auto">
-                  <table className="w-full border-collapse">
-                    <thead>
-                      <tr className="bg-blue-50">
-                        <th className="p-2 border">เดือน</th>
-                        <th className="p-2 border">อัตราการเข้าพักปัจจุบัน</th>
-                        <th className="p-2 border">ประเภทโปรโมชั่น</th>
-                        <th className="p-2 border">ส่วนลด</th>
-                        <th className="p-2 border">การเพิ่มขึ้นที่คาดหวัง</th>
-                        <th className="p-2 border">อัตราการเข้าพักที่คาดการณ์</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {promotionPlan.map((item, index) => (
-                        <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                          <td className="p-2 border font-medium">{item.month}</td>
-                          <td className="p-2 border">{item.occupancyRate.toFixed(1)}%</td>
-                          <td className="p-2 border">{item.promotionType}</td>
-                          <td className="p-2 border">{item.discountPercentage}%</td>
-                          <td className="p-2 border">+{item.estimatedBookingIncrease}%</td>
-                          <td className="p-2 border font-bold text-blue-600">
-                            {(item.occupancyRate + (item.occupancyRate * item.estimatedBookingIncrease / 100)).toFixed(1)}%
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <div className="text-center p-8 text-gray-500">
-                  ไม่จำเป็นต้องมีแผนโปรโมชั่น - ทุกเดือนมีการคาดการณ์อัตราการเข้าพักที่เพียงพอแล้ว
-                </div>
-              )}
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white rounded-lg shadow-md p-4">
-                <h2 className="text-xl font-semibold mb-4">Marketing Channels</h2>
-                <div className="space-y-4">
-                  <div className="flex items-center p-3 border rounded-lg hover:bg-blue-50">
-                    <div className="mr-3 text-blue-500 text-2xl">🌐</div>
-                    <div>
-                      <h3 className="font-medium">Online Travel Agencies (OTAs)</h3>
-                      <p className="text-sm text-gray-600">Booking.com, Agoda, Expedia</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center p-3 border rounded-lg hover:bg-blue-50">
-                    <div className="mr-3 text-blue-500 text-2xl">📱</div>
-                    <div>
-                      <h3 className="font-medium">Social Media</h3>
-                      <p className="text-sm text-gray-600">Facebook, Instagram, LINE</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center p-3 border rounded-lg hover:bg-blue-50">
-                    <div className="mr-3 text-blue-500 text-2xl">✉️</div>
-                    <div>
-                      <h3 className="font-medium">Email Marketing</h3>
-                      <p className="text-sm text-gray-600">Past guests, Newsletter subscribers</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center p-3 border rounded-lg hover:bg-blue-50">
-                    <div className="mr-3 text-blue-500 text-2xl">🤝</div>
-                    <div>
-                      <h3 className="font-medium">Partnerships</h3>
-                      <p className="text-sm text-gray-600">Local attractions, Tour operators</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-white rounded-lg shadow-md p-4">
-                <h2 className="text-xl font-semibold mb-4">Promotion Ideas</h2>
-                <div className="space-y-4">
-                  <div className="p-3 border rounded-lg hover:bg-green-50">
-                    <h3 className="font-medium text-green-700">Early Bird Discount</h3>
-                    <p className="text-sm text-gray-600">15% off when booking at least 60 days in advance</p>
-                  </div>
-                  
-                  <div className="p-3 border rounded-lg hover:bg-green-50">
-                    <h3 className="font-medium text-green-700">Stay 3 Pay 2</h3>
-                    <p className="text-sm text-gray-600">Free night when booking 3 nights or more</p>
-                  </div>
-                  
-                  <div className="p-3 border rounded-lg hover:bg-green-50">
-                    <h3 className="font-medium text-green-700">Package Deals</h3>
-                    <p className="text-sm text-gray-600">Room + breakfast + airport transfer bundle</p>
-                  </div>
-                  
-                  <div className="p-3 border rounded-lg hover:bg-green-50">
-                    <h3 className="font-medium text-green-700">Flash Sales</h3>
-                    <p className="text-sm text-gray-600">Limited-time offers with significant discounts</p>
-                  </div>
-                  
-                  <div className="p-3 border rounded-lg hover:bg-green-50">
-                    <h3 className="font-medium text-green-700">Loyalty Program</h3>
-                    <p className="text-sm text-gray-600">Reward points and special perks for repeat guests</p>
                   </div>
                 </div>
               </div>

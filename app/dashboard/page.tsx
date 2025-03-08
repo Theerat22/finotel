@@ -3,14 +3,17 @@
 import React, { useState } from 'react';
 import Navbar from '@/app/components/Navbar';
 import HotelFinancialForecast from './pages/Density';
+import DynamicPricing from './pages/DynamicPricing';
+import ExpenseAnalysis from '@/app/dashboard/pages/ExpenseAnalysis';
 
 const Dashboard: React.FC = () => {
   const [activePage, setActivePage] = useState('overview');
 
-  // Render the active page
   const renderPage = () => {
     switch(activePage) {
       case 'overview': return <HotelFinancialForecast />;
+      case 'hotel': return <ExpenseAnalysis />;
+      case 'financial': return <DynamicPricing />;
       default: return <HotelFinancialForecast />;
     }
   };
