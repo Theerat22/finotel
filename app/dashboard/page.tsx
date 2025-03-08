@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Navbar from '@/app/components/Navbar';
-import OverviewPage from '@/app/dashboard/pages/Overview';
+import HotelFinancialForecast from './pages/Density';
 
 const Dashboard: React.FC = () => {
   const [activePage, setActivePage] = useState('overview');
@@ -10,9 +10,8 @@ const Dashboard: React.FC = () => {
   // Render the active page
   const renderPage = () => {
     switch(activePage) {
-      case 'overview': return <OverviewPage />;
-      // case 'hotel': return <HotelDashboard />;
-      default: return <OverviewPage />;
+      case 'overview': return <HotelFinancialForecast />;
+      default: return <HotelFinancialForecast />;
     }
   };
 
@@ -22,7 +21,6 @@ const Dashboard: React.FC = () => {
         activePage={activePage} 
         setActivePage={setActivePage} 
       />
-
       <main className="pt-16 flex-grow">
         {renderPage()}
       </main>

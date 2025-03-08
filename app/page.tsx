@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaChartLine, FaHotel, FaMoneyBillWave, FaRobot } from 'react-icons/fa';
+import Dashboard from '@/public/imgs/dashboard.png';
 
 export default function Home() {
   return (
@@ -76,13 +77,13 @@ export default function Home() {
                 </Link>
               </div>
               <div className="md:w-1/2">
-                <div className="relative h-64 md:h-96 w-full">
+                <div className="relative mt-3 h-64 md:h-96 w-full">
                   <Image 
-                    src="/api/placeholder/600/400" 
+                    src={Dashboard}
                     alt="Finotel Dashboard" 
-                    layout="fill"
+                    layout="fit"
                     objectFit="contain"
-                    className="rounded-lg shadow-xl"
+                    className="rounded-lg shadow-lg"
                   />
                 </div>
               </div>

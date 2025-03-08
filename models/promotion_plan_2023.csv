@@ -1,0 +1,11 @@
+month,occupancy_rate,promotion_type,discount_percentage,estimated_booking_increase
+January,12.370322580645162,Early Bird Discount,15,20
+February,6.249285714285714,Stay 3 Pay 2,33,25
+March,4.928709677419356,Free Breakfast,10,15
+April,28.452333333333332,Free Airport Transfer,5,10
+May,18.351290322580645,Early Bird Discount,15,20
+June,6.9656666666666665,Stay 3 Pay 2,33,25
+July,16.48032258064516,Free Breakfast,10,15
+August,11.61225806451613,Free Airport Transfer,5,10
+September,7.659000000000001,Early Bird Discount,15,20
+November,39.212,Stay 3 Pay 2,33,25
