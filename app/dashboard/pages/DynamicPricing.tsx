@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
   ResponsiveContainer, ComposedChart 
@@ -29,6 +29,9 @@ interface CombinedDataItem {
   dynamicPrice: number;
   estimatedRevenue: number;
   target_revenue?: number;
+  revPER?: number;
+  revPERPercentage?: number;
+  potentialRevenue?: number;
 }
 
 interface DailyDataItem {
@@ -49,13 +52,6 @@ interface WeeklyDataItem {
   occupancyRate: number;
 }
 
-interface PromotionPlanItem {
-  month: string;
-  occupancyRate: number;
-  promotionType: string;
-  discountPercentage: number;
-  estimatedBookingIncrease: number;
-}
 
 // Generate data functions
 const generateHistoricalData = (): HistoricalDataItem[] => {
@@ -168,7 +164,7 @@ const generateDailyData = (): DailyDataItem[] => {
     
     days.forEach(day => {
       if (day <= maxDays) {
-        let baseOccupancy = 50;
+        const baseOccupancy = 50;
         
         const dayOfWeek = (day % 7);
         const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
@@ -229,7 +225,7 @@ const generateDailyData = (): DailyDataItem[] => {
 const generateWeeklyData = (): WeeklyDataItem[] => {
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   
-  return daysOfWeek.map((day, index) => {
+  return daysOfWeek.map((day) => {
     // Weekend has higher occupancy
     let baseBooking = 4.5;
     if (day === 'Saturday') baseBooking = 6.8;
@@ -244,15 +240,11 @@ const generateWeeklyData = (): WeeklyDataItem[] => {
   });
 };
 
-// Generate promotion plan data
-
-
-// Generate revenue data
+// Generate revenue data with RevPER
 const generateRevenueData = (
   forecastData: ForecastDataItem[],
   dailyData: DailyDataItem[]
 ): CombinedDataItem[] => {
-  const basePrice = 3000; // THB per room
   
   // Calculate monthly data
   const monthlyData = forecastData.map((item) => {
@@ -262,8 +254,18 @@ const generateRevenueData = (
     // Calculate average price for the month
     const avgPrice = monthDailyData.reduce((sum, d) => sum + d.dynamicPrice, 0) / monthDailyData.length;
     
+    // Calculate days in month (approximate)
+    const daysInMonth = monthDailyData.length;
+    
     // Calculate estimated revenue
-    const estimatedRevenue = item.forecastBooking * avgPrice * 30; // Approximate month length
+    const estimatedRevenue = item.forecastBooking * avgPrice * daysInMonth;
+    
+    // Calculate potential revenue (if all rooms were booked at current price)
+    const totalRooms = 8; // Total number of rooms
+    const potentialRevenue = totalRooms * avgPrice * daysInMonth;
+    
+    // Calculate RevPER (Revenue Per Expected Room)
+    const revPER = estimatedRevenue / potentialRevenue;
     
     return {
       month: item.month,
@@ -272,7 +274,10 @@ const generateRevenueData = (
       actualOccupancy: item.occupancyRate,
       forecastOccupancy: item.forecastOccupancy,
       dynamicPrice: Math.round(avgPrice),
-      estimatedRevenue: Math.round(estimatedRevenue)
+      estimatedRevenue: Math.round(estimatedRevenue),
+      potentialRevenue: Math.round(potentialRevenue),
+      revPER: parseFloat(revPER.toFixed(3)),
+      revPERPercentage: parseFloat((revPER * 100).toFixed(1))
     };
   });
   
@@ -311,8 +316,14 @@ const DynamicPricing: React.FC = () => {
   // Calculate financial statistics
   const totalYearlyRevenue = revenueData.reduce((sum, item) => sum + item.estimatedRevenue, 0);
   const targetYearlyRevenue = revenueData.reduce((sum, item) => sum + (item.target_revenue || 0), 0);
+  const averageRevPER = parseFloat((revenueData.reduce((sum, item) => sum + (item.revPER || 0), 0) / revenueData.length).toFixed(3));
+  const averageRevPERPercentage = parseFloat((averageRevPER * 100).toFixed(1));
   
-  // Month names in Thai (abbreviated)
+  // Find highest and lowest RevPER months
+  const highestRevPERMonth = revenueData.reduce((max, item) => 
+    (item.revPER || 0) > (max.revPER || 0) ? item : max, revenueData[0]);
+  const lowestRevPERMonth = revenueData.reduce((min, item) => 
+    (item.revPER || 0) < (min.revPER || 0) ? item : min, revenueData[0]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -323,10 +334,10 @@ const DynamicPricing: React.FC = () => {
       </Head>
       
       <div className="container mx-auto px-4 py-6">
-        <h1 className="text-3xl font-bold text-blue-600 text-center mb-6">Dynamic Pricing</h1>
+        <h1 className="text-3xl font-bold text-blue-600 text-center mb-6">Dynamic Pricing & RevPER</h1>
         
         {/* การ์ดสรุป */}
-        <div className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           <div className="bg-white rounded-lg shadow-md p-4">
             <h2 className="text-lg font-semibold mb-2 text-blue-700">สรุปการจอง</h2>
             <div className="space-y-3">
@@ -371,35 +382,41 @@ const DynamicPricing: React.FC = () => {
             </div>
           </div>
           
-          <div className="bg-white rounded-lg shadow-md p-4 md:col-span-2 lg:col-span-1">
-            <h2 className="text-lg font-semibold mb-2 text-blue-700">คำแนะนำ</h2>
-            <ul className="space-y-1 text-gray-700">
-              <li className="flex items-start">
-                <span className="text-blue-500 mr-2">•</span>
-                <span>เพิ่มราคาห้องในช่วง {peakMonth.month} (ช่วงฤดูสูง)</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-blue-500 mr-2">•</span>
-                <span>วางแผนโปรโมชั่นสำหรับเดือน {lowMonth.month} เพื่อเพิ่มอัตราการเข้าพัก</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-blue-500 mr-2">•</span>
-                <span>ตรวจสอบให้มีพนักงานเพียงพอในวัน {peakDay.dayOfWeek} (อัตราการเข้าพักสูงสุด)</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-blue-500 mr-2">•</span>
-                <span>เตรียมพร้อมสำหรับเทศกาลสงกรานต์ (13-15 เมษายน)</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-blue-500 mr-2">•</span>
-                <span>คาดการณ์การเพิ่มขึ้นของอัตราการเข้าพัก: {(averageForecastOccupancy - averageActualOccupancy).toFixed(2)}%</span>
-              </li>
-            </ul>
+          {/* New RevPER Summary Card */}
+          <div className="bg-white rounded-lg shadow-md p-4">
+            <h2 className="text-lg font-semibold mb-2 text-blue-700">ข้อมูล RevPER</h2>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600 tooltip" data-tip="Revenue Per Expected Room">RevPER เฉลี่ย:</span>
+                <span className="text-lg font-bold text-purple-600">{averageRevPERPercentage}%</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">เดือนที่มี RevPER สูงสุด:</span>
+                <span className="text-lg font-bold text-green-600">
+                  {highestRevPERMonth.month} ({highestRevPERMonth.revPERPercentage}%)
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">เดือนที่มี RevPER ต่ำสุด:</span>
+                <span className="text-lg font-bold text-red-600">
+                  {lowestRevPERMonth.month} ({lowestRevPERMonth.revPERPercentage}%)
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">ช่องว่างในการเพิ่มรายได้:</span>
+                <span className="text-lg font-bold">
+                  {(100 - averageRevPERPercentage).toFixed(1)}%
+                </span>
+              </div>
+            </div>
           </div>
+          
         </div>
       
 
           <div className="space-y-8">
+            {/* RevPER Chart */}
+            
             <div className="bg-white rounded-lg shadow-md p-4">
               <h2 className="text-xl font-semibold mb-4 text-center">การพยากรณ์รายได้รายเดือน (บาท)</h2>
               <ResponsiveContainer width="100%" height={300}>
@@ -411,6 +428,7 @@ const DynamicPricing: React.FC = () => {
                   <Legend />
                   <Bar dataKey="estimatedRevenue" name="รายได้ที่คาดการณ์" fill="#8884d8" />
                   <Line type="monotone" dataKey="target_revenue" name="เป้าหมายรายได้" stroke="#ff7300" />
+                  <Line type="monotone" dataKey="potentialRevenue" name="รายได้สูงสุดที่เป็นไปได้" stroke="#82ca9d" />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
@@ -432,7 +450,7 @@ const DynamicPricing: React.FC = () => {
             </div>
             
             <div className="bg-white rounded-lg shadow-md p-4">
-              <h2 className="text-xl font-semibold mb-4">รายงานการจัดการรายได้</h2>
+              <h2 className="text-xl font-semibold mb-4">รายงานการจัดการรายได้และ RevPER</h2>
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse">
                   <thead>
@@ -441,22 +459,20 @@ const DynamicPricing: React.FC = () => {
                       <th className="p-2 border">อัตราการเข้าพัก</th>
                       <th className="p-2 border">ราคาเฉลี่ย</th>
                       <th className="p-2 border">รายได้ที่คาดการณ์</th>
+                      <th className="p-2 border">รายได้สูงสุดที่เป็นไปได้</th>
+                      <th className="p-2 border">RevPER</th>
                       <th className="p-2 border">เป้าหมาย</th>
-                      <th className="p-2 border">ช่องว่าง</th>
                       <th className="p-2 border">กลยุทธ์</th>
                     </tr>
                   </thead>
                   <tbody>
                     {revenueData.map((item, index) => {
-                      const gap = (item.target_revenue || 0) - item.estimatedRevenue;
                       let strategy = "";
                       
-                      if (gap > 0) {
-                        if (item.forecastOccupancy < 50) {
-                          strategy = "เพิ่มอัตราการเข้าพักด้วยโปรโมชั่น";
-                        } else {
-                          strategy = "เพิ่มราคาห้องพัก";
-                        }
+                      if (item.revPERPercentage && item.revPERPercentage > 70) {
+                        strategy = "เพิ่มราคาห้องพัก (high RevPER)";
+                      } else if (item.revPERPercentage && item.revPERPercentage < 50) {
+                        strategy = "เพิ่มการตลาดและโปรโมชั่น";
                       } else {
                         strategy = "รักษากลยุทธ์ปัจจุบัน";
                       }
@@ -467,25 +483,23 @@ const DynamicPricing: React.FC = () => {
                           <td className="p-2 border">{item.forecastOccupancy}%</td>
                           <td className="p-2 border">{item.dynamicPrice.toLocaleString()} บาท</td>
                           <td className="p-2 border">{item.estimatedRevenue.toLocaleString()} บาท</td>
-                          <td className="p-2 border">{(item.target_revenue || 0).toLocaleString()} บาท</td>
-                          <td className={`p-2 border ${gap > 0 ? 'text-red-600' : 'text-green-600'}`}>
-                            {gap > 0 ? '-' : '+'}{Math.abs(gap).toLocaleString()} บาท
-                          </td>
-                          <td className="p-2 border text-sm">{strategy}</td>
+                          <td className="p-2 border">{item.potentialRevenue?.toLocaleString()} บาท</td>
+                          <td className="p-2 border">{item.revPERPercentage}%</td>
+                          <td className="p-2 border">{item.target_revenue?.toLocaleString()} บาท</td>
+                          <td className="p-2 border">{strategy}</td>
                         </tr>
                       );
                     })}
                   </tbody>
                   <tfoot>
                     <tr className="bg-blue-100 font-bold">
-                      <td className="p-2 border">รวม</td>
+                      <td className="p-2 border">รวมทั้งปี</td>
                       <td className="p-2 border">{averageForecastOccupancy}%</td>
                       <td className="p-2 border">-</td>
                       <td className="p-2 border">{totalYearlyRevenue.toLocaleString()} บาท</td>
+                      <td className="p-2 border">{revenueData.reduce((sum, item) => sum + (item.potentialRevenue || 0), 0).toLocaleString()} บาท</td>
+                      <td className="p-2 border">{averageRevPERPercentage}%</td>
                       <td className="p-2 border">{targetYearlyRevenue.toLocaleString()} บาท</td>
-                      <td className="p-2 border">
-                        {(targetYearlyRevenue - totalYearlyRevenue > 0 ? '-' : '+')}{Math.abs(targetYearlyRevenue - totalYearlyRevenue).toLocaleString()} บาท
-                      </td>
                       <td className="p-2 border">-</td>
                     </tr>
                   </tfoot>
@@ -493,13 +507,8 @@ const DynamicPricing: React.FC = () => {
               </div>
             </div>
           </div>
-        
-        
-        <footer className="mt-8 text-center text-sm text-gray-500">
-          <p>Hotel Booking Dashboard © 2023 | Data updated on: March 1, 2023</p>
-        </footer>
+        </div>
       </div>
-    </div>
   );
 };
 

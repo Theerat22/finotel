@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -148,7 +147,7 @@ export default function Home() {
                 </div>
                 <div className="md:w-2/3">
                   <h3 className="text-xl font-bold mb-2 text-gray-800">หน้าเริ่มต้น</h3>
-                  <p className="text-gray-600">คลิกปุ่ม "เริ่มต้นใช้งาน" เพื่อเริ่มการตั้งค่าระบบสำหรับโรงแรมของคุณ</p>
+                  <p className="text-gray-600">คลิกปุ่ม เริ่มต้นใช้งาน เพื่อเริ่มการตั้งค่าระบบสำหรับโรงแรมของคุณ</p>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row items-center mb-12">

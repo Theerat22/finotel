@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
-import { FaHotel } from 'react-icons/fa';import { 
+import { FaHotel } from 'react-icons/fa';
+
+import { 
   Home, 
   BarChart, 
   Settings, 
-  Zap, 
   Thermometer, 
-  CloudLightning, 
+  BadgeDollarSign,
   Menu, 
-  X 
+  X
 } from 'lucide-react';
 
 export interface NavItem {
@@ -26,11 +27,9 @@ const Navbar: React.FC<NavbarProps> = ({ activePage, setActivePage }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems: NavItem[] = [
-    { icon: Home, label: 'Overview', page: 'overview' },
-    { icon: Zap, label: 'Devices', page: 'hotel' },
-    { icon: BarChart, label: 'Analytics', page: 'financial' },
-    { icon: Thermometer, label: 'Sensors', page: 'sensors' },
-    { icon: CloudLightning, label: 'Alerts', page: 'alerts' },
+    { icon: BadgeDollarSign, label: 'วิเคราะห์การเงิน', page: 'financial' },
+    { icon: Home, label: 'อัตราการจอง', page: 'booking' },
+    { icon: BarChart, label: 'การกำหนดราคา', page: 'dynamic' },
     { icon: Settings, label: 'Settings', page: 'settings' }
   ];
 

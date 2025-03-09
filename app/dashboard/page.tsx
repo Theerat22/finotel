@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Navbar from '@/app/components/Navbar';
-import HotelFinancialForecast from './pages/Density';
+import BookingTrend from './pages/BookingTrend';
 import DynamicPricing from './pages/DynamicPricing';
 import ExpenseAnalysis from '@/app/dashboard/pages/ExpenseAnalysis';
 
@@ -11,10 +11,10 @@ const Dashboard: React.FC = () => {
 
   const renderPage = () => {
     switch(activePage) {
-      case 'overview': return <HotelFinancialForecast />;
-      case 'hotel': return <ExpenseAnalysis />;
-      case 'financial': return <DynamicPricing />;
-      default: return <HotelFinancialForecast />;
+      case 'financial': return <ExpenseAnalysis />;
+      case 'booking': return <BookingTrend />;
+      case 'dynamic': return <DynamicPricing />;
+      default: return <ExpenseAnalysis />;
     }
   };
 
@@ -27,6 +27,9 @@ const Dashboard: React.FC = () => {
       <main className="pt-16 flex-grow">
         {renderPage()}
       </main>
+      <footer className="mt-8 text-center text-sm text-gray-500">
+          <p>&copy; {new Date().getFullYear()} Finotel. | Data updated on: March 1, 2023</p>
+      </footer>
     </div>
   );
 };

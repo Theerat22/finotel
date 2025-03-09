@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Card } from '@/app/components/ui/Card';
-import { LineChart, BarChart, PieChart, ComposedChart, Line, Bar, Pie, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Cell, ResponsiveContainer, Area } from 'recharts';
-import { AlertTriangle, TrendingUp, TrendingDown, DollarSign, PercentCircle, LightbulbIcon } from 'lucide-react';
+import { PieChart, ComposedChart, Line, Pie, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Cell, ResponsiveContainer, Area, TooltipProps } from 'recharts';
+import { AlertTriangle, TrendingUp, TrendingDown, DollarSign, PercentCircle } from 'lucide-react';
 
 // ประกาศ type ต่างๆ
 type MonthlyData = {
@@ -35,10 +35,20 @@ type AnomalyReport = {
   category_amounts: number[];
 };
 
+interface CustomTooltipProps extends TooltipProps<number, string> {
+  active?: boolean;
+  payload?: {
+    name: string;
+    value: number;
+    color: string;
+  }[];
+  label?: string;
+};
+
 export default function Dashboard() {
   const [monthlyData, setMonthlyData] = useState<MonthlyData[]>([]);
   const [categoryData, setCategoryData] = useState<CategoryData[]>([]);
-  const [anomalyData, setAnomalyData] = useState<MonthlyData[]>([]);
+  // const [anomalyData, setAnomalyData] = useState<MonthlyData[]>([]);
   const [forecastData, setForecastData] = useState<ForecastData[]>([]);
   const [anomalyReports, setAnomalyReports] = useState<AnomalyReport[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -124,10 +134,11 @@ export default function Dashboard() {
 
     setMonthlyData(mockMonthlyData);
     setCategoryData(mockCategoryData);
-    setAnomalyData(mockMonthlyData.filter(item => item.is_anomaly));
+    // setAnomalyData(mockMonthlyData.filter(item => item.is_anomaly));
     setForecastData(mockForecastData);
     setAnomalyReports(mockAnomalyReports);
     setIsLoading(false);
+    // console.log(anomalyData)
   }, []);
 
   // ฟังก์ชั่นช่วยในการจัดรูปแบบตัวเลข
@@ -198,16 +209,16 @@ export default function Dashboard() {
   }
 
   // Custom tooltip สำหรับแผนภูมิ
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white p-4 border border-gray-200 shadow-md rounded-md">
           <p className="font-medium text-gray-900">{label}</p>
-          {payload.map((item: any, index: number) => (
+          {payload.map((item, index) => (
             <p key={index} style={{ color: item.color }} className="flex items-center space-x-2">
               <span className="w-3 h-3 inline-block rounded-full" style={{ backgroundColor: item.color }}></span>
-              <span>{item.name}: {item.name === 'อัตราส่วนรายจ่าย' || item.name === 'พยากรณ์' || item.name === 'ค่าจริง' ? 
-                formatPercent(item.value) : 
+              <span>{item.name}: {item.name === 'อัตราส่วนรายจ่าย' || item.name === 'พยากรณ์' || item.name === 'ค่าจริง' ?
+                formatPercent(item.value) :
                 formatNumber(item.value) + ' บาท'}
               </span>
             </p>
@@ -223,7 +234,7 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-xl shadow-md p-6 mb-6">
           <h1 className="text-2xl md:text-3xl font-bold mb-2 text-gray-800">รายงานการเงินรายปี 2022</h1>
-          <p className="text-gray-500">ข้อมูลการวิเคราะห์รายได้และรายจ่ายประจำปี พร้อมการตรวจจับความผิดปกติ</p>
+          <p className="text-gray-500">ข้อมูลการวิเคราะห์รายได้และรายจ่ายประจำปี และตรวจจับความผิดปกติของการเงิน</p>
         </div>
         
         {/* สรุปตัวเลขสำคัญ */}
@@ -402,81 +413,7 @@ export default function Dashboard() {
         
         {/* การวิเคราะห์แนวโน้มและความผิดปกติ */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          {/* การพยากรณ์ */}
-          <Card className="p-6 shadow-lg bg-white rounded-lg transition-all duration-300 hover:shadow-xl">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800 flex items-center">
-              <TrendingUp className="mr-2 text-blue-500" size={20} />
-              การพยากรณ์อัตราส่วนรายจ่าย
-            </h2>
-            <div className="h-80 md:h-96">
-              <ResponsiveContainer width="100%" height="100%">
-                <ComposedChart data={forecastData} margin={{ top: 10, right: 10, left: 10, bottom: 30 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis 
-                    dataKey="month" 
-                    tick={{ fill: "#6B7280" }}
-                    axisLine={{ stroke: '#E5E7EB' }}
-                    tickLine={{ stroke: '#E5E7EB' }}
-                    dy={10}
-                  />
-                  <YAxis 
-                    domain={[0.4, 0.7]} 
-                    tickFormatter={(value) => formatPercent(value)}
-                    tick={{ fill: "#6B7280" }}
-                    axisLine={{ stroke: '#E5E7EB' }}
-                    tickLine={{ stroke: '#E5E7EB' }}
-                  />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Legend 
-                    verticalAlign="top" 
-                    height={36} 
-                    iconType="circle"
-                    iconSize={10}
-                    wrapperStyle={{ paddingTop: '10px' }}
-                  />
-                  <defs>
-                    <linearGradient id="forecastGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor={CHART_COLORS.forecast.line} stopOpacity={0.1}/>
-                      <stop offset="95%" stopColor={CHART_COLORS.forecast.line} stopOpacity={0.05}/>
-                    </linearGradient>
-                  </defs>
-                  <Area 
-                    type="monotone" 
-                    dataKey="upper_bound" 
-                    fill="url(#forecastGradient)" 
-                    stroke="none" 
-                    name="ขอบบน" 
-                    fillOpacity={0.8}
-                  />
-                  <Area 
-                    type="monotone" 
-                    dataKey="lower_bound" 
-                    fill="#fff" 
-                    stroke="none" 
-                    name="ขอบล่าง" 
-                  />
-                  <Line 
-                    type="monotone" 
-                    dataKey="forecast" 
-                    stroke={CHART_COLORS.forecast.line} 
-                    name="พยากรณ์" 
-                    strokeWidth={2} 
-                    strokeDasharray="4 4"
-                    dot={false}
-                  />
-                  <Line 
-                    type="monotone" 
-                    dataKey="actual" 
-                    stroke="#000" 
-                    name="ค่าจริง" 
-                    strokeWidth={3} 
-                    dot={{ r: 5, fill: '#000', strokeWidth: 2, stroke: '#fff' }} 
-                    activeDot={{ r: 8, fill: '#000', strokeWidth: 0 }}
-                  />
-                </ComposedChart>
-              </ResponsiveContainer>
-            </div>
-          </Card>
+          
 
           {/* Anomaly Reports Card - First Section */}
         <div className="mb-8">
@@ -527,52 +464,10 @@ export default function Dashboard() {
             )}
         </div>
         </div>
-
-            {/* Summary and Recommendations */}
-            <div className="mb-6">
-            <Card className="p-6 shadow-lg bg-white rounded-lg transition-all duration-300 hover:shadow-xl">
-                <h2 className="text-xl font-semibold mb-4 text-gray-800">สรุปผลและคำแนะนำ</h2>
-                <div className="space-y-4">
-                <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
-                    <h3 className="font-medium text-blue-800 mb-2">สรุปภาพรวมทางการเงิน</h3>
-                    <p className="text-gray-700">
-                    บริษัทมีรายได้รวมทั้งสิ้น {formatNumber(totalRevenue)} บาท และรายจ่ายรวม {formatNumber(totalExpense)} บาท 
-                    คิดเป็นอัตราส่วนรายจ่ายเฉลี่ย {formatPercent(avgRatio)} ในปี 2022
-                    </p>
-                </div>
-                
-                <div className="p-4 bg-amber-50 rounded-lg border border-amber-100">
-                    <h3 className="font-medium text-amber-800 mb-2">ช่วงเวลาที่มีความผิดปกติ</h3>
-                    <p className="text-gray-700">
-                    ตรวจพบความผิดปกติของรายจ่ายในเดือนมีนาคมและกรกฎาคม โดยมีอัตราส่วนรายจ่ายสูงถึง 63% ซึ่งสูงกว่าค่าเฉลี่ยทั้งปีที่ 54% 
-                    โดยเฉพาะในหมวดสาธารณูปโภค และซ่อมบำรุง/อาหาร ที่มีค่าใช้จ่ายสูงผิดปกติ
-                    </p>
-                </div>
-                
-                <div className="p-4 bg-green-50 rounded-lg border border-green-100">
-                    <h3 className="font-medium text-green-800 mb-2">ข้อเสนอแนะ</h3>
-                    <ul className="list-disc pl-5 space-y-2 text-gray-700">
-                    <li>
-                        <span className="font-medium">ตรวจสอบรายจ่ายสาธารณูปโภค:</span> ในช่วงเดือนมีนาคมและกรกฎาคม มีการใช้จ่ายในหมวดนี้สูงกว่าปกติถึง 25% ควรตรวจสอบการรั่วไหลหรือการใช้งานผิดปกติ
-                    </li>
-                    <li>
-                        <span className="font-medium">ปรับแผนการซ่อมบำรุง:</span> ควรวางแผนการซ่อมบำรุงเชิงป้องกันเพื่อกระจายค่าใช้จ่ายให้สม่ำเสมอตลอดทั้งปี แทนที่จะเป็นการซ่อมแซมเมื่อเกิดปัญหา
-                    </li>
-                    <li>
-                        <span className="font-medium">เพิ่มงบการตลาดในไตรมาสแรก:</span> จากข้อมูลพบว่าการใช้งบการตลาดในช่วงปลายปีให้ผลตอบแทนที่ดี ควรพิจารณาเพิ่มงบการตลาดในช่วงต้นปีเพื่อกระตุ้นรายได้
-                    </li>
-                    </ul>
-                </div>
-                </div>
-            </Card>
-            </div>
           
         </div>
         
         {/* ส่วนท้าย */}
-        <div className="text-center text-gray-500 text-sm p-4">
-          รายงานนี้ถูกสร้างขึ้นโดยแผนกวิเคราะห์การเงิน | ข้อมูล ณ วันที่ 31 ธันวาคม 2022
-        </div>
       </div>
     </div>
   );

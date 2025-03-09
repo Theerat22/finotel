@@ -1,10 +1,11 @@
 "use client";
 import React, { useState } from 'react';
 import { 
-  LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
+  Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
   ResponsiveContainer, ComposedChart 
 } from 'recharts';
 import Head from 'next/head';
+
 
 interface HistoricalDataItem {
   month: string;
@@ -47,14 +48,6 @@ interface WeeklyDataItem {
   dayOfWeek: string;
   bookings: number;
   occupancyRate: number;
-}
-
-interface PromotionPlanItem {
-  month: string;
-  occupancyRate: number;
-  promotionType: string;
-  discountPercentage: number;
-  estimatedBookingIncrease: number;
 }
 
 // Generate data functions
@@ -168,7 +161,7 @@ const generateDailyData = (): DailyDataItem[] => {
     
     days.forEach(day => {
       if (day <= maxDays) {
-        let baseOccupancy = 50;
+        const baseOccupancy = 50;
         
         const dayOfWeek = (day % 7);
         const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
@@ -229,7 +222,7 @@ const generateDailyData = (): DailyDataItem[] => {
 const generateWeeklyData = (): WeeklyDataItem[] => {
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   
-  return daysOfWeek.map((day, index) => {
+  return daysOfWeek.map((day) => {
     // Weekend has higher occupancy
     let baseBooking = 4.5;
     if (day === 'Saturday') baseBooking = 6.8;
@@ -244,37 +237,12 @@ const generateWeeklyData = (): WeeklyDataItem[] => {
   });
 };
 
-// Generate promotion plan data
-const generatePromotionPlan = (forecastData: ForecastDataItem[]): PromotionPlanItem[] => {
-  // Filter data for months with low booking rates
-  const lowOccupancyMonths = forecastData.filter(item => item.forecastOccupancy < 40);
-  const numMonths = lowOccupancyMonths.length;
-
-  if (numMonths === 0) return [];
-
-  // Create promotion plan
-  const promotionTypes = ['Early Bird Discount', 'Stay 3 Pay 2', 'Free Breakfast', 'Free Airport Transfer'];
-  const discountPercentages = [15, 33, 10, 5];
-  const bookingIncreases = [20, 25, 15, 10];
-
-  return lowOccupancyMonths.map((item, index) => {
-    const typeIndex = index % 4;
-    return {
-      month: item.month,
-      occupancyRate: item.forecastOccupancy,
-      promotionType: promotionTypes[typeIndex],
-      discountPercentage: discountPercentages[typeIndex],
-      estimatedBookingIncrease: bookingIncreases[typeIndex]
-    };
-  });
-};
-
 // Generate revenue data
 const generateRevenueData = (
   forecastData: ForecastDataItem[],
   dailyData: DailyDataItem[]
 ): CombinedDataItem[] => {
-  const basePrice = 3000; // THB per room
+  // const basePrice = 3000; // THB per room
   
   // Calculate monthly data
   const monthlyData = forecastData.map((item) => {
@@ -314,7 +282,7 @@ const generateRevenueData = (
   });
 };
 
-const HotelFinancialForecast: React.FC = () => {
+const BookingTrend: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<'monthly' | 'weekly' | 'heatmap' | 'revenue' | 'promotion'>('monthly');
   
   // Generate data
@@ -322,7 +290,7 @@ const HotelFinancialForecast: React.FC = () => {
   const forecastData = generateForecastData(historicalData);
   const dailyData = generateDailyData();
   const weeklyData = generateWeeklyData();
-  const promotionPlan = generatePromotionPlan(forecastData);
+  // const promotionPlan = generatePromotionPlan(forecastData);
   const revenueData = generateRevenueData(forecastData, dailyData);
   
   // Calculate summary statistics
@@ -448,20 +416,6 @@ const HotelFinancialForecast: React.FC = () => {
         {/* แท็บข้อมูลรายเดือน */}
         {selectedTab === 'monthly' && (
           <div className="space-y-8">
-            <div className="bg-white rounded-lg shadow-md p-4">
-              <h2 className="text-xl font-semibold mb-4 text-center">การเปรียบเทียบการจองรายเดือน</h2>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={revenueData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis domain={[0, 8]} />
-                  <Tooltip formatter={(value) => [`${value}`, 'ห้อง']} />
-                  <Legend />
-                  <Bar dataKey="actualBooking" name="2022 (จริง)" fill="#8884d8" />
-                  <Bar dataKey="forecastBooking" name="2023 (คาดการณ์)" fill="#82ca9d" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
             
             <div className="bg-white rounded-lg shadow-md p-4">
               <h2 className="text-xl font-semibold mb-4 text-center">อัตราการเข้าพักรายเดือน (%)</h2>
@@ -497,23 +451,6 @@ const HotelFinancialForecast: React.FC = () => {
                 <Bar yAxisId="right" dataKey="occupancyRate" name="อัตราการเข้าพัก (%)" fill="#82ca9d" />
               </BarChart>
             </ResponsiveContainer>
-            
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-blue-700 mb-2">กลยุทธ์วันหยุดสุดสัปดาห์</h3>
-                <p className="text-gray-700">วันหยุดสุดสัปดาห์มีอัตราการเข้าพักสูงกว่าอย่างมีนัยสำคัญ ควรพิจารณาใช้นโยบายเข้าพักขั้นต่ำ 2 คืนในวันหยุดสุดสัปดาห์เพื่อเพิ่มรายได้ให้สูงสุด</p>
-              </div>
-              
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-blue-700 mb-2">โปรโมชั่นวันธรรมดา</h3>
-                <p className="text-gray-700">มุ่งเน้นกลุ่มนักเดินทางเพื่อธุรกิจด้วยแพ็คเกจพิเศษสำหรับวันธรรมดาและอัตราสำหรับบริษัท เพื่อเพิ่มอัตราการเข้าพักช่วงกลางสัปดาห์</p>
-              </div>
-              
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-blue-700 mb-2">แผนจัดการพนักงาน</h3>
-                <p className="text-gray-700">จัดตารางพนักงานให้มากขึ้นในวัน{peakDay.dayOfWeek} และลดจำนวนพนักงานในวันที่มีผู้เข้าพักน้อย เพื่อปรับต้นทุนการดำเนินงานให้เหมาะสม</p>
-              </div>
-            </div>
           </div>
         )}
         
@@ -581,7 +518,7 @@ const HotelFinancialForecast: React.FC = () => {
                           else if (data.occupancyRate >= 40) bgColorClass = "bg-blue-300";
                           else if (data.occupancyRate >= 20) bgColorClass = "bg-blue-200";
                           
-                          let textColorClass = data.occupancyRate >= 60 ? "text-white" : "text-gray-800";
+                          const textColorClass = data.occupancyRate >= 60 ? "text-white" : "text-gray-800";
                           
                           // เพิ่มสัญลักษณ์สำหรับวันหยุด และวันหยุดสุดสัปดาห์
                           let symbol = '';
@@ -628,12 +565,9 @@ const HotelFinancialForecast: React.FC = () => {
           </div>
         )}
         
-        <footer className="mt-8 text-center text-sm text-gray-500">
-          <p>Hotel Booking Dashboard © 2023 | Data updated on: March 1, 2023</p>
-        </footer>
       </div>
     </div>
   );
 };
 
-export default HotelFinancialForecast;
+export default BookingTrend;
