@@ -311,7 +311,7 @@ const DynamicPricing: React.FC = () => {
   const averageForecastOccupancy = parseFloat((forecastData.reduce((sum, item) => sum + item.forecastOccupancy, 0) / forecastData.length).toFixed(2));
   const peakMonth = forecastData.reduce((max, item) => item.forecastOccupancy > max.forecastOccupancy ? item : max, forecastData[0]);
   const lowMonth = forecastData.reduce((min, item) => item.forecastOccupancy < min.forecastOccupancy ? item : min, forecastData[0]);
-  const peakDay = weeklyData.reduce((max, item) => item.occupancyRate > max.occupancyRate ? item : max, weeklyData[0]);
+  // const peakDay = weeklyData.reduce((max, item) => item.occupancyRate > max.occupancyRate ? item : max, weeklyData[0]);
   
   // Calculate financial statistics
   const totalYearlyRevenue = revenueData.reduce((sum, item) => sum + item.estimatedRevenue, 0);

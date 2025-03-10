@@ -49,7 +49,7 @@ export default function Dashboard() {
   const [monthlyData, setMonthlyData] = useState<MonthlyData[]>([]);
   const [categoryData, setCategoryData] = useState<CategoryData[]>([]);
   // const [anomalyData, setAnomalyData] = useState<MonthlyData[]>([]);
-  const [forecastData, setForecastData] = useState<ForecastData[]>([]);
+  // const [forecastData, setForecastData] = useState<ForecastData[]>([]);
   const [anomalyReports, setAnomalyReports] = useState<AnomalyReport[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -95,23 +95,6 @@ export default function Dashboard() {
         { month: "ธ.ค.", category: "Supplies", expense: 20000 }
     ];
 
-    const mockForecastData: ForecastData[] = [
-      { month: "ม.ค.", actual: 0.45, forecast: 0.46, lower_bound: 0.42, upper_bound: 0.50 },
-      { month: "ก.พ.", actual: 0.48, forecast: 0.47, lower_bound: 0.43, upper_bound: 0.51 },
-      { month: "มี.ค.", actual: 0.63, forecast: 0.48, lower_bound: 0.44, upper_bound: 0.52 },
-      { month: "เม.ย.", actual: 0.54, forecast: 0.49, lower_bound: 0.45, upper_bound: 0.53 },
-      { month: "พ.ค.", actual: 0.55, forecast: 0.50, lower_bound: 0.46, upper_bound: 0.54 },
-      { month: "มิ.ย.", actual: 0.54, forecast: 0.51, lower_bound: 0.47, upper_bound: 0.55 },
-      { month: "ก.ค.", actual: 0.63, forecast: 0.52, lower_bound: 0.48, upper_bound: 0.56 },
-      { month: "ส.ค.", actual: 0.55, forecast: 0.51, lower_bound: 0.47, upper_bound: 0.55 },
-      { month: "ก.ย.", actual: 0.55, forecast: 0.50, lower_bound: 0.46, upper_bound: 0.54 },
-      { month: "ต.ค.", actual: 0.56, forecast: 0.49, lower_bound: 0.45, upper_bound: 0.53 },
-      { month: "พ.ย.", actual: 0.47, forecast: 0.48, lower_bound: 0.44, upper_bound: 0.52 },
-      { month: "ธ.ค.", actual: 0.47, forecast: 0.47, lower_bound: 0.43, upper_bound: 0.51 },
-      { month: "ม.ค. 23", actual: 0, forecast: 0.46, lower_bound: 0.42, upper_bound: 0.50 },
-      { month: "ก.พ. 23", actual: 0, forecast: 0.47, lower_bound: 0.43, upper_bound: 0.51 },
-      { month: "มี.ค. 23", actual: 0, forecast: 0.48, lower_bound: 0.44, upper_bound: 0.52 }
-    ];
 
     const mockAnomalyReports: AnomalyReport[] = [
       {
@@ -135,7 +118,7 @@ export default function Dashboard() {
     setMonthlyData(mockMonthlyData);
     setCategoryData(mockCategoryData);
     // setAnomalyData(mockMonthlyData.filter(item => item.is_anomaly));
-    setForecastData(mockForecastData);
+    // setForecastData(mockForecastData);
     setAnomalyReports(mockAnomalyReports);
     setIsLoading(false);
     // console.log(anomalyData)

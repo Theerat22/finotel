@@ -7,7 +7,6 @@ import {
   Home, 
   BarChart, 
   Settings, 
-  Thermometer, 
   BadgeDollarSign,
   Menu, 
   X
