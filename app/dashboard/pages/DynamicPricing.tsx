@@ -46,12 +46,6 @@ interface DailyDataItem {
   is_high_season: boolean;
 }
 
-interface WeeklyDataItem {
-  dayOfWeek: string;
-  bookings: number;
-  occupancyRate: number;
-}
-
 
 // Generate data functions
 const generateHistoricalData = (): HistoricalDataItem[] => {
@@ -222,23 +216,6 @@ const generateDailyData = (): DailyDataItem[] => {
 };
 
 // Generate weekly data
-const generateWeeklyData = (): WeeklyDataItem[] => {
-  const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-  
-  return daysOfWeek.map((day) => {
-    // Weekend has higher occupancy
-    let baseBooking = 4.5;
-    if (day === 'Saturday') baseBooking = 6.8;
-    else if (day === 'Friday' || day === 'Sunday') baseBooking = 6.2;
-    
-    const booking = baseBooking + Math.random() * 0.5;
-    return {
-      dayOfWeek: day,
-      bookings: parseFloat(booking.toFixed(2)),
-      occupancyRate: parseFloat((booking / 8 * 100).toFixed(2))
-    };
-  });
-};
 
 // Generate revenue data with RevPER
 const generateRevenueData = (
@@ -303,7 +280,7 @@ const DynamicPricing: React.FC = () => {
   const historicalData = generateHistoricalData();
   const forecastData = generateForecastData(historicalData);
   const dailyData = generateDailyData();
-  const weeklyData = generateWeeklyData();
+  // const weeklyData = generateWeeklyData();
   const revenueData = generateRevenueData(forecastData, dailyData);
   
   // Calculate summary statistics

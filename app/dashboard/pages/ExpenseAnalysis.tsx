@@ -18,13 +18,6 @@ type CategoryData = {
   expense: number;
 };
 
-type ForecastData = {
-  month: string;
-  actual: number;
-  forecast: number;
-  lower_bound: number;
-  upper_bound: number;
-};
 
 type AnomalyReport = {
   period: string;
