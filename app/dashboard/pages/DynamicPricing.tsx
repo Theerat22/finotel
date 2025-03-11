@@ -311,7 +311,7 @@ const DynamicPricing: React.FC = () => {
       </Head>
       
       <div className="container mx-auto px-4 py-6">
-        <h1 className="text-3xl font-bold text-blue-600 text-center mb-6">Dynamic Pricing & RevPER</h1>
+        <h1 className="text-3xl font-bold text-blue-600 text-center mb-6">Dynamic Pricing & RevPAR</h1>
         
         {/* การ์ดสรุป */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
@@ -361,20 +361,20 @@ const DynamicPricing: React.FC = () => {
           
           {/* New RevPER Summary Card */}
           <div className="bg-white rounded-lg shadow-md p-4">
-            <h2 className="text-lg font-semibold mb-2 text-blue-700">ข้อมูล RevPER</h2>
+            <h2 className="text-lg font-semibold mb-2 text-blue-700">ข้อมูล RevPAR</h2>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-gray-600 tooltip" data-tip="Revenue Per Expected Room">RevPER เฉลี่ย:</span>
+                <span className="text-gray-600 tooltip" data-tip="Revenue Per Expected Room">RevPAR เฉลี่ย:</span>
                 <span className="text-lg font-bold text-purple-600">{averageRevPERPercentage}%</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-gray-600">เดือนที่มี RevPER สูงสุด:</span>
+                <span className="text-gray-600">เดือนที่มี RevPAR สูงสุด:</span>
                 <span className="text-lg font-bold text-green-600">
                   {highestRevPERMonth.month} ({highestRevPERMonth.revPERPercentage}%)
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-gray-600">เดือนที่มี RevPER ต่ำสุด:</span>
+                <span className="text-gray-600">เดือนที่มี RevPAR ต่ำสุด:</span>
                 <span className="text-lg font-bold text-red-600">
                   {lowestRevPERMonth.month} ({lowestRevPERMonth.revPERPercentage}%)
                 </span>
