@@ -192,7 +192,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="bg-gray-800 text-white py-12">
+      {/* <footer className="bg-gray-800 text-white py-12">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
@@ -235,7 +235,7 @@ export default function Home() {
             <p>&copy; {new Date().getFullYear()} Finotel. สงวนลิขสิทธิ์ทั้งหมด.</p>
           </div>
         </div>
-      </footer>
+      </footer> */}
     </div>
   );
 }
