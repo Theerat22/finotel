@@ -332,12 +332,7 @@ const BookingTrend: React.FC = () => {
           >
             รายสัปดาห์
           </button>
-          <button 
-            className={`px-4 py-2 rounded-lg ${selectedTab === 'heatmap' ? 'bg-blue-600 text-white font-bold' : 'bg-gray-200 text-gray-800'}`}
-            onClick={() => setSelectedTab('heatmap')}
-          >
-            รายวัน
-          </button>
+
         </div>
         
         {/* การ์ดสรุป */}
