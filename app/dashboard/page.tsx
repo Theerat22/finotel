@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Navbar from '@/app/components/Navbar';
 import BookingTrend from './pages/BookingTrend';
 import DynamicPricing from './pages/DynamicPricing';
-import ExpenseAnalysis from '@/app/dashboard/pages/ExpenseAnalysis';
+import ExpenseAnalysis from '@/app/dashboard/pages/ExpenseAnalysist';
 
 const Dashboard: React.FC = () => {
   const [activePage, setActivePage] = useState('overview');
