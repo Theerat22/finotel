@@ -1,4 +1,3 @@
-// src/app/dashboard/components/SummaryCards.tsx
 import React from 'react';
 import { Card } from '@/app/components/ui/Card';
 import { TrendingUp, TrendingDown, PercentCircle } from 'lucide-react';

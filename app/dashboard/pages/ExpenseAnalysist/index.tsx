@@ -1,4 +1,3 @@
-// src/app/dashboard/page.tsx
 import { useEffect, useState } from 'react';
 import SummaryCards from './components/SummaryCards';
 import MonthlyRevenueExpenseChart from './components/MonthlyRevenueExpenseChart';

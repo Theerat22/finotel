@@ -1,4 +1,3 @@
-// src/app/dashboard/data/mockData.ts
 import { MonthlyData, CategoryData, AnomalyReport } from './index';
 
 export const mockData = {
