@@ -1,8 +1,8 @@
 import Head from 'next/head';
-import Image from 'next/image';
+// import Image from 'next/image';
 import Link from 'next/link';
 import { FaChartLine, FaHotel, FaMoneyBillWave, FaRobot } from 'react-icons/fa';
-import Dashboard from '@/public/imgs/dashboard.png';
+// import Dashboard from '@/public/img/dashboard.jpg';
 
 export default function Home() {
   return (
@@ -77,13 +77,13 @@ export default function Home() {
               </div>
               <div className="md:w-1/2">
                 <div className="relative mt-3 h-64 md:h-96 w-full">
-                  <Image 
-                    src={Dashboard}
+                  {/* <Image 
+                    // src={Dashboard}
                     alt="Finotel Dashboard" 
                     layout="fit"
                     objectFit="contain"
                     className="rounded-lg shadow-lg"
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
