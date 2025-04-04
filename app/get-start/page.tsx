@@ -13,8 +13,8 @@ const StartPage: React.FC = () => {
         return <Step1 setActivePage={setActivePage} />;
       case "hotel":
         return <Step2 setActivePage={setActivePage} />;
-      case "finance":
-        return <div>Finance Dashboard Page</div>;
+      // case "finance":
+      //   return <Link href="/dashboard">Finance Dashboard Page</Link>;
       default:
         return <div>Overview Page</div>;
     }

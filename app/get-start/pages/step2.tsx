@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { useJsApiLoader, GoogleMap, Autocomplete } from '@react-google-maps/api';
 import { FaMapMarkerAlt, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
@@ -116,13 +117,17 @@ const Step2: React.FC<Step2Props> = ({ setActivePage }) => {
       }
     }
   };
+  const router = useRouter();
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
     // Here you would save the location data
     console.log('Saving location data:', locationData);
     // Navigate to next step
-    setActivePage('next-step');
+    // setActivePage('finance');
+    router.push('/dashboard');
+    
   };
   
   const handleBack = () => {
@@ -155,8 +160,17 @@ const Step2: React.FC<Step2Props> = ({ setActivePage }) => {
   return (
     <div className="bg-gray-50 min-h-screen flex items-center justify-center">
       <div className="w-full max-w-4xl mx-auto bg-white rounded-md shadow overflow-hidden">
+        {/* สำหรับหน้าจอมือถือ (Mobile) - ย้ายส่วนสีน้ำเงินขึ้นด้านบน */}
+        <div className="md:hidden bg-blue-600 flex flex-col items-center justify-center p-4 text-center">
+          <h1 className="text-xl font-bold text-white mb-2">เลือกตำแหน่งที่ตั้ง</h1>
+          <p className="text-blue-100 mb-3 text-sm">ระบุตำแหน่งที่ตั้งโรงแรมของคุณ</p>
+          <div className="mb-2">
+            <FaMapMarkerAlt className="h-12 w-12 text-white opacity-80" />
+          </div>
+        </div>
+        
         <div className="flex flex-col md:flex-row">
-          <div className="md:w-2/3 p-6">
+          <div className="w-full md:w-2/3 p-6">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">ตำแหน่งที่ตั้งโรงแรม</h2>
             
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -191,30 +205,6 @@ const Step2: React.FC<Step2Props> = ({ setActivePage }) => {
                   className="w-full px-3 py-2 text-sm font-bold text-blue-500 border border-gray-300 rounded-md bg-gray-50"
                 />
               </div>
-{/*               
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label htmlFor="latitude" className="block text-sm font-medium text-gray-700">ละติจูด</label>
-                  <input
-                    type="text"
-                    id="latitude"
-                    value={locationData.latitude}
-                    readOnly
-                    className="w-full px-3 py-2 text-sm font-bold text-blue-500 border border-gray-300 rounded-md bg-gray-50"
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="longitude" className="block text-sm font-medium text-gray-700">ลองจิจูด</label>
-                  <input
-                    type="text"
-                    id="longitude"
-                    value={locationData.longitude}
-                    readOnly
-                    className="w-full px-3 py-2 text-sm font-bold text-blue-500 border border-gray-300 rounded-md bg-gray-50"
-                  />
-                </div> */}
-              {/* </div> */}
               
               <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">แผนที่</label>
@@ -258,7 +248,8 @@ const Step2: React.FC<Step2Props> = ({ setActivePage }) => {
             </form>
           </div>
           
-          <div className="md:w-1/3 bg-blue-600 flex flex-col items-center justify-center p-6 text-center">
+          {/* สำหรับหน้าจอ desktop - แสดงส่วนสีน้ำเงินด้านขวา */}
+          <div className="hidden md:flex md:w-1/3 bg-blue-600 flex-col items-center justify-center p-6 text-center">
             <h1 className="text-2xl font-bold text-white mb-4">เลือกตำแหน่งที่ตั้ง</h1>
             <p className="text-blue-100 mb-6">ระบุตำแหน่งที่ตั้งโรงแรมของคุณ</p>
             <div className="mt-4">

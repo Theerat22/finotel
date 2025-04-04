@@ -39,11 +39,21 @@ const Step1: React.FC<Step1Props> = ({ setActivePage }) => {
   };
 
   return (
-    <div className=" bg-gray-50 min-h-screen flex items-center justify-center">
+    <div className="bg-gray-50 min-h-screen flex items-center justify-center">
       <div className="w-full max-w-4xl mx-auto bg-white rounded-md shadow overflow-hidden">
+        {/* สำหรับหน้าจอมือถือ (Mobile) - ย้ายส่วนสีน้ำเงินขึ้นด้านบน */}
+        <div className="md:hidden bg-blue-600 flex flex-col items-center justify-center p-4 text-center">
+          <h1 className="text-xl font-bold text-white mb-2">เริ่มต้นโรงแรมของคุณ</h1>
+          <p className="text-blue-100 mb-3 text-sm">กรอกข้อมูลโรงแรมของคุณเพื่อเริ่มต้นการใช้งานระบบ</p>
+          <div className="mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-white opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+          </div>
+        </div>
+        
         <div className="flex flex-col md:flex-row">
-
-          <div className="md:w-2/3 p-6">
+          <div className="w-full md:w-2/3 p-6">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">ข้อมูลโรงแรม</h2>
             
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -75,7 +85,7 @@ const Step1: React.FC<Step1Props> = ({ setActivePage }) => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label htmlFor="contactPhone" className="block text-sm font-medium text-gray-700">เบอร์โทรศัพท์</label>
                   <input
@@ -105,7 +115,6 @@ const Step1: React.FC<Step1Props> = ({ setActivePage }) => {
                 </div>
               </div>
 
-
               <div className="flex justify-end mt-6">
                 <button
                   type="submit"
@@ -123,7 +132,8 @@ const Step1: React.FC<Step1Props> = ({ setActivePage }) => {
             </form>
           </div>
 
-          <div className="md:w-1/3 bg-blue-600 flex flex-col items-center justify-center p-6 text-center">
+          {/* สำหรับหน้าจอ desktop - แสดงส่วนสีน้ำเงินด้านขวา */}
+          <div className="hidden md:flex md:w-1/3 bg-blue-600 flex-col items-center justify-center p-6 text-center">
             <h1 className="text-2xl font-bold text-white mb-4">เริ่มต้นโรงแรมของคุณ</h1>
             <p className="text-blue-100 mb-6">กรอกข้อมูลโรงแรมของคุณเพื่อเริ่มต้นการใช้งานระบบ</p>
             <div className="mt-4">
