@@ -13,10 +13,10 @@ interface FormData {
 
 const Step1: React.FC<Step1Props> = ({ setActivePage }) => {
   const [formData, setFormData] = useState<FormData>({
-    hotelName: 'CD Hotel',
-    ownerName: 'สมชาย ใจรักดี',
+    hotelName: 'CD ลิงกังกู',
+    ownerName: 'พวกเรา รักจุฬา',
     contactPhone: '123-456-7890',
-    email: 'cdhotel@gmail.com',
+    email: 'cdlingangu@gmail.com',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -30,7 +30,7 @@ const Step1: React.FC<Step1Props> = ({ setActivePage }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setActivePage('hotel');
-    // console.log(formData);
+    console.log(formData);
   };
 
   const isFormValid = () => {
@@ -41,7 +41,7 @@ const Step1: React.FC<Step1Props> = ({ setActivePage }) => {
   return (
     <div className="bg-gray-50 min-h-screen flex items-center justify-center">
       <div className="w-full max-w-4xl mx-auto bg-white rounded-md shadow overflow-hidden">
-        {/* สำหรับหน้าจอมือถือ (Mobile) - ย้ายส่วนสีน้ำเงินขึ้นด้านบน */}
+        
         <div className="md:hidden bg-blue-600 flex flex-col items-center justify-center p-4 text-center">
           <h1 className="text-xl font-bold text-white mb-2">เริ่มต้นโรงแรมของคุณ</h1>
           <p className="text-blue-100 mb-3 text-sm">กรอกข้อมูลโรงแรมของคุณเพื่อเริ่มต้นการใช้งานระบบ</p>

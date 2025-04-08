@@ -53,7 +53,7 @@ export default function Home() {
 
       <main>
         {/* Hero Section */}
-        <section className="pt-32 pb-20">
+        <section className="pt-32 pb-20 min-h-screen flex items-center justify-center">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row items-center">
               <div className="md:w-1/2 mb-10 md:mb-0">
@@ -91,7 +91,7 @@ export default function Home() {
         </section>
 
         {/* Features Section */}
-        <section id="features" className="py-20 bg-white">
+        <section id="features" className="py-20 bg-white min-h-screen flex items-center justify-center">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-3xl font-bold text-gray-800 mb-4">คุณสมบัติหลัก</h2>
@@ -132,7 +132,7 @@ export default function Home() {
         </section>
 
         {/* How It Works */}
-        <section className="py-20 bg-gray-50">
+        <section className="py-20 bg-gray-50 min-h-screen flex items-center justify-center">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-3xl font-bold text-gray-800 mb-4">วิธีการเริ่มต้นใช้งาน</h2>
@@ -173,7 +173,7 @@ export default function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 bg-blue-600">
+        <section className="py-16 bg-blue-600 min-h-screen flex items-center justify-center">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold text-white mb-6">พร้อมที่จะเพิ่มประสิทธิภาพการจัดการการเงินของโรงแรมคุณหรือยัง?</h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
