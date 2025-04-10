@@ -67,20 +67,19 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-          <h1 className="text-2xl md:text-3xl font-bold mb-2 text-gray-800">รายงานการเงินรายปี 2022</h1>
-          <p className="text-gray-500">ข้อมูลการวิเคราะห์รายได้และรายจ่ายประจำปี และตรวจจับความผิดปกติของการเงิน</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-800">รายงานการเงินรายปี 2024</h1>
         </div>
         
-        {/* สรุปตัวเลขสำคัญ */}
+        {/* SUMMARY */}
         <SummaryCards summaryMetrics={summaryMetrics} />
         
-        {/* แผนภูมิหลัก */}
+        {/* CHART */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <MonthlyRevenueExpenseChart monthlyData={monthlyData} />
           <ExpenseCategoryPieChart categoryData={categoryData} />
         </div>
         
-        {/* การวิเคราะห์แนวโน้มและความผิดปกติ */}
+        {/* ANOMALY */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <AnomalyReports anomalyReports={anomalyReports} />
         </div>
