@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const response = await fetch('https://tatdataapi.io/api/v2/events?provinceId=219&limit=10', {
+    const response = await fetch('https://tatdataapi.io/api/v2/events?', {
       method: 'GET',
       headers: {
         'x-api-key': process.env.TAT_DATA_API as string,
@@ -18,7 +18,6 @@ export async function GET() {
     const data = await response.json();
     console.log('TAT API Response:', data);
 
-    // ส่งข้อมูลกลับไปยัง client
     return NextResponse.json(data);
   } catch (error) {
     console.error('Error fetching events from TAT API:', error);

@@ -11,11 +11,15 @@ interface Event {
   latitude: number;
   longitude: number;
   location: {
-    provinceCode: string;
-    provinceName: string;
+    province?: {
+      name: string;
+      provinceId: number;
+    };
+    provinceCode?: string;
+    provinceName?: string;
     amphurName?: string;
     tambolName?: string;
-    [key: string]: string | undefined;
+
   };
   thumbnailUrl: string;
   tags: [];
@@ -87,8 +91,10 @@ const mockEvents: Event[] = [
     latitude: 13.7558693,
     longitude: 100.4932804,
     location: {
-      provinceCode: '10',
-      provinceName: 'กรุงเทพมหานคร'
+      province: {
+        name: 'กรุงเทพมหานคร',
+        provinceId: 219
+      }
     },
     thumbnailUrl: '/api/placeholder/600/400', // Use placeholder as default for mock data
     tags: [],
@@ -109,11 +115,10 @@ export default function EventTabs() {
     const fetchEvents = async () => {
       try {
         setLoading(true);
-        // ใช้ AbortController เพื่อกำหนดเวลาหมดเวลาในการเรียก API
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 วินาทีก่อนยกเลิก
         
-        // เปลี่ยน URL เป็น localhost/api/fetchEvents
+
         const response = await fetch('/api/fetchEvents', {
           method: 'GET',
           signal: controller.signal
@@ -167,12 +172,17 @@ export default function EventTabs() {
   const getLocationText = (location: Event['location']) => {
     if (!location) return 'ไม่ระบุสถานที่';
     
-    const locationParts = [];
-    if (location.tambolName) locationParts.push(location.tambolName);
-    if (location.amphurName) locationParts.push(location.amphurName);
-    if (location.provinceName) locationParts.push(location.provinceName);
+    // Handle new API structure where province is an object with name property
+    if (location.province && location.province.name) {
+      return location.province.name;
+    }
     
-    return locationParts.length > 0 ? locationParts.join(', ') : 'ไม่ระบุสถานที่';
+    // Handle original structure for backward compatibility
+    if (location.provinceName) {
+      return location.provinceName;
+    }
+    
+    return 'ไม่ระบุสถานที่';
   };
 
   if (loading) {
