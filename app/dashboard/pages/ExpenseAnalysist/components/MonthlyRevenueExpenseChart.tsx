@@ -17,10 +17,20 @@ interface CustomTooltipProps extends TooltipProps<number, string> {
 
 interface MonthlyRevenueExpenseChartProps {
   monthlyData: MonthlyData[];
+  highlightMonth?: string;
 }
 
-const MonthlyRevenueExpenseChart: React.FC<MonthlyRevenueExpenseChartProps> = ({ monthlyData }) => {
-  // Custom tooltip สำหรับแผนภูมิ
+const MonthlyRevenueExpenseChart: React.FC<MonthlyRevenueExpenseChartProps> = ({ 
+  monthlyData,
+  highlightMonth 
+}) => {
+  // Transform data to highlight selected month
+  const chartData = monthlyData.map(item => ({
+    ...item,
+    isHighlighted: highlightMonth === item.month
+  }));
+
+  // Custom tooltip for chart
   const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
       return (
@@ -46,10 +56,11 @@ const MonthlyRevenueExpenseChart: React.FC<MonthlyRevenueExpenseChartProps> = ({
       <h2 className="text-xl font-semibold mb-4 text-gray-800 flex items-center">
         <DollarSign className="mr-2 text-blue-500" size={20} />
         รายได้และรายจ่ายรายเดือน
+        {highlightMonth && <span className="ml-2 text-blue-600">- {highlightMonth}</span>}
       </h2>
       <div className="h-80 md:h-96">
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={monthlyData} margin={{ top: 10, right: 10, left: 10, bottom: 30 }}>
+          <ComposedChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 30 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
             <XAxis 
               dataKey="month" 
@@ -118,7 +129,15 @@ const MonthlyRevenueExpenseChart: React.FC<MonthlyRevenueExpenseChartProps> = ({
               name="อัตราส่วนรายจ่าย" 
               stroke={CHART_COLORS.ratio.stroke} 
               strokeWidth={3}
-              dot={{ r: 6, fill: 'white', strokeWidth: 2 }}
+              dot={(props) => {
+                const { cx, cy, payload, index } = props;
+                // ใช้ index ในการสร้าง key ที่ไม่ซ้ำกัน
+                return payload.isHighlighted ? (
+                  <circle key={`dot-highlighted-${index}`} cx={cx} cy={cy} r={8} fill={CHART_COLORS.ratio.stroke} />
+                ) : (
+                  <circle key={`dot-normal-${index}`} cx={cx} cy={cy} r={6} fill="white" stroke={CHART_COLORS.ratio.stroke} strokeWidth={2} />
+                );
+              }}
               activeDot={{ r: 8, fill: CHART_COLORS.ratio.stroke, strokeWidth: 0 }}
             />
           </ComposedChart>
