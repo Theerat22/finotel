@@ -64,7 +64,7 @@ const AnomalyReports: React.FC<AnomalyReportsProps> = ({
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center h-110 bg-gray-50 rounded-lg border border-gray-100">
+        <div className="flex flex-col items-center justify-center h-110 bg-gray-50 rounded-lg border border-gray-100 sm:h-80">
           <div className="p-4 bg-blue-50 rounded-full mb-3">
             <TrendingUp className="text-blue-500" size={28} />
           </div>
