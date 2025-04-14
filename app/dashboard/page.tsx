@@ -18,6 +18,13 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const date = new Date();
+const thaiDate = date.toLocaleDateString('th-TH', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar 
@@ -28,7 +35,8 @@ const Dashboard: React.FC = () => {
         {renderPage()}
       </main>
       <footer className="mt-8 text-center text-sm text-gray-500">
-          <p>&copy; {new Date().getFullYear()} Finotel. | Data updated on: March 1, 2023</p>
+          <p>
+            &copy; {new Date().getFullYear()} Finotel  | อัปเดตล่าสุด {thaiDate}</p>
       </footer>
     </div>
   );
