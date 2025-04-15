@@ -26,7 +26,7 @@ const AnomalyReports: React.FC<AnomalyReportsProps> = ({
             <div key={index} className="rounded-xl overflow-hidden bg-gradient-to-r from-red-50 to-orange-50 border border-red-100 transition-all duration-300 hover:shadow-lg">
               <div className="p-4 bg-gradient-to-r from-red-600 to-orange-500 text-white flex items-center">
                 <div className="p-2 bg-white bg-opacity-20 rounded-full mr-3">
-                  <AlertTriangle className="text-white" size={18} />
+                  <AlertTriangle className="text-black" size={18} />
                 </div>
                 <h3 className="font-bold">{report.period} - รายจ่ายผิดปกติ</h3>
               </div>

@@ -60,17 +60,20 @@ export default function Dashboard() {
     ? anomalyReports
     : anomalyReports.filter(report => report.period.includes(selectedMonth));
 
-  const calculateSummaryMetrics = () => {
-    const data = selectedMonth === 'all' ? monthlyData : filteredMonthlyData;
-    
-    if (data.length === 0) return { totalRevenue: 0, totalExpense: 0, avgRatio: 0 };
-    
-    const totalRevenue = data.reduce((sum, item) => sum + item.revenue, 0);
-    const totalExpense = data.reduce((sum, item) => sum + item.expense, 0);
-    const avgRatio = totalExpense / totalRevenue;
-    
-    return { totalRevenue, totalExpense, avgRatio };
-  };
+    const calculateSummaryMetrics = () => {
+      const data = selectedMonth === 'all' ? monthlyData : filteredMonthlyData;
+      
+      if (data.length === 0) return { totalRevenue: 0, totalExpense: 0, avgRatio: 0, ebitdar: 0 };
+      
+      const totalRevenue = data.reduce((sum, item) => sum + item.revenue, 0);
+      const totalExpense = data.reduce((sum, item) => sum + item.expense, 0);
+      const avgRatio = totalExpense / totalRevenue;
+
+      const approximateITDAR = totalExpense * 0.15;
+      const ebitdar = totalRevenue - totalExpense + approximateITDAR;
+      
+      return { totalRevenue, totalExpense, avgRatio, ebitdar };
+    };
 
   const summaryMetrics = calculateSummaryMetrics();
 
