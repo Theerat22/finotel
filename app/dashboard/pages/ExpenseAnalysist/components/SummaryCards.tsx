@@ -22,8 +22,8 @@ const SummaryCards: React.FC<SummaryCardsProps> = ({ summaryMetrics, period }) =
   const expenseStatus = avgRatio > 0.7 ? 'high' : avgRatio > 0.6 ? 'medium' : 'good';
   
   // สร้างสถานะสำหรับ EBITDAR
-  const ebitdarStatus = ebitdar < totalRevenue * 0.3 ? 'good' : 
-                        ebitdar < totalRevenue * 0.15 ? 'medium' : 'low';
+  const ebitdarStatus = ebitdar > totalRevenue * 0.3 ? 'good' : 
+                        ebitdar > totalRevenue * 0.15 ? 'medium' : 'low';
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -123,7 +123,7 @@ const SummaryCards: React.FC<SummaryCardsProps> = ({ summaryMetrics, period }) =
               ) : (
                 <>
                   <AlertTriangle size={14} className="mr-1" />
-                  <span>ต่ำกว่าเป้าหมาย</span>
+                  <span>ขาดทุน</span>
                 </>
               )}
             </div>
