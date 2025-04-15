@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const response = await fetch('https://tatdataapi.io/api/v2/events?', {
+    const response = await fetch('https://tatdataapi.io/api/v2/events?limit=3', {
       method: 'GET',
       headers: {
         'x-api-key': process.env.TAT_DATA_API as string,

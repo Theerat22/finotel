@@ -259,24 +259,34 @@ export default function EventCalendar() {
       )}
       
       {/* Month Selector */}
-      <div className="flex justify-center mb-8 overflow-x-auto scrollbar-hide mb-6">
-        <div className="bg-white rounded-xl shadow-md p-2 flex space-x-1">
+      <div className="flex justify-center mb-6">
+        <div className="bg-white rounded-xl shadow-lg p-2 flex flex-nowrap overflow-x-auto max-w-4xl scrollbar-hide">
           {thaiMonths.map((month, index) => (
             <button
               key={index}
               onClick={() => setSelectedMonth(index)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                selectedMonth === index 
+              className={`
+                px-4 py-2 
+                rounded-lg 
+                text-sm 
+                font-medium 
+                whitespace-nowrap
+                mx-1
+                transition-all 
+                duration-200 
+                flex items-center
+                ${selectedMonth === index 
                   ? 'bg-blue-600 text-white shadow-md' 
-                  : 'hover:bg-blue-100 text-gray-600'
-              } ${eventsByMonth[index]?.length ? 'border-b-2 border-blue-400' : ''}`}
+                  : 'bg-gray-50 hover:bg-blue-50 text-gray-700'
+                }
+              `}
             >
               {month}
-              {eventsByMonth[index]?.length ? 
-                <span className="ml-1 bg-blue-500 text-white text-xs rounded-full px-2 py-0.5">
+              {eventsByMonth[index]?.length > 0 && (
+                <span className="ml-2 bg-blue-100 text-blue-800 text-xs rounded-full px-2 py-0.5 flex items-center justify-center min-w-5">
                   {eventsByMonth[index].length}
-                </span> : null
-              }
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -324,10 +334,6 @@ export default function EventCalendar() {
                     {selectedEvent.introduction || 'ไม่มีคำอธิบายเพิ่มเติม'}
                   </p>
                 </div>
-                
-                <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-md">
-                  ดูรายละเอียดเพิ่มเติม
-                </button>
               </div>
             </div>
           ) : (
