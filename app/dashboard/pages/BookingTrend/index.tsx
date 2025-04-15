@@ -15,6 +15,8 @@ import {
   generateRevenueData
 } from './mockData';
 
+import EventTabs from '@/app/events/page';
+
 const BookingTrend: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<'monthly' | 'weekly' | 'heatmap' | 'revenue' | 'promotion'>('monthly');
   
@@ -51,10 +53,13 @@ const BookingTrend: React.FC = () => {
           totalYearlyRevenue={totalYearlyRevenue}
           targetYearlyRevenue={targetYearlyRevenue}
         />
+
+  
         
         {/* Monthly Data Tab */}
         {selectedTab === 'monthly' && (
-          <div className="space-y-8">
+          <div className="space-y-8 mt-8">
+            <EventTabs />
             <MonthlyTrendChart data={revenueData} />
           </div>
         )}
@@ -63,6 +68,8 @@ const BookingTrend: React.FC = () => {
         {selectedTab === 'weekly' && (
           <WeeklyTrendChart data={weeklyData} />
         )}
+
+
       </div>
     </div>
   );

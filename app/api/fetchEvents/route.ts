@@ -16,7 +16,7 @@ export async function GET() {
     }
 
     const data = await response.json();
-    console.log('TAT API Response:', data);
+    // console.log('TAT API Response:', data);
 
     return NextResponse.json(data);
   } catch (error) {
