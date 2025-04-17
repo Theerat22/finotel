@@ -67,13 +67,13 @@ export const calculateDynamicPrice = (
   
   // Adjust price based on booking rate (Demand-based pricing)
   if (occupancyRate > 80) {
-    price *= 1.25; // Increase price by 25% when booking rate is very high
+    price *= 1.25; 
   } else if (occupancyRate > 60) {
-    price *= 1.15; // Increase price by 15% when booking rate is high
+    price *= 1.15;
   } else if (occupancyRate < 30) {
-    price *= 0.85; // Decrease price by 15% when booking rate is low
+    price *= 0.85; 
   } else if (occupancyRate < 15) {
-    price *= 0.75; // Decrease price by 25% when booking rate is very low
+    price *= 0.75;
   }
   
   return Math.round(price);
