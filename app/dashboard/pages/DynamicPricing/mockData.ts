@@ -168,7 +168,7 @@ export const generateDailyData = (): DailyDataItem[] => {
   return dailyData;
 };
 
-// Generate revenue data with RevPER
+// Generate revenue data with RevPAR (as currency value)
 export const generateRevenueData = (
   forecastData: ForecastDataItem[],
   dailyData: DailyDataItem[]
@@ -192,8 +192,12 @@ export const generateRevenueData = (
     const totalRooms = 8; // Total number of rooms
     const potentialRevenue = totalRooms * avgPrice * daysInMonth;
     
-    // Calculate RevPER (Revenue Per Expected Room)
-    const revPER = estimatedRevenue / potentialRevenue;
+    // Calculate RevPAR (Revenue Per Available Room) as currency value in THB
+    // RevPAR = Total Revenue / (Total Rooms Available * Days)
+    const revPAR = estimatedRevenue / (totalRooms * daysInMonth);
+    
+    // Calculate RevPAR as percentage of full potential
+    const revPARPercentage = (estimatedRevenue / potentialRevenue) * 100;
     
     return {
       month: item.month,
@@ -204,8 +208,9 @@ export const generateRevenueData = (
       dynamicPrice: Math.round(avgPrice),
       estimatedRevenue: Math.round(estimatedRevenue),
       potentialRevenue: Math.round(potentialRevenue),
-      revPER: parseFloat(revPER.toFixed(3)),
-      revPERPercentage: parseFloat((revPER * 100).toFixed(1))
+      // Store RevPAR as currency value in THB
+      revPER: Math.round(revPAR), // Round to nearest baht
+      revPERPercentage: parseFloat(revPARPercentage.toFixed(1))
     };
   });
   
@@ -310,12 +315,17 @@ export const calculateSummaryStatistics = (
   const totalYearlyRevenue = revenueData.reduce((sum, item) => sum + item.estimatedRevenue, 0);
   const targetYearlyRevenue = revenueData.reduce((sum, item) => sum + (item.target_revenue || 0), 0);
   
-  const averageRevPER = parseFloat(
-    (revenueData.reduce((sum, item) => sum + (item.revPER || 0), 0) / revenueData.length).toFixed(3)
+  // Calculate average RevPAR (kept as revPER in variable names) - this already stores currency values
+  const averageRevPER = Math.round(
+    revenueData.reduce((sum, item) => sum + (item.revPER || 0), 0) / revenueData.length
   );
-  const averageRevPERPercentage = parseFloat((averageRevPER * 100).toFixed(1));
   
-  // Find highest and lowest RevPER months
+  // Calculate average RevPAR percentage
+  const averageRevPERPercentage = parseFloat(
+    (revenueData.reduce((sum, item) => sum + (item.revPERPercentage || 0), 0) / revenueData.length).toFixed(1)
+  );
+  
+  // Find highest and lowest RevPAR months
   const highestRevPERMonth = revenueData.reduce(
     (max, item) => (item.revPER || 0) > (max.revPER || 0) ? item : max, revenueData[0]
   );
@@ -331,19 +341,31 @@ export const calculateSummaryStatistics = (
     lowMonth,
     totalYearlyRevenue,
     targetYearlyRevenue,
-    averageRevPER,
+    averageRevPER,          // Already in THB currency format
     averageRevPERPercentage,
-    highestRevPERMonth,
-    lowestRevPERMonth
+    highestRevPERMonth,     // Contains the month with highest RevPAR in THB
+    lowestRevPERMonth       // Contains the month with lowest RevPAR in THB
   };
 };
 
-// Extended function to calculate summary statistics including GOPPAR
+// Function to format RevPAR statistics for display
+export const formatRevPARStatistics = (stats: ReturnType<typeof calculateSummaryStatistics>) => {
+  return {
+    revparStats: {
+      averageRevPAR: `${stats.averageRevPER.toLocaleString()} บาท`,
+      highestRevPARMonth: `${stats.highestRevPERMonth.month} (${stats.highestRevPERMonth.revPER.toLocaleString()} บาท)`,
+      lowestRevPARMonth: `${stats.lowestRevPERMonth.month} (${stats.lowestRevPERMonth.revPER.toLocaleString()} บาท)`
+    }
+  };
+};
+
+// Extended function to calculate summary statistics including GOPPAR (unchanged)
 export const calculateSummaryStatisticsWithGOPPAR = (
   historicalData: HistoricalDataItem[],
   forecastData: ForecastDataItem[],
   revenueData: GOPPARDataItem[]
 ) => {
+  // Existing implementation...
   // Get base statistics
   const baseStats = calculateSummaryStatistics(historicalData, forecastData, revenueData);
   
@@ -382,5 +404,21 @@ export const calculateSummaryStatisticsWithGOPPAR = (
     highestGOPPARMonth,
     lowestGOPPARMonth,
     overallProfitMargin: parseFloat(overallProfitMargin.toFixed(2))
+  };
+};
+
+// Format GOPPAR statistics for display
+export const formatGOPPARStatistics = (stats: ReturnType<typeof calculateSummaryStatisticsWithGOPPAR>) => {
+  return {
+    revparStats: {
+      averageRevPAR: `${stats.averageRevPER.toLocaleString()} บาท`,
+      highestRevPARMonth: `${stats.highestRevPERMonth.month} (${stats.highestRevPERMonth.revPER.toLocaleString()} บาท)`,
+      lowestRevPARMonth: `${stats.lowestRevPERMonth.month} (${stats.lowestRevPERMonth.revPER.toLocaleString()} บาท)`
+    },
+    gopparStats: {
+      averageGOPPAR: `${Math.round(stats.averageGOPPAR).toLocaleString()} บาท`,
+      highestGOPPARMonth: `${stats.highestGOPPARMonth.month} (${Math.round(stats.highestGOPPARMonth.goppar).toLocaleString()} บาท)`,
+      lowestGOPPARMonth: `${stats.lowestGOPPARMonth.month} (${Math.round(stats.lowestGOPPARMonth.goppar).toLocaleString()} บาท)`
+    }
   };
 };

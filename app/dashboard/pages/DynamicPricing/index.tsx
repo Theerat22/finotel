@@ -3,9 +3,9 @@ import React from 'react';
 import Head from 'next/head';
 import SummaryCards from './components/SummaryCards';
 import DynamicPricingChart from './components/DynamicPricingChart';
-import RevenueForecastChart from './components/RevenueForecastChart';
+// import RevenueForecastChart from './components/RevenueForecastChart';
 import RevenueManagementTable from './components/RevenueManagementTable';
-import RecommendationsBox from './components/RecommendationsBox';
+// import RecommendationsBox from './components/RecommendationsBox';
 import { 
   generateHistoricalData, 
   generateForecastData, 
@@ -48,12 +48,14 @@ const DynamicPricing: React.FC = () => {
           lowMonth={stats.lowMonth}
           totalYearlyRevenue={stats.totalYearlyRevenue}
           targetYearlyRevenue={stats.targetYearlyRevenue}
-          averageRevPERPercentage={stats.averageRevPERPercentage}
+          averageRevPERPercentage={stats.averageRevPER}
           highestRevPERMonth={stats.highestRevPERMonth}
           lowestRevPERMonth={stats.lowestRevPERMonth}
-          averageGOPPARPercentage={stats.averageGOPPARPercentage}
+          averageGOPPARPercentage={stats.averageGOPPAR}
           highestGOPPARMonth={stats.highestGOPPARMonth}
           lowestGOPPARMonth={stats.lowestGOPPARMonth}
+          highestGOPPARMonththb={stats.highestGOPPARMonth.goppar}
+          lowestGOPPARMonththb={stats.lowestGOPPARMonth.goppar}
         />
 
         
@@ -63,7 +65,7 @@ const DynamicPricing: React.FC = () => {
           <DynamicPricingChart data={revenueData} />
           
           {/* Revenue Forecast Chart Component */}
-          <RevenueForecastChart data={revenueData} />
+          {/* <RevenueForecastChart data={revenueData} /> */}
           
           {/* Revenue Management Table Component */}
           <RevenueManagementTable 
@@ -71,13 +73,13 @@ const DynamicPricing: React.FC = () => {
             totalYearlyRevenue={stats.totalYearlyRevenue}
             targetYearlyRevenue={stats.targetYearlyRevenue}
             averageForecastOccupancy={stats.averageForecastOccupancy}
-            averageRevPERPercentage={stats.averageRevPERPercentage}
+            averageRevPERPercentage={stats.averageRevPER}
             averageGOPPARPercentage={stats.averageGOPPARPercentage}
           />
 
-          <RecommendationsBox />
+          {/* <RecommendationsBox /> */}
         </div>
-        
+
       </div>
 
       

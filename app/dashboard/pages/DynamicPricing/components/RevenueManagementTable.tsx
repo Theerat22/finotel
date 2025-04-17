@@ -204,7 +204,7 @@ const RevenueManagementTable: React.FC<RevenueManagementTableProps> = ({
                 }
                 
                 if (item.revPERPercentage && item.revPERPercentage > 70) {
-                  strategy = "เพิ่มราคาห้องพัก (high RevPER)";
+                  strategy = "เพิ่มราคาห้องพัก (high RevPAR)";
                 } else if (item.revPERPercentage && item.revPERPercentage < 50) {
                   strategy = "เพิ่มการตลาดและโปรโมชั่น";
                 } else {
@@ -218,7 +218,7 @@ const RevenueManagementTable: React.FC<RevenueManagementTableProps> = ({
                     <td className="p-2 border">{item.dynamicPrice.toLocaleString()} บาท</td>
                     <td className="p-2 border">{item.estimatedRevenue.toLocaleString()} บาท</td>
                     <td className="p-2 border">{item.potentialRevenue?.toLocaleString()} บาท</td>
-                    <td className="p-2 border">{item.revPERPercentage}%</td>
+                    <td className="p-2 border">{item.revPER} บาท</td>
                     <td className="p-2 border">{item.target_revenue?.toLocaleString()} บาท</td>
                     <td className="p-2 border">{strategy}</td>
                   </tr>
@@ -232,7 +232,7 @@ const RevenueManagementTable: React.FC<RevenueManagementTableProps> = ({
                 <td className="p-2 border">-</td>
                 <td className="p-2 border">{totalYearlyRevenue.toLocaleString()} บาท</td>
                 <td className="p-2 border">{data.reduce((sum, item) => sum + (item.potentialRevenue || 0), 0).toLocaleString()} บาท</td>
-                <td className="p-2 border">{averageRevPERPercentage}%</td>
+                <td className="p-2 border">{averageRevPERPercentage} บาท</td>
                 <td className="p-2 border">{targetYearlyRevenue.toLocaleString()} บาท</td>
                 <td className="p-2 border">-</td>
               </tr>
