@@ -77,12 +77,12 @@ const SummaryCards: React.FC<SummaryCardsProps> = ({
               {lowestRevPERMonth.month} ({lowestRevPERMonth.revPER} บาท)
             </span>
           </div>
-          <div className="flex justify-between items-center">
+          {/* <div className="flex justify-between items-center">
             <span className="text-gray-600">ช่องว่างในการเพิ่มรายได้:</span>
             <span className="text-lg font-bold">
               {(2500 - averageRevPERPercentage)} บาท
             </span>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -91,26 +91,26 @@ const SummaryCards: React.FC<SummaryCardsProps> = ({
         <div className="space-y-3">
           <div className="flex justify-between items-center">
             <span className="text-gray-600 tooltip" data-tip="Revenue Per Expected Room">GOPPAR เฉลี่ย:</span>
-            <span className="text-lg font-bold text-purple-600">{averageGOPPARPercentage} บาท</span>
+            <span className="text-lg font-bold text-purple-600">{averageGOPPARPercentage.toFixed(0)} บาท</span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-gray-600">เดือนที่มี GOPPAR สูงสุด:</span>
             <span className="text-lg font-bold text-green-600">
-              {highestGOPPARMonth.month} ({highestGOPPARMonththb} บาท)
+              {highestGOPPARMonth.month} ({highestGOPPARMonththb.toFixed(0)} บาท)
             </span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-gray-600">เดือนที่มี GOPPAR ต่ำสุด:</span>
             <span className="text-lg font-bold text-red-600">
-              {lowestGOPPARMonth.month} ({lowestGOPPARMonththb} บาท)
+              {lowestGOPPARMonth.month} ({lowestGOPPARMonththb.toFixed(0)} บาท)
             </span>
           </div>
-          <div className="flex justify-between items-center">
+          {/* <div className="flex justify-between items-center">
             <span className="text-gray-600">ช่องว่างในการเพิ่มรายได้:</span>
             <span className="text-lg font-bold">
-              {(100 - averageGOPPARPercentage).toFixed(1)}%
+              {(2500 - averageGOPPARPercentage).toFixed(0)} บาท
             </span>
-          </div>
+          </div> */}
         </div>
       </div>
       

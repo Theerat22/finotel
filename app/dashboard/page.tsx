@@ -34,7 +34,7 @@ const thaiDate = date.toLocaleDateString('th-TH', {
       <main className="pt-16 flex-grow">
         {renderPage()}
       </main>
-      <footer className="mt-8 text-center text-sm text-gray-500">
+      <footer className="mt-5 p-10 text-center text-sm text-gray-500">
           <p>
             &copy; {new Date().getFullYear()} Finotel  | อัปเดตล่าสุด {thaiDate}</p>
       </footer>

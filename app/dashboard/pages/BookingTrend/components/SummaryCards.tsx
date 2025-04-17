@@ -73,7 +73,7 @@ const SummaryCards: React.FC<SummaryCardsProps> = ({
           </div>
           <div className="flex justify-between items-center">
             <span className="text-gray-600">ราคาพื้นฐาน:</span>
-            <span className="text-lg font-bold">3,000 บาท</span>
+            <span className="text-lg font-bold">2,500 บาท</span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-gray-600">รายได้ที่คาดการณ์:</span>
@@ -93,7 +93,7 @@ const SummaryCards: React.FC<SummaryCardsProps> = ({
         <ul className="space-y-1 text-gray-700">
           <li className="flex items-start">
             <span className="text-blue-500 mr-2">•</span>
-            <span>เพิ่มราคาห้องในช่วง {peakMonth.month} (ช่วง High Season)</span>
+            <span>เตรียมพร้อมห้องพักในช่วง {peakMonth.month} (ช่วง High Season)</span>
           </li>
           <li className="flex items-start">
             <span className="text-blue-500 mr-2">•</span>
@@ -103,10 +103,10 @@ const SummaryCards: React.FC<SummaryCardsProps> = ({
             <span className="text-blue-500 mr-2">•</span>
             <span>ตรวจสอบให้มีพนักงานเพียงพอในวัน {peakDay.dayOfWeek} (อัตราการเข้าพักสูงสุด)</span>
           </li>
-          <li className="flex items-start">
+          {/* <li className="flex items-start">
             <span className="text-blue-500 mr-2">•</span>
             <span>เตรียมพร้อมสำหรับเทศกาลสงกรานต์ (13-15 เมษายน)</span>
-          </li>
+          </li> */}
           <li className="flex items-start">
             <span className="text-blue-500 mr-2">•</span>
             <span>
