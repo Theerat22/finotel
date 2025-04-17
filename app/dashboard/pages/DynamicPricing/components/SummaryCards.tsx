@@ -11,6 +11,9 @@ interface SummaryCardsProps {
   averageRevPERPercentage: number;
   highestRevPERMonth: CombinedDataItem;
   lowestRevPERMonth: CombinedDataItem;
+  averageGOPPARPercentage: number;
+  highestGOPPARMonth: CombinedDataItem;
+  lowestGOPPARMonth: CombinedDataItem;
 }
 
 const SummaryCards: React.FC<SummaryCardsProps> = ({
@@ -18,11 +21,14 @@ const SummaryCards: React.FC<SummaryCardsProps> = ({
   averageForecastOccupancy,
   peakMonth,
   lowMonth,
-  totalYearlyRevenue,
-  targetYearlyRevenue,
+  // totalYearlyRevenue,
+  // targetYearlyRevenue,
   averageRevPERPercentage,
   highestRevPERMonth,
-  lowestRevPERMonth
+  lowestRevPERMonth,
+  averageGOPPARPercentage,
+  highestGOPPARMonth,
+  lowestGOPPARMonth
 }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
@@ -44,28 +50,6 @@ const SummaryCards: React.FC<SummaryCardsProps> = ({
           <div className="flex justify-between items-center">
             <span className="text-gray-600">เดือนที่ต่ำสุด:</span>
             <span className="text-lg font-bold text-red-600">{lowMonth.month} ({lowMonth.forecastOccupancy}%)</span>
-          </div>
-        </div>
-      </div>
-      
-      <div className="bg-white rounded-lg shadow-md p-4">
-        <h2 className="text-lg font-semibold mb-2 text-blue-700">ภาพรวมการเงิน</h2>
-        <div className="space-y-3">
-          <div className="flex justify-between items-center">
-            <span className="text-gray-600">จำนวนห้องทั้งหมด:</span>
-            <span className="text-lg font-bold">8 ห้อง</span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-gray-600">ราคาพื้นฐาน:</span>
-            <span className="text-lg font-bold">3,000 บาท</span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-gray-600">รายได้ที่คาดการณ์:</span>
-            <span className="text-lg font-bold">{(totalYearlyRevenue/1000000).toFixed(2)} ล้านบาท</span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-gray-600">เป้าหมายรายได้:</span>
-            <span className="text-lg font-bold text-blue-600">{(targetYearlyRevenue/1000000).toFixed(2)} ล้านบาท</span>
           </div>
         </div>
       </div>
@@ -97,6 +81,37 @@ const SummaryCards: React.FC<SummaryCardsProps> = ({
           </div>
         </div>
       </div>
+
+      <div className="bg-white rounded-lg shadow-md p-4">
+        <h2 className="text-lg font-semibold mb-2 text-blue-700">ข้อมูล GOPPAR</h2>
+        <div className="space-y-3">
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600 tooltip" data-tip="Revenue Per Expected Room">GOPPAR เฉลี่ย:</span>
+            <span className="text-lg font-bold text-purple-600">{averageGOPPARPercentage}%</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600">เดือนที่มี GOPPAR สูงสุด:</span>
+            <span className="text-lg font-bold text-green-600">
+              {highestGOPPARMonth.month} ({highestGOPPARMonth.revPERPercentage}%)
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600">เดือนที่มี GOPPAR ต่ำสุด:</span>
+            <span className="text-lg font-bold text-red-600">
+              {lowestGOPPARMonth.month} ({lowestGOPPARMonth.revPERPercentage}%)
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600">ช่องว่างในการเพิ่มรายได้:</span>
+            <span className="text-lg font-bold">
+              {(100 - averageGOPPARPercentage).toFixed(1)}%
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      
+
     </div>
   );
 };

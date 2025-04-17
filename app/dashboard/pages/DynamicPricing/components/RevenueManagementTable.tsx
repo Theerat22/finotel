@@ -8,6 +8,7 @@ interface RevenueManagementTableProps {
   totalYearlyRevenue: number;
   targetYearlyRevenue: number;
   averageRevPERPercentage: number;
+  averageGOPPARPercentage: number;
 }
 
 const RevenueManagementTable: React.FC<RevenueManagementTableProps> = ({ 
@@ -98,8 +99,8 @@ const RevenueManagementTable: React.FC<RevenueManagementTableProps> = ({
           {activeTab === 'high' && (
             <>
               {renderPromotionCard(
-                "เพิ่มราคาห้องพักพรีเมียม",
-                "เพิ่มราคาห้องพักประเภทพรีเมียมขึ้น 15-20% จากราคาปกติในช่วงที่มีอัตราการเข้าพักสูง",
+                "เพิ่มราคาห้องพัก",
+                "เพิ่มราคาห้องพักขึ้น 15-20% จากราคาปกติในช่วงที่มีอัตราการเข้าพักสูง",
                 "high",
                 highOccupancyMonths
               )}
@@ -124,7 +125,7 @@ const RevenueManagementTable: React.FC<RevenueManagementTableProps> = ({
             <>
               {renderPromotionCard(
                 "ราคาปกติพร้อมสิทธิพิเศษ",
-                "รักษาระดับราคาปกติ แต่เพิ่มสิทธิพิเศษ เช่น อาหารเช้าฟรี หรือ รับเครดิตใช้ในโรงแรม",
+                "รักษาระดับราคาปกติ แต่เพิ่มสิทธิพิเศษ เช่น อาหารเช้าฟรี",
                 "medium",
                 mediumOccupancyMonths
               )}
@@ -148,7 +149,7 @@ const RevenueManagementTable: React.FC<RevenueManagementTableProps> = ({
           {activeTab === 'low' && (
             <>
               {renderPromotionCard(
-                "ส่วนลดฤดูกาล",
+                "ส่วนลด low season",
                 "มอบส่วนลด 20-30% จากราคาปกติในช่วงที่มีอัตราการเข้าพักต่ำ",
                 "low",
                 lowOccupancyMonths
@@ -174,7 +175,7 @@ const RevenueManagementTable: React.FC<RevenueManagementTableProps> = ({
 
       {/* Original Revenue Management Table */}
       <div className="bg-white rounded-lg shadow-md p-4">
-        <h2 className="text-xl font-semibold mb-4">รายงานการจัดการรายได้และ RevPER</h2>
+        <h2 className="text-xl font-semibold mb-4">รายงานการจัดการราคาห้องพัก</h2>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
@@ -184,7 +185,7 @@ const RevenueManagementTable: React.FC<RevenueManagementTableProps> = ({
                 <th className="p-2 border">ราคาเฉลี่ย</th>
                 <th className="p-2 border">รายได้ที่คาดการณ์</th>
                 <th className="p-2 border">รายได้สูงสุดที่เป็นไปได้</th>
-                <th className="p-2 border">RevPER</th>
+                <th className="p-2 border">RevPAR</th>
                 <th className="p-2 border">เป้าหมาย</th>
                 <th className="p-2 border">กลยุทธ์</th>
               </tr>

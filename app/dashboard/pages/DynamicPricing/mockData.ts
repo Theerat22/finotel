@@ -1,4 +1,4 @@
-import { HistoricalDataItem, ForecastDataItem, DailyDataItem, CombinedDataItem } from './types';
+import { HistoricalDataItem, ForecastDataItem, DailyDataItem, CombinedDataItem, GOPPARDataItem } from './types';
 
 // Generate historical data function
 export const generateHistoricalData = (): HistoricalDataItem[] => {
@@ -225,6 +225,65 @@ export const generateRevenueData = (
   });
 };
 
+// Generate operating expenses based on revenue and other factors
+export const generateOperatingExpenses = (revenue: number, month: string, occupancyRate: number): number => {
+  // Base operating expenses typically range from 60-75% of revenue in hotel industry
+  let baseExpenseRatio = 0.65; // 65% as base expense ratio
+  
+  // Adjust based on season (higher occupancy often means higher variable costs)
+  if (['November', 'December', 'January', 'April'].includes(month)) {
+    // High season - economies of scale but higher labor costs
+    if (occupancyRate > 70) {
+      baseExpenseRatio = 0.62; // More efficient operations with higher occupancy
+    } else {
+      baseExpenseRatio = 0.67; // Higher fixed costs spread over fewer rooms
+    }
+  } else if (['July', 'August'].includes(month)) {
+    // Low season - less efficient operations
+    baseExpenseRatio = 0.72; // Higher expense ratio during low season
+  }
+  
+  // Calculate expenses
+  const operatingExpenses = revenue * baseExpenseRatio;
+  
+  // Add some random variation (±5%)
+  const randomFactor = 0.95 + (Math.random() * 0.1);
+  return Math.round(operatingExpenses * randomFactor);
+};
+
+// Calculate GOPPAR for the dataset
+export const calculateGOPPAR = (revenueData: CombinedDataItem[], roomCount: number = 8): GOPPARDataItem[] => {
+  return revenueData.map(item => {
+    // Calculate operating expenses
+    const operatingExpenses = generateOperatingExpenses(
+      item.estimatedRevenue, 
+      item.month, 
+      item.forecastOccupancy
+    );
+    
+    // Calculate gross operating profit
+    const grossOperatingProfit = item.estimatedRevenue - operatingExpenses;
+    
+    // Calculate days in month (approximate)
+    const daysInMonth = new Date(2025, revenueData.indexOf(item) + 1, 0).getDate();
+    
+    // Calculate GOPPAR
+    const totalAvailableRooms = roomCount * daysInMonth;
+    const goppar = grossOperatingProfit / totalAvailableRooms;
+    
+    // Calculate GOPPAR as percentage of potential revenue
+    const gopparPercentage = (grossOperatingProfit / item.potentialRevenue) * 100;
+    
+    return {
+      ...item,
+      operatingExpenses,
+      grossOperatingProfit,
+      goppar: parseFloat(goppar.toFixed(2)),
+      gopparPercentage: parseFloat(gopparPercentage.toFixed(2))
+    };
+  });
+};
+
 // Helper function to calculate summary statistics
 export const calculateSummaryStatistics = (
   historicalData: HistoricalDataItem[],
@@ -276,5 +335,52 @@ export const calculateSummaryStatistics = (
     averageRevPERPercentage,
     highestRevPERMonth,
     lowestRevPERMonth
+  };
+};
+
+// Extended function to calculate summary statistics including GOPPAR
+export const calculateSummaryStatisticsWithGOPPAR = (
+  historicalData: HistoricalDataItem[],
+  forecastData: ForecastDataItem[],
+  revenueData: GOPPARDataItem[]
+) => {
+  // Get base statistics
+  const baseStats = calculateSummaryStatistics(historicalData, forecastData, revenueData);
+  
+  // Calculate GOPPAR statistics
+  const totalOperatingExpenses = revenueData.reduce((sum, item) => sum + item.operatingExpenses, 0);
+  const totalGrossOperatingProfit = revenueData.reduce((sum, item) => sum + item.grossOperatingProfit, 0);
+  
+  // Calculate average GOPPAR
+  const averageGOPPAR = parseFloat(
+    (revenueData.reduce((sum, item) => sum + item.goppar, 0) / revenueData.length).toFixed(2)
+  );
+  
+  // Calculate average GOPPAR percentage
+  const averageGOPPARPercentage = parseFloat(
+    (revenueData.reduce((sum, item) => sum + item.gopparPercentage, 0) / revenueData.length).toFixed(2)
+  );
+  
+  // Find highest and lowest GOPPAR months
+  const highestGOPPARMonth = revenueData.reduce(
+    (max, item) => item.goppar > max.goppar ? item : max, revenueData[0]
+  );
+  
+  const lowestGOPPARMonth = revenueData.reduce(
+    (min, item) => item.goppar < min.goppar ? item : min, revenueData[0]
+  );
+  
+  // Calculate profit margin
+  const overallProfitMargin = (totalGrossOperatingProfit / baseStats.totalYearlyRevenue) * 100;
+  
+  return {
+    ...baseStats,
+    totalOperatingExpenses,
+    totalGrossOperatingProfit,
+    averageGOPPAR,
+    averageGOPPARPercentage,
+    highestGOPPARMonth,
+    lowestGOPPARMonth,
+    overallProfitMargin: parseFloat(overallProfitMargin.toFixed(2))
   };
 };

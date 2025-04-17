@@ -5,23 +5,28 @@ import SummaryCards from './components/SummaryCards';
 import DynamicPricingChart from './components/DynamicPricingChart';
 import RevenueForecastChart from './components/RevenueForecastChart';
 import RevenueManagementTable from './components/RevenueManagementTable';
+import RecommendationsBox from './components/RecommendationsBox';
 import { 
   generateHistoricalData, 
   generateForecastData, 
   generateDailyData, 
   generateRevenueData,
-  calculateSummaryStatistics
+  calculateGOPPAR,
+  calculateSummaryStatisticsWithGOPPAR
 } from './mockData';
 
 const DynamicPricing: React.FC = () => {
+  
   // Generate all the required data
   const historicalData = generateHistoricalData();
   const forecastData = generateForecastData(historicalData);
   const dailyData = generateDailyData();
   const revenueData = generateRevenueData(forecastData, dailyData);
+  const gopparData = calculateGOPPAR(revenueData);
+  const stats = calculateSummaryStatisticsWithGOPPAR(historicalData, forecastData, gopparData);
   
   // Calculate summary statistics
-  const stats = calculateSummaryStatistics(historicalData, forecastData, revenueData);
+  // const stats = calculateSummaryStatistics(historicalData, forecastData, revenueData);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -45,7 +50,12 @@ const DynamicPricing: React.FC = () => {
           averageRevPERPercentage={stats.averageRevPERPercentage}
           highestRevPERMonth={stats.highestRevPERMonth}
           lowestRevPERMonth={stats.lowestRevPERMonth}
+          averageGOPPARPercentage={stats.averageGOPPARPercentage}
+          highestGOPPARMonth={stats.highestGOPPARMonth}
+          lowestGOPPARMonth={stats.lowestGOPPARMonth}
         />
+
+        <RecommendationsBox />
         
         <div className="space-y-8">
           {/* Dynamic Pricing Chart Component */}
@@ -61,6 +71,7 @@ const DynamicPricing: React.FC = () => {
             targetYearlyRevenue={stats.targetYearlyRevenue}
             averageForecastOccupancy={stats.averageForecastOccupancy}
             averageRevPERPercentage={stats.averageRevPERPercentage}
+            averageGOPPARPercentage={stats.averageGOPPARPercentage}
           />
         </div>
       </div>
