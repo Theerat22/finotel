@@ -25,6 +25,7 @@ const DynamicPricing: React.FC = () => {
   const gopparData = calculateGOPPAR(revenueData);
   const stats = calculateSummaryStatisticsWithGOPPAR(historicalData, forecastData, gopparData);
   
+  // const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   // Calculate summary statistics
   // const stats = calculateSummaryStatistics(historicalData, forecastData, revenueData);
 
@@ -55,7 +56,7 @@ const DynamicPricing: React.FC = () => {
           lowestGOPPARMonth={stats.lowestGOPPARMonth}
         />
 
-        <RecommendationsBox />
+        
         
         <div className="space-y-8">
           {/* Dynamic Pricing Chart Component */}
@@ -73,8 +74,13 @@ const DynamicPricing: React.FC = () => {
             averageRevPERPercentage={stats.averageRevPERPercentage}
             averageGOPPARPercentage={stats.averageGOPPARPercentage}
           />
+
+          <RecommendationsBox />
         </div>
+        
       </div>
+
+      
     </div>
   );
 };
