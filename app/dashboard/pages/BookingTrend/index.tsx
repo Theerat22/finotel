@@ -59,8 +59,8 @@ const BookingTrend: React.FC = () => {
         {/* Monthly Data Tab */}
         {selectedTab === 'monthly' && (
           <div className="space-y-8 mt-8">
-            <EventTabs />
             <MonthlyTrendChart data={revenueData} />
+            <EventTabs />
           </div>
         )}
         
