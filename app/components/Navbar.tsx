@@ -7,7 +7,7 @@ import {
   Home, 
   BarChart, 
   Settings, 
-  BadgeDollarSign,
+  // BadgeDollarSign,
   Menu, 
   X
 } from 'lucide-react';
