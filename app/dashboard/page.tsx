@@ -5,6 +5,7 @@ import Navbar from '@/app/components/Navbar';
 import BookingTrend from './pages/BookingTrend';
 import DynamicPricing from './pages/DynamicPricing';
 // import ExpenseAnalysis from '@/app/dashboard/pages/ExpenseAnalysist';
+import { Analytics } from "@vercel/analytics/react";
 
 const Dashboard: React.FC = () => {
   const [activePage, setActivePage] = useState('overview');
@@ -32,6 +33,7 @@ const thaiDate = date.toLocaleDateString('th-TH', {
         setActivePage={setActivePage} 
       />
       <main className="pt-16 flex-grow">
+        <Analytics />
         {renderPage()}
       </main>
       <footer className="mt-5 p-10 text-center text-sm text-gray-500">
