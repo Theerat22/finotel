@@ -62,21 +62,21 @@ const Profile: React.FC<Step1Props> = ({ setActivePage }) => {
 //   };
   const main = async () => {
     await liff.init({ liffId: "2007306544-Oyvzorbv" });
-    if (liff.isLoggedIn()) {
+    liff.login()
+
+    if (liff.isLoggedIn()){
         const profile = await liff.getProfile();
         console.log(profile);
 
         setDisplayName(profile.displayName);
         setPictureUrl(profile.pictureUrl || '');
         setUserId(profile.userId);
-    } else {
-        liff.login();
-        console.log("please login");
     }
+    
   }
 
   useEffect(() => {
-    liff.init({ liffId: "2007306544-Oyvzorbv" });
+
     // ตรวจสอบว่า liff object มีอยู่จริงก่อนเรียกใช้
     if (liff) {
       main();
