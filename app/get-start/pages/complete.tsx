@@ -2,15 +2,24 @@
 import React, { useEffect } from 'react';
 import liff from '@line/liff';
 import { CiCircleCheck } from "react-icons/ci";
-interface ProfileProps {
-  setActivePage: React.Dispatch<React.SetStateAction<string>>;
-}
 
-const Complete: React.FC<ProfileProps> = ({ setActivePage }) => {
+
+
+const Complete: React.FC = () => {
     useEffect(() => {
-        liff.init({ liffId: "2007306544-Oyvzorbv" });
-        liff.closeWindow();
-    }, [setActivePage]);
+        const initializeLiff = async () => {
+          try {
+            await liff.init({ liffId: "2007306544-Oyvzorbv" });
+            setTimeout(() => {
+              liff.closeWindow();
+            }, 2000);
+          } catch (error) {
+            console.error('LIFF initialization failed', error);
+          }
+        };
+    
+        initializeLiff();
+      }, []);
 
   return (
     <div className="bg-gray-50 min-h-screen flex items-center justify-center">

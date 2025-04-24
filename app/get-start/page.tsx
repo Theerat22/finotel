@@ -17,7 +17,7 @@ const StartPage: React.FC = () => {
       case "hotel":
         return <Step2 setActivePage={setActivePage} />;
       case "complete":
-        return <Complete setActivePage={setActivePage} />;
+        return <Complete />;
       // case "finance":
       //   return <Link href="/dashboard">Finance Dashboard Page</Link>;
       default:
