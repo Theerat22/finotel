@@ -13,12 +13,128 @@ const Complete: React.FC = () => {
         success?: boolean;
       }>({ loading: false });
 
-    const message = 'เริ่มต้นกับ Finotel เสร็จเรียบร้อยแล้ว! \nยินดีต้อนโรงแรม CD ลิงกังกู ที่มาเป็นส่วนนึงในการร่วมสร้างคอมมูนิตี้ของโรงแรมขนาดเล็ก';
+    const message = [[
+        {
+          "type": "bubble",
+          "size": "nano",
+          "header": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "มิถุนายน",
+                "color": "#ffffff",
+                "align": "start",
+                "size": "md",
+                "gravity": "center"
+              },
+              {
+                "type": "text",
+                "text": "70%",
+                "margin": "none",
+                "size": "xs",
+                "align": "start"
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                      {
+                        "type": "filler"
+                      }
+                    ],
+                    "width": "70%",
+                    "backgroundColor": "#0D8186",
+                    "height": "6px"
+                  }
+                ],
+                "backgroundColor": "#9FD8E36E",
+                "height": "6px",
+                "margin": "sm"
+              }
+            ],
+            "backgroundColor": "#27ACB2",
+            "paddingTop": "19px",
+            "paddingAll": "12px",
+            "paddingBottom": "16px"
+          },
+          "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "RevPAR",
+                    "color": "#8C8C8C",
+                    "size": "xxs",
+                    "wrap": true,
+                    "align": "start"
+                  },
+                  {
+                    "type": "text",
+                    "text": "200",
+                    "size": "xs",
+                    "align": "end"
+                  }
+                ],
+                "flex": 1
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "GOPPAR",
+                    "color": "#8C8C8C",
+                    "size": "xxs",
+                    "wrap": true,
+                    "align": "start"
+                  },
+                  {
+                    "type": "text",
+                    "text": "100",
+                    "size": "xs",
+                    "align": "end"
+                  }
+                ],
+                "flex": 1
+              },
+              {
+                "type": "button",
+                "action": {
+                  "type": "uri",
+                  "label": "เพิ่มเติม",
+                  "uri": "http://linecorp.com/"
+                },
+                "margin": "xs"
+              }
+            ],
+            "spacing": "md",
+            "paddingAll": "12px"
+          },
+          "styles": {
+            "footer": {
+              "separator": false
+            }
+          }
+        }
+      ]];
+
     const { userData } = useUser();
     const userId = userData.userId;
 
     const sendMessage = async () => {
-        if (!message.trim()) {
+        if (!message) {
             setStatus({ loading: false, error: 'Message cannot be empty' });
             return;
         }
@@ -27,7 +143,7 @@ const Complete: React.FC = () => {
             setStatus({ loading: true });
             console.log('Sending message:', message);
             
-            const response = await axios.post('/api/sendMessage', {
+            const response = await axios.post('/api/sendFlexMessage', {
             userId,
             message
             });
