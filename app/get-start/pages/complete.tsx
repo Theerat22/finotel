@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useEffect, useState } from 'react';
 import liff from '@line/liff';
@@ -12,7 +13,7 @@ const Complete: React.FC = () => {
         success?: boolean;
       }>({ loading: false });
 
-    const message = 'เริ่มต้นกับ Finotel เสร็จเรียบร้อยแล้ว \n ';
+    const message = 'เริ่มต้นกับ Finotel เสร็จเรียบร้อยแล้ว! \nยินดีต้อนโรงแรม CD ลิงกังกู ที่มาเป็นส่วนนึงในการร่วมสร้างคอมมูนิตี้ของโรงแรมขนาดเล็ก';
     const { userData } = useUser();
     const userId = userData.userId;
 
@@ -65,14 +66,14 @@ const Complete: React.FC = () => {
       <div className="w-full max-w-4xl mx-auto bg-white rounded-md shadow overflow-hidden p-10 items-center text-center flex flex-col">
         <CiCircleCheck size={100} className='text-green-600' />
         <h1 className='font-bold text-2xl text-blue-600 mt-4'>เริ่มต้นกับ Finotel เสร็จเรียบร้อย</h1>
-      </div>
-      {status.error && (
+        {status.error && (
         <div className="text-red-500 text-sm">{status.error}</div>
       )}
       
       {status.success && (
-        <div className="text-green-500 text-sm">Message sent successfully!</div>
+        <div className="text-green-500 text-sm"></div>
       )}
+      </div>
     </div>
   );
 };

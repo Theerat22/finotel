@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaArrowLeft,FaArrowRight } from 'react-icons/fa';
-import { useUser } from '@/app/components/UserContext';
-import LineMessageSender from '@/app/components/line/LineMessageSender';
+// import { useUser } from '@/app/components/UserContext';
+// import LineMessageSender from '@/app/components/line/LineMessageSender';
 
 interface Step1Props {
   setActivePage: React.Dispatch<React.SetStateAction<string>>;
@@ -22,7 +22,7 @@ const Step1: React.FC<Step1Props> = ({ setActivePage }) => {
     email: 'cdlingangu@gmail.com',
   });
 
-  const { userData } = useUser();
+  // const { userData } = useUser();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -46,7 +46,7 @@ const Step1: React.FC<Step1Props> = ({ setActivePage }) => {
   return (
     <div className="bg-gray-50 min-h-screen flex items-center justify-center">
       <div className="w-full max-w-4xl mx-auto bg-white rounded-md shadow overflow-hidden">
-        <LineMessageSender userId={userData.userId} />
+        {/* <LineMessageSender userId={userData.userId} /> */}
         <div className="md:hidden bg-blue-600 flex flex-col items-center justify-center p-4 text-center">
           <h1 className="text-xl font-bold text-white mb-2">เริ่มต้นโรงแรมของคุณ</h1>
           <p className="text-blue-100 mb-3 text-sm">กรอกข้อมูลโรงแรมของคุณเพื่อเริ่มต้นการใช้งานระบบ</p>
