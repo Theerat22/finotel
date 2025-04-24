@@ -62,7 +62,7 @@ const Profile: React.FC<Step1Props> = ({ setActivePage }) => {
 //   };
   const main = async () => {
     await liff.init({ liffId: "2007306544-Oyvzorbv" });
-    liff.login()
+    // liff.login()
 
     if (liff.isLoggedIn()){
         const profile = await liff.getProfile();
@@ -71,6 +71,8 @@ const Profile: React.FC<Step1Props> = ({ setActivePage }) => {
         setDisplayName(profile.displayName);
         setPictureUrl(profile.pictureUrl || '');
         setUserId(profile.userId);
+    } else {
+        liff.login()
     }
     
   }
