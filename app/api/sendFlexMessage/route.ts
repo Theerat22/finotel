@@ -23,8 +23,9 @@ export async function POST(request: NextRequest) {
       to: userId,
       messages: [
         {
-          type: 'bubble',
-          body: message
+          type: 'flex',
+          altText: 'Send Flex message',
+          contents: message
         }
       ]
     };
