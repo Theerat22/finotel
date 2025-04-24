@@ -14,22 +14,166 @@ const Complete: React.FC = () => {
       }>({ loading: false });
 
     const message = {
-        "type": "bubble",
-        "body": {
-          "type": "box",
-          "layout": "horizontal",
-          "contents": [
-            {
-              "type": "text",
-              "text": "Hello,"
-            },
-            {
-              "type": "text",
-              "text": "World!"
-            }
-          ]
-        }
-      }
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "สรุปการเงินโรงแรม",
+            "weight": "bold",
+            "color": "#1DB446",
+            "size": "sm"
+          },
+          {
+            "type": "text",
+            "text": "โรงแรมลิงกังกู",
+            "weight": "bold",
+            "size": "xxl",
+            "margin": "md"
+          },
+          {
+            "type": "text",
+            "size": "xs",
+            "color": "#aaaaaa",
+            "wrap": true,
+            "text": "Nan, Thailand"
+          },
+          {
+            "type": "separator",
+            "margin": "xxl"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "margin": "xxl",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "รายได้รวม (ทั้งปี)",
+                    "size": "sm",
+                    "color": "#555555",
+                    "flex": 0
+                  },
+                  {
+                    "type": "text",
+                    "text": "8,082,993 ฿",
+                    "size": "sm",
+                    "color": "#1DB446",
+                    "align": "end"
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "รายจ่ายรวม (ทั้งปี)",
+                    "size": "sm",
+                    "color": "#555555",
+                    "flex": 0
+                  },
+                  {
+                    "type": "text",
+                    "text": "5,736,450 ฿",
+                    "size": "sm",
+                    "color": "#DC143C",
+                    "align": "end"
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "กำไร (EBITDA)",
+                    "size": "sm",
+                    "color": "#555555",
+                    "flex": 0
+                  },
+                  {
+                    "type": "text",
+                    "text": "2,346,543 ฿",
+                    "size": "sm",
+                    "color": "#1DB446",
+                    "align": "end"
+                  }
+                ]
+              },
+              {
+                "type": "separator",
+                "margin": "xxl"
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "margin": "xxl",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "RevPAR",
+                    "size": "sm",
+                    "color": "#555555"
+                  },
+                  {
+                    "type": "text",
+                    "text": "2383",
+                    "size": "sm",
+                    "color": "#145CFA",
+                    "align": "end"
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "GOPPAR",
+                    "size": "sm",
+                    "color": "#555555"
+                  },
+                  {
+                    "type": "text",
+                    "text": "867",
+                    "size": "sm",
+                    "color": "#145CFA",
+                    "align": "end"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "separator",
+            "margin": "xxl"
+          },
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "margin": "md",
+            "contents": [
+              {
+                "type": "button",
+                "action": {
+                  "type": "uri",
+                  "label": "ดูเพิ่มเติม",
+                  "uri": "http://linecorp.com/"
+                }
+              }
+            ]
+          }
+        ]
+      };
 
     const { userData } = useUser();
     const userId = userData.userId;
@@ -96,3 +240,5 @@ const Complete: React.FC = () => {
 };
 
 export default Complete;
+
+
