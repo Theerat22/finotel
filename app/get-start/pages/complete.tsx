@@ -12,7 +12,7 @@ const Complete: React.FC = () => {
             await liff.init({ liffId: "2007306544-Oyvzorbv" });
             setTimeout(() => {
               liff.closeWindow();
-            }, 2000);
+            }, 1000);
           } catch (error) {
             console.error('LIFF initialization failed', error);
           }
