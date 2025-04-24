@@ -1,29 +1,17 @@
-// pages/api/send-message.ts
-import type { NextApiRequest, NextApiResponse } from 'next';
-import axios from 'axios';
+import { NextRequest, NextResponse } from 'next/server';
+import axios, { AxiosError } from 'axios';
 
 const LINE_BOT_API = 'https://api.line.me/v2/bot';
 
-type ResponseData = {
-  message: string;
-  responseData?: string;
-  error?: string;
-};
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
-) {
-  // Only allow POST method
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
-  }
-
+export async function POST(request: NextRequest) {
   try {
-    const { userId, message } = req.body;
+    const { userId, message } = await request.json();
     
     if (!userId || !message) {
-      return res.status(400).json({ message: 'userId and message are required' });
+      return NextResponse.json(
+        { message: 'userId and message are required' },
+        { status: 400 }
+      );
     }
 
     const headers = {
@@ -47,15 +35,31 @@ export default async function handler(
       { headers }
     );
 
-    return res.status(200).json({
+    return NextResponse.json({
       message: 'Send message success',
       responseData: response.data
     });
-  } catch (error) {
+    
+  } catch (error: unknown) {
     console.error('Error sending LINE message:', error);
-    // return res.status(500).json({
-    //   message: 'Error sending message',
-    //   error: error.response?.data || error.message
-    // });
+    
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      return NextResponse.json(
+        { 
+          message: 'Error sending message',
+          error: axiosError.response?.data ? JSON.stringify(axiosError.response.data) : axiosError.message 
+        },
+        { status: 500 }
+      );
+    }
+    
+    return NextResponse.json(
+      { 
+        message: 'Error sending message',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
   }
 }
