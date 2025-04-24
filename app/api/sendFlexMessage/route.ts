@@ -5,9 +5,9 @@ const LINE_BOT_API = 'https://api.line.me/v2/bot';
 
 export async function POST(request: NextRequest) {
   try {
-    const { userId, message } = await request.json();
+    const { userId, flexMessage } = await request.json();
     
-    if (!userId || !message) {
+    if (!userId || !flexMessage) {
       return NextResponse.json(
         { message: 'userId and message are required' },
         { status: 400 }
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
         {
           type: 'flex',
           altText: 'Send Flex message',
-          contents: message
+          contents: flexMessage
         }
       ]
     };
