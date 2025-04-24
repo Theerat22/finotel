@@ -62,7 +62,6 @@ const Profile: React.FC<Step1Props> = ({ setActivePage }) => {
 //   };
   const main = async () => {
     await liff.init({ liffId: "2007306544-Oyvzorbv" });
-    liff.login()
 
     if (liff.isLoggedIn()){
         console.log("login leaw");
@@ -76,20 +75,12 @@ const Profile: React.FC<Step1Props> = ({ setActivePage }) => {
     } else {
         console.log('young mai dai login')
         liff.login()
-
     }
     
   }
 
   useEffect(() => {
-
-    // ตรวจสอบว่า liff object มีอยู่จริงก่อนเรียกใช้
-    if (liff) {
-      main();
-    } else {
-      setError('ไม่พบ LIFF SDK กรุณาตรวจสอบการติดตั้ง');
-      setIsLoading(false);
-    }
+    main()
   }, []);
 
   if (isLoading) return (
