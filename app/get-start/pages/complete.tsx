@@ -13,7 +13,7 @@ const Complete: React.FC = () => {
         success?: boolean;
       }>({ loading: false });
 
-    const message = [[
+    const message = [
         {
           "type": "bubble",
           "size": "nano",
@@ -128,7 +128,7 @@ const Complete: React.FC = () => {
             }
           }
         }
-      ]];
+      ];
 
     const { userData } = useUser();
     const userId = userData.userId;
