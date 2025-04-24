@@ -24,7 +24,7 @@ export default function LineMessageSender({ userId }: LineMessageSenderProps) {
       setStatus({ loading: true });
       console.log('Sending message:', message);
       
-      const response = await axios.post('/api/send-message', {
+      const response = await axios.post('/api/sendMessage', {
         userId,
         message
       });
