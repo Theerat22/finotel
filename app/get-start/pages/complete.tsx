@@ -13,7 +13,7 @@ const Complete: React.FC = () => {
         success?: boolean;
       }>({ loading: false });
 
-    const message = {
+    const flexMessage = {
         "type": "bubble",
         "body": {
           "type": "box",
@@ -182,7 +182,7 @@ const Complete: React.FC = () => {
           }
         }
       };
-
+    const message = 'เริ่มต้นกับ Finotel เสร็จเรียบร้อยแล้ว! \n\n ยินดีต้อนรับ "โรงแรมลิงกังกู" ที่มาเป็นส่วนนึงของครอบครัว Finotel';
     const { userData } = useUser();
     const userId = userData.userId;
 
@@ -196,9 +196,35 @@ const Complete: React.FC = () => {
             setStatus({ loading: true });
             console.log('Sending message:', message);
             
-            const response = await axios.post('/api/sendFlexMessage', {
+            const response = await axios.post('/api/sendMessage', {
             userId,
             message
+            });
+            
+            console.log('Response:', response.data);
+            setStatus({ loading: false, success: true });
+
+            setTimeout(() => {
+            setStatus({ loading: false });
+            }, 3000);
+        } catch (error) {
+            console.error("Error:", error);
+        };
+    };
+
+    const sendFlexMessage = async () => {
+        if (!flexMessage) {
+            setStatus({ loading: false, error: 'Message cannot be empty' });
+            return;
+        }
+    
+        try {
+            setStatus({ loading: true });
+            console.log('Sending message:', flexMessage);
+            
+            const response = await axios.post('/api/sendFlexMessage', {
+            userId,
+            flexMessage
             });
             
             console.log('Response:', response.data);
@@ -218,6 +244,7 @@ const Complete: React.FC = () => {
           try {
             await liff.init({ liffId: "2007306544-Oyvzorbv" });
             sendMessage();
+            sendFlexMessage();
             setTimeout(() => {
               liff.closeWindow();
             }, 1000);
