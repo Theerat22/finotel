@@ -23,7 +23,8 @@ export async function POST(request: NextRequest) {
       to: userId,
       messages: [
         {
-          type: 'carousel',
+          type: 'flex',
+          "altText": "This is a Flex Message",
           contents: message
         }
       ]
