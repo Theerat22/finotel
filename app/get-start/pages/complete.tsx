@@ -182,7 +182,7 @@ const Complete: React.FC = () => {
           }
         }
       };
-    const message = 'เริ่มต้นกับ Finotel เสร็จเรียบร้อยแล้ว! \n\n ยินดีต้อนรับ "โรงแรมลิงกังกู" ที่มาเป็นส่วนนึงของครอบครัว Finotel';
+    const message = 'เริ่มต้นกับ Finotel เสร็จเรียบร้อยแล้ว! \n\nยินดีต้อนรับ "โรงแรมลิงกังกู" ที่มาเป็นส่วนนึงของครอบครัว Finotel';
     const { userData } = useUser();
     const userId = userData.userId;
 
@@ -200,6 +200,8 @@ const Complete: React.FC = () => {
             userId,
             message
             });
+
+            sendFlexMessage()
             
             console.log('Response:', response.data);
             setStatus({ loading: false, success: true });
@@ -207,7 +209,6 @@ const Complete: React.FC = () => {
             setTimeout(() => {
             setStatus({ loading: false });
             }, 4000);
-            sendFlexMessage()
         } catch (error) {
             console.error("Error:", error);
         };
