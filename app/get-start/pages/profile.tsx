@@ -18,7 +18,7 @@ const Profile: React.FC<Step1Props> = ({ setActivePage }) => {
   const [displayName, setDisplayName] = useState<string>('');
   const [userId, setUserId] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+//   const [error, setError] = useState<string | null>(null);
 
   const logout = (): void => {
     liff.logout();
@@ -92,20 +92,20 @@ const Profile: React.FC<Step1Props> = ({ setActivePage }) => {
     </div>
   );
 
-  if (error) return (
-    <div className="bg-gray-50 min-h-screen flex items-center justify-center">
-      <div className="w-full max-w-md mx-auto bg-white rounded-md shadow p-6 text-center">
-        <div className="text-red-500 mb-4">เกิดข้อผิดพลาด</div>
-        <p>{error}</p>
-        <button 
-          className="mt-4 font-bold text-white bg-blue-600 hover:bg-blue-700 py-2 px-4 rounded-lg"
-          onClick={() => window.location.reload()}
-        >
-          ลองใหม่อีกครั้ง
-        </button>
-      </div>
-    </div>
-  );
+//   if (error) return (
+//     <div className="bg-gray-50 min-h-screen flex items-center justify-center">
+//       <div className="w-full max-w-md mx-auto bg-white rounded-md shadow p-6 text-center">
+//         <div className="text-red-500 mb-4">เกิดข้อผิดพลาด</div>
+//         <p>{error}</p>
+//         <button 
+//           className="mt-4 font-bold text-white bg-blue-600 hover:bg-blue-700 py-2 px-4 rounded-lg"
+//           onClick={() => window.location.reload()}
+//         >
+//           ลองใหม่อีกครั้ง
+//         </button>
+//       </div>
+//     </div>
+//   );
 
   return (
     <div className="bg-gray-50 min-h-screen flex items-center justify-center">
