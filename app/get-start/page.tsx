@@ -1,16 +1,16 @@
 "use client";
 import React, { useState } from 'react';
 import StartNav from '../components/StartNav';
-import Step1 from '@/app/get-start/pages/step1';
+// import Step1 from '@/app/get-start/pages/step1';
 import Step2 from './pages/step2';
-
+import Profile from './pages/profile';
 const StartPage: React.FC = () => {
   const [activePage, setActivePage] = useState('overview');
   
   const renderPage = () => {
     switch (activePage) {
       case "overview":
-        return <Step1 setActivePage={setActivePage} />;
+        return <Profile setActivePage={setActivePage} />;
       case "hotel":
         return <Step2 setActivePage={setActivePage} />;
       // case "finance":

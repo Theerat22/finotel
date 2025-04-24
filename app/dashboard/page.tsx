@@ -6,7 +6,7 @@ import BookingTrend from './pages/BookingTrend';
 import DynamicPricing from './pages/DynamicPricing';
 // import ExpenseAnalysis from '@/app/dashboard/pages/ExpenseAnalysist';
 import { Analytics } from "@vercel/analytics/react";
-
+import Slug from './pages';
 const Dashboard: React.FC = () => {
   const [activePage, setActivePage] = useState('overview');
 
@@ -15,7 +15,7 @@ const Dashboard: React.FC = () => {
       // case 'financial': return <ExpenseAnalysis />;
       case 'booking': return <BookingTrend />;
       case 'dynamic': return <DynamicPricing />;
-      default: return <BookingTrend />;
+      default: return <Slug />;
     }
   };
 
