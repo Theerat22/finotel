@@ -14,7 +14,7 @@ interface FormData {
 const Step1: React.FC<Step1Props> = ({ setActivePage }) => {
   const [formData, setFormData] = useState<FormData>({
     hotelName: 'CD ลิงกังกู',
-    ownerName: 'พวกเรา รักจุฬา',
+    ownerName: 'พวกเรา รักCEDT',
     contactPhone: '123-456-7890',
     email: 'cdlingangu@gmail.com',
   });
