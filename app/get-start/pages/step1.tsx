@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { FaArrowLeft,FaArrowRight } from 'react-icons/fa';
 interface Step1Props {
   setActivePage: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -33,10 +33,10 @@ const Step1: React.FC<Step1Props> = ({ setActivePage }) => {
     console.log(formData);
   };
 
-  const isFormValid = () => {
-    const { hotelName, ownerName, contactPhone, email } = formData;
-    return hotelName && ownerName && contactPhone && email;
-  };
+  // const isFormValid = () => {
+  //   const { hotelName, ownerName, contactPhone, email } = formData;
+  //   return hotelName && ownerName && contactPhone && email;
+  // };
 
   return (
     <div className="bg-gray-50 min-h-screen flex items-center justify-center">
@@ -115,18 +115,22 @@ const Step1: React.FC<Step1Props> = ({ setActivePage }) => {
                 </div>
               </div>
 
-              <div className="flex justify-end mt-6">
+              <div className="flex justify-between mt-6">
+                <button
+                  type="button"
+                  onClick={() => setActivePage('login')}
+                  className="flex items-center text-sm space-x-1 px-4 py-2 rounded-md text-gray-700 bg-gray-200 hover:bg-gray-300 transition duration-200"
+                >
+                  <FaArrowLeft className="h-3 w-3" />
+                  <span>ย้อนกลับ</span>
+                </button>
+                
                 <button
                   type="submit"
-                  disabled={!isFormValid()}
-                  className={`flex items-center text-sm space-x-1 px-4 py-2 rounded-md text-white font-medium 
-                    ${isFormValid() ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'} 
-                    transition duration-200`}
+                  className="flex items-center text-sm space-x-1 px-4 py-2 rounded-md text-white font-medium bg-blue-600 hover:bg-blue-700 transition duration-200"
                 >
                   <span>ถัดไป</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
+                  <FaArrowRight className="h-3 w-3" />
                 </button>
               </div>
             </form>

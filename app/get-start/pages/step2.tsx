@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useJsApiLoader, GoogleMap, Autocomplete } from '@react-google-maps/api';
 import { FaMapMarkerAlt, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
-const defaultCenter = { lat: 13.7563, lng: 100.5018 };
+const defaultCenter = { lat: 13.7367858, lng: 100.5331428};
 
 interface Step2Props {
   setActivePage: React.Dispatch<React.SetStateAction<string>>;
@@ -22,10 +22,10 @@ const libraries = ['places'] as ['places'];
 
 const Step2: React.FC<Step2Props> = ({ setActivePage }) => {
   const [locationData, setLocationData] = useState<LocationData>({
-    address: '',
+    address: "254 Phaya Thai Rd, Khwaeng Wang Mai, Pathum Wan, Krung Thep Maha Nakhon 10330, Thailand",
     latitude: defaultCenter.lat,
     longitude: defaultCenter.lng,
-    place_id: ''
+    place_id: "ChIJc4NRsNWe4jARQ6LvlRhjCb8"
   });
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [marker, setMarker] = useState<google.maps.Marker | null>(null);

@@ -6,60 +6,18 @@ interface Step1Props {
   setActivePage: React.Dispatch<React.SetStateAction<string>>;
 }
 
-// interface LineProfile {
-//   userId: string;
-//   displayName: string;
-//   pictureUrl?: string;
-//   statusMessage?: string;
-// }
 
 const Profile: React.FC<Step1Props> = ({ setActivePage }) => {
   const [pictureUrl, setPictureUrl] = useState<string>('');
   const [displayName, setDisplayName] = useState<string>('');
   const [userId, setUserId] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
-//   const [error, setError] = useState<string | null>(null);
 
   const logout = (): void => {
     liff.logout();
     window.location.reload();
   };
 
-//   const initLine = async (): Promise<void> => {
-//     try {
-//       console.log("เริ่มต้นการเชื่อมต่อกับ LINE...");
-//       await liff.init({ liffId: '2007306544-Oyvzorbv' });
-      
-//       console.log("สถานะการล็อกอิน:", liff.isLoggedIn());
-      
-//       if (liff.isLoggedIn()) {
-//         console.log("ผู้ใช้ล็อกอินแล้ว ดึงข้อมูลโปรไฟล์...");
-//         await fetchProfile();
-//       } else {
-//         console.log("ผู้ใช้ยังไม่ได้ล็อกอิน กำลังเริ่มการล็อกอิน...");
-//         liff.login();
-//       }
-//     } catch (err) {
-//       console.error('LIFF initialization failed', err);
-//       setError('ไม่สามารถเชื่อมต่อกับ LINE ได้ กรุณาลองใหม่อีกครั้ง');
-//       setIsLoading(false);
-//     }
-//   };
-
-//   const fetchProfile = async (): Promise<void> => {
-//     try {
-//       const profile: LineProfile = await liff.getProfile();
-//       console.log("ได้รับข้อมูลโปรไฟล์:", profile);
-//       setDisplayName(profile.displayName);
-//       setPictureUrl(profile.pictureUrl || '');
-//       setUserId(profile.userId);
-//     } catch (err) {
-//       console.error('Failed to get profile', err);
-//       setError('ไม่สามารถดึงข้อมูลโปรไฟล์ LINE ได้');
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
   const main = async () => {
     await liff.init({ liffId: "2007306544-Oyvzorbv" });
 
