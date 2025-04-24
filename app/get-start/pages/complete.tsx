@@ -8,12 +8,8 @@ interface ProfileProps {
 
 const Complete: React.FC<ProfileProps> = ({ setActivePage }) => {
     useEffect(() => {
-        const timer = setTimeout(() => {
-            liff.init({ liffId: "2007306544-Oyvzorbv" });
-            liff.closeWindow();
-        }, 3000);
-
-        return () => clearTimeout(timer);
+        liff.init({ liffId: "2007306544-Oyvzorbv" });
+        liff.closeWindow();
     }, [setActivePage]);
 
   return (
