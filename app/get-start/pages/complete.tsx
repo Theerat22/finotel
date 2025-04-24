@@ -206,7 +206,8 @@ const Complete: React.FC = () => {
 
             setTimeout(() => {
             setStatus({ loading: false });
-            }, 3000);
+            }, 4000);
+            sendFlexMessage()
         } catch (error) {
             console.error("Error:", error);
         };
@@ -232,7 +233,7 @@ const Complete: React.FC = () => {
 
             setTimeout(() => {
             setStatus({ loading: false });
-            }, 3000);
+            }, 4000);
         } catch (error) {
             console.error("Error:", error);
         };
@@ -244,10 +245,9 @@ const Complete: React.FC = () => {
           try {
             await liff.init({ liffId: "2007306544-Oyvzorbv" });
             sendMessage();
-            sendFlexMessage();
             setTimeout(() => {
               liff.closeWindow();
-            }, 1000);
+            }, 2000);
           } catch (error) {
             console.error('LIFF initialization failed', error);
           }
