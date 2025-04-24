@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { useJsApiLoader, GoogleMap, Autocomplete } from '@react-google-maps/api';
 import { FaMapMarkerAlt, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
@@ -117,7 +117,7 @@ const Step2: React.FC<Step2Props> = ({ setActivePage }) => {
       }
     }
   };
-  const router = useRouter();
+  // const router = useRouter();
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,7 +126,8 @@ const Step2: React.FC<Step2Props> = ({ setActivePage }) => {
     console.log('Saving location data:', locationData);
     // Navigate to next step
     // setActivePage('finance');
-    router.push('/dashboard');
+    // router.push('/dashboard');
+    setActivePage('complete');
     
   };
   
