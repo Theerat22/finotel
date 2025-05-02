@@ -93,16 +93,143 @@ export default function Financial() {
     const revpar = selectedMonth.revpar;
     const occ = selectedMonth.occ;
 
+    const flexMessage = {
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "สรุปการเงินโรงแรม",
+            "weight": "bold",
+            "color": "#1DB446",
+            "size": "sm"
+          },
+          {
+            "type": "text",
+            "text": month,
+            "weight": "bold",
+            "size": "xxl",
+            "margin": "md"
+          },
+          {
+            "type": "text",
+            "size": "xs",
+            "color": "#aaaaaa",
+            "wrap": true,
+            "text": "Nan, Thailand"
+          },
+          {
+            "type": "separator",
+            "margin": "xxl"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "margin": "xxl",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "ทำนายอัตราการเข้าพัก",
+                    "size": "xl",
+                    "color": "#555555",
+                    "flex": 0
+                  },
+                  {
+                    "type": "text",
+                    "text": occ,
+                    "size": "xl",
+                    "color": "#1DB446",
+                    "align": "end"
+                  }
+                ]
+              },
+              {
+                "type": "separator",
+                "margin": "xxl"
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "margin": "xxl",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "RevPAR",
+                    "size": "sm",
+                    "color": "#555555"
+                  },
+                  {
+                    "type": "text",
+                    "text": revpar,
+                    "size": "sm",
+                    "color": "#145CFA",
+                    "align": "end"
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": goppar,
+                    "size": "sm",
+                    "color": "#555555"
+                  },
+                  {
+                    "type": "text",
+                    "text": "867",
+                    "size": "sm",
+                    "color": "#145CFA",
+                    "align": "end"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "separator",
+            "margin": "xxl"
+          },
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "margin": "md",
+            "contents": [
+              {
+                "type": "button",
+                "action": {
+                  "type": "uri",
+                  "label": "ดูเพิ่มเติม",
+                  "uri": "http://linecorp.com/"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "styles": {
+        "footer": {
+          "separator": true
+        }
+      }
+    };
+
     try {
       //   setStatus({ loading: true });
       console.log("Sending message:", selectedMonth, userId);
 
-      const response = await axios.post("/api/sendFlexMessageMonth", {
+      const response = await axios.post("/api/sendFlexMessage", {
         userId,
-        month,
-        goppar,
-        revpar,
-        occ
+        flexMessage
       });
 
       console.log("Response:", response.data);
