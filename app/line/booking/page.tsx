@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { FaHouseCircleCheck } from "react-icons/fa6";
 import liff from "@line/liff";
-import { useUser } from "@/app/components/UserContext";
 import axios from "axios";
 
 type MonthData = {
@@ -66,8 +65,7 @@ export default function Financial() {
     },
   };
 
-  const { userData } = useUser();
-  const userId = userData.userId;
+  const userId = localStorage.getItem('userId');
 
   const sendFlexMessage = async () => {
     const selectedMonth = mockMonth[value];

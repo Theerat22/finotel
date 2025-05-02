@@ -54,6 +54,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
           pictureUrl: profile.pictureUrl || '',
           isLoggedIn: true,
         });
+
+        const userId = localStorage.setItem('userId', JSON.stringify(profile.userId));
+        console.log('userId:', userId);
       } else {
         console.log('ยังไม่ได้ login');
         liff.login();
