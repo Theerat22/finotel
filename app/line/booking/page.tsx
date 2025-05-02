@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaHouseCircleCheck } from "react-icons/fa6";
 import liff from "@line/liff";
 import axios from "axios";
@@ -16,6 +16,7 @@ type MonthsRecord = {
 
 export default function Financial() {
   const [value, setValue] = useState<string>("");
+  const [userId, setUserId] = useState<string>("");
 
   const months = [
     "มกราคม",
@@ -39,7 +40,7 @@ export default function Financial() {
       revpar: 2000,
       occ: 50
     },
-    กุมภาพันธ์ุ: {
+    กุมภาพันธ์: { // Fixed typo: removed ุ
       month: "February",
       goppar: 1200,
       revpar: 2200,
@@ -65,7 +66,19 @@ export default function Financial() {
     },
   };
 
-  const userId = localStorage.getItem('userId');
+  // Move localStorage operations inside useEffect to prevent server-side errors
+  useEffect(() => {
+    // Only run on client-side
+    const storedUserId = localStorage.getItem("userId");
+    if (storedUserId) {
+      try {
+        const parsedUserId = JSON.parse(storedUserId);
+        setUserId(parsedUserId);
+      } catch (error) {
+        console.error("Error parsing userId from localStorage:", error);
+      }
+    }
+  }, []);
 
   const sendFlexMessage = async () => {
     const selectedMonth = mockMonth[value];
@@ -114,7 +127,7 @@ export default function Financial() {
             className="border border-gray-300 rounded-md py-2 px-4 mb-4 w-1/2"
             onChange={(e) => setValue(e.target.value)}
           >
-            <option value="all" >เลือกเดือน</option>
+            <option value="" >เลือกเดือน</option>
             {months.map((month) => (
               <option key={month} value={month}>
                 {month}
