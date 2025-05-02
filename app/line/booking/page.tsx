@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { FaHouseCircleCheck } from "react-icons/fa6";
 import liff from "@line/liff";
 import axios from "axios";
+import { useUser } from '@/app/components/UserContext';
 
 type MonthData = {
   month: string;
@@ -16,7 +17,8 @@ type MonthsRecord = {
 
 export default function Financial() {
   const [value, setValue] = useState<string>("");
-  const [userId, setUserId] = useState<string>("");
+  // const [userId, setUserId] = useState<string>("");
+  const { initializeLiff, userData } = useUser();
 
   const months = [
     "มกราคม",
@@ -68,17 +70,12 @@ export default function Financial() {
 
   // Move localStorage operations inside useEffect to prevent server-side errors
   useEffect(() => {
-    // Only run on client-side
-    const storedUserId = localStorage.getItem("userId");
-    if (storedUserId) {
-      try {
-        const parsedUserId = JSON.parse(storedUserId);
-        setUserId(parsedUserId);
-      } catch (error) {
-        console.error("Error parsing userId from localStorage:", error);
-      }
-    }
-  }, []);
+      const setupProfile = async () => {
+        await initializeLiff();
+      };
+      
+      setupProfile();
+  }, [initializeLiff]);
 
   const sendFlexMessage = async () => {
     const selectedMonth = mockMonth[value];
@@ -223,9 +220,10 @@ export default function Financial() {
       }
     };
 
+    const userId = userData.userId;
     try {
       //   setStatus({ loading: true });
-      console.log("Sending message:", selectedMonth, userId);
+      console.log("Sending message:", selectedMonth, userData.userId);
 
       const response = await axios.post("/api/sendFlexMessage", {
         userId,
