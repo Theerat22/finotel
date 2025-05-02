@@ -77,6 +77,9 @@ export default function Financial() {
       setupProfile();
   }, [initializeLiff]);
 
+  const userId = userData.userId;
+  console.log("userId:", userId);
+
   const sendFlexMessage = async () => {
     const selectedMonth = mockMonth[value];
 
@@ -220,10 +223,9 @@ export default function Financial() {
       }
     };
 
-    const userId = userData.userId;
     try {
       //   setStatus({ loading: true });
-      console.log("Sending message:", selectedMonth, userData.userId);
+      console.log("Sending message:", selectedMonth, userId);
 
       const response = await axios.post("/api/sendFlexMessage", {
         userId,
