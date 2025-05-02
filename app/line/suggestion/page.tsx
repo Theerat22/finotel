@@ -2,11 +2,18 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import liff from '@line/liff';
-import { CiCircleCheck } from "react-icons/ci";
+// import { CiCircleCheck } from "react-icons/ci";
 import { useUser } from '@/app/components/UserContext';
+import { IoHome } from "react-icons/io5";
 import axios from 'axios';
+import StartNav from '@/app/components/StartNav';
 
 const Complete: React.FC = () => {
+
+    const months = [
+      'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.',
+      'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'
+    ];
     const [status, setStatus] = useState<{
         loading: boolean;
         error?: string;
@@ -259,11 +266,21 @@ const Complete: React.FC = () => {
 
 
   return (
-    <section className='relative min-h-screen overflow-hidden'>
-    <div className="bg-gray-50 min-h-screen flex flex-col items-center justify-center">
+    <div className="bg-gray-50 min-h-screen flex items-center justify-center">
+     <StartNav />
       <div className="w-full max-w-4xl mx-auto bg-white rounded-md shadow overflow-hidden p-10 items-center text-center flex flex-col">
-        <CiCircleCheck size={100} className='text-green-600' />
-        <h1 className='font-bold text-2xl text-blue-600 mt-4'>เริ่มต้นกับ Finotel เสร็จเรียบร้อย</h1>
+        <IoHome size={35} className='text-green-600' />
+        <h1 className='font-bold text-xl text-blue-600 mt-4'>เลือกช่วงเดือนที่ต้องการ</h1>
+        <select>
+          <option>--เลือกเดือน--</option>
+          {months.map((month) => (
+            <option key={month} value={month}>
+              {month}
+            </option>
+          ))}
+        </select>
+
+        <button onClick={sendFlexMessage}>ยืนยัน</button>
         {status.error && (
         <div className="text-red-500 text-sm">{status.error}</div>
       )}
@@ -273,7 +290,6 @@ const Complete: React.FC = () => {
       )}
       </div>
     </div>
-    </section>
   );
 };
 

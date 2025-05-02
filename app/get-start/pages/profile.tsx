@@ -30,7 +30,8 @@ const Profile: React.FC<ProfileProps> = ({ setActivePage }) => {
   );
 
   return (
-    <div className="bg-gray-50 min-h-screen flex items-center justify-center">
+    <section className='relative min-h-screen overflow-hidden'>
+    <div className="bg-gray-50 min-h-screen flex flex-col items-center justify-center">
       <div className="w-full max-w-4xl mx-auto bg-white rounded-md shadow overflow-hidden p-10 items-center text-center flex flex-col">
         <h1 className='font-bold text-center text-3xl text-blue-600'>ยินดีต้อนรับ</h1>
         {userData.pictureUrl && (
@@ -58,6 +59,7 @@ const Profile: React.FC<ProfileProps> = ({ setActivePage }) => {
         </button>
       </div>
     </div>
+    </section>
   );
 };
 

@@ -88,7 +88,6 @@ const Step2: React.FC<Step2Props> = ({ setActivePage }) => {
     });
   };
   
-  // แก้ไขฟังก์ชัน handlePlaceSelect
   const handlePlaceSelect = () => {
     if (autocompleteRef.current) {
       const place = autocompleteRef.current.getPlace();
@@ -159,7 +158,8 @@ const Step2: React.FC<Step2Props> = ({ setActivePage }) => {
   }
   
   return (
-    <div className="bg-gray-50 min-h-screen flex items-center justify-center">
+    <section className='relative min-h-screen overflow-hidden'>
+    <div className="bg-gray-50 min-h-screen flex flex-col items-center justify-center">
       <div className="w-full max-w-4xl mx-auto bg-white rounded-md shadow overflow-hidden">
         {/* สำหรับหน้าจอมือถือ (Mobile) - ย้ายส่วนสีน้ำเงินขึ้นด้านบน */}
         <div className="md:hidden bg-blue-600 flex flex-col items-center justify-center p-4 text-center">
@@ -260,6 +260,7 @@ const Step2: React.FC<Step2Props> = ({ setActivePage }) => {
         </div>
       </div>
     </div>
+    </section>
   );
 };
 

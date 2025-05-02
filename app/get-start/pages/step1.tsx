@@ -10,16 +10,12 @@ interface Step1Props {
 interface FormData {
   hotelName: string;
   ownerName: string;
-  contactPhone: string;
-  email: string;
 }
 
 const Step1: React.FC<Step1Props> = ({ setActivePage }) => {
   const [formData, setFormData] = useState<FormData>({
     hotelName: 'CD ลิงกังกู',
     ownerName: 'พวกเรา รักCEDT',
-    contactPhone: '123-456-7890',
-    email: 'cdlingangu@gmail.com',
   });
 
   // const { userData } = useUser();
@@ -38,13 +34,11 @@ const Step1: React.FC<Step1Props> = ({ setActivePage }) => {
     console.log(formData);
   };
 
-  // const isFormValid = () => {
-  //   const { hotelName, ownerName, contactPhone, email } = formData;
-  //   return hotelName && ownerName && contactPhone && email;
-  // };
+
 
   return (
-    <div className="bg-gray-50 min-h-screen flex items-center justify-center">
+    <section className='relative min-h-screen overflow-hidden'>
+    <div className="bg-gray-50 min-h-screen flex flex-col items-center justify-center">
       <div className="w-full max-w-4xl mx-auto bg-white rounded-md shadow overflow-hidden">
         {/* <LineMessageSender userId={userData.userId} /> */}
         <div className="md:hidden bg-blue-600 flex flex-col items-center justify-center p-4 text-center">
@@ -90,36 +84,6 @@ const Step1: React.FC<Step1Props> = ({ setActivePage }) => {
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label htmlFor="contactPhone" className="block text-sm font-medium text-gray-700">เบอร์โทรศัพท์</label>
-                  <input
-                    type="tel"
-                    id="contactPhone"
-                    name="contactPhone"
-                    value={formData.contactPhone}
-                    onChange={handleChange}
-                    placeholder="0xx-xxx-xxxx"
-                    className="w-full px-3 py-2 text-sm font-bold text-blue-500 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">อีเมล</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="example@email.com"
-                    className="w-full px-3 py-2 text-sm font-bold text-blue-500 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                    required
-                  />
-                </div>
-              </div>
-
               <div className="flex justify-between mt-6">
                 <button
                   type="button"
@@ -154,6 +118,7 @@ const Step1: React.FC<Step1Props> = ({ setActivePage }) => {
         </div>
       </div>
     </div>
+    </section>
   );
 };
 
