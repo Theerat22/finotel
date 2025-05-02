@@ -21,7 +21,7 @@ export default function Financial() {
 
   const months = [
     "มกราคม",
-    "กุมภาพันธ์ุ",
+    "กุมภาพันธ์",
     "มีนาคม",
     "เมษายน",
     "พฤษภาคม",
@@ -97,10 +97,10 @@ export default function Financial() {
 
       console.log("Response:", response.data);
 
-      await liff.init({ liffId: "2007306544-Oyvzorbv" });
+      await liff.init({ liffId: "2007306544-8nvWdZ1v" });
       setTimeout(() => {
         liff.closeWindow();
-      }, 2000);
+      }, 1000);
 
     } catch (error) {
       console.error("Error:", error);
@@ -113,12 +113,12 @@ export default function Financial() {
       <div className="w-full max-w-2xl mx-auto bg-white rounded-md shadow overflow-hidden p-10 items-center text-center flex flex-col">
         <div className="flex flex-col items-center">
           <FaHouseCircleCheck size={100} className="text-blue-500 mb-4" />
-          <p className="font-bold mb-3 text-blue-600">เลือกเดือนที่ต้องการ</p>
+          <p className="font-bold mb-3 text-blue-600 text-2xl">เลือกเดือนที่ต้องการ</p>
           <select
-            className="border border-gray-300 rounded-md py-2 px-4 mb-4"
+            className="border border-gray-300 rounded-md py-2 px-4 mb-4 w-1/2"
             onChange={(e) => setValue(e.target.value)}
           >
-            <option value="all">ทั้งปี</option>
+            <option value="all" >--เลือกเดือน--</option>
             {months.map((month) => (
               <option key={month} value={month}>
                 {month}
