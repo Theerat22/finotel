@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { FaHouseCircleCheck } from "react-icons/fa6";
-import StartNav from "@/app/components/StartNav";
 import liff from "@line/liff";
 import { useUser } from "@/app/components/UserContext";
 import axios from "axios";
@@ -109,7 +108,6 @@ export default function Financial() {
 
   return (
     <section className="min-h-screen bg-gray-50 flex flex-col justify-center items-center">
-      <StartNav />
       <div className="w-full max-w-2xl mx-auto bg-white rounded-md shadow overflow-hidden p-10 items-center text-center flex flex-col">
         <div className="flex flex-col items-center">
           <FaHouseCircleCheck size={100} className="text-blue-500 mb-4" />
@@ -118,7 +116,7 @@ export default function Financial() {
             className="border border-gray-300 rounded-md py-2 px-4 mb-4 w-1/2"
             onChange={(e) => setValue(e.target.value)}
           >
-            <option value="all" >--เลือกเดือน--</option>
+            <option value="all" >เลือกเดือน</option>
             {months.map((month) => (
               <option key={month} value={month}>
                 {month}
