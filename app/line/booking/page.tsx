@@ -88,10 +88,140 @@ export default function Financial() {
       return;
     }
 
-    const month = selectedMonth.month;
-    const goppar = selectedMonth.goppar;
-    const revpar = selectedMonth.revpar;
-    const occ = selectedMonth.occ;
+    // const month = selectedMonth.month;
+    // const goppar = selectedMonth.goppar;
+    // const revpar = selectedMonth.revpar;
+    // const occ = selectedMonth.occ;
+
+    // const flexMessage = {
+    //   "type": "bubble",
+    //   "body": {
+    //     "type": "box",
+    //     "layout": "vertical",
+    //     "contents": [
+    //       {
+    //         "type": "text",
+    //         "text": "สรุปการเงินโรงแรม",
+    //         "weight": "bold",
+    //         "color": "#1DB446",
+    //         "size": "sm"
+    //       },
+    //       {
+    //         "type": "text",
+    //         "text": month,
+    //         "weight": "bold",
+    //         "size": "xxl",
+    //         "margin": "md"
+    //       },
+    //       {
+    //         "type": "text",
+    //         "size": "xs",
+    //         "color": "#aaaaaa",
+    //         "wrap": true,
+    //         "text": "Nan, Thailand"
+    //       },
+    //       {
+    //         "type": "separator",
+    //         "margin": "xxl"
+    //       },
+    //       {
+    //         "type": "box",
+    //         "layout": "vertical",
+    //         "margin": "xxl",
+    //         "spacing": "sm",
+    //         "contents": [
+    //           {
+    //             "type": "box",
+    //             "layout": "horizontal",
+    //             "contents": [
+    //               {
+    //                 "type": "text",
+    //                 "text": "ทำนายอัตราการเข้าพัก",
+    //                 "size": "xl",
+    //                 "color": "#555555",
+    //                 "flex": 0
+    //               },
+    //               {
+    //                 "type": "text",
+    //                 "text": occ,
+    //                 "size": "xl",
+    //                 "color": "#1DB446",
+    //                 "align": "end"
+    //               }
+    //             ]
+    //           },
+    //           {
+    //             "type": "separator",
+    //             "margin": "xxl"
+    //           },
+    //           {
+    //             "type": "box",
+    //             "layout": "horizontal",
+    //             "margin": "xxl",
+    //             "contents": [
+    //               {
+    //                 "type": "text",
+    //                 "text": "RevPAR",
+    //                 "size": "sm",
+    //                 "color": "#555555"
+    //               },
+    //               {
+    //                 "type": "text",
+    //                 "text": revpar,
+    //                 "size": "sm",
+    //                 "color": "#145CFA",
+    //                 "align": "end"
+    //               }
+    //             ]
+    //           },
+    //           {
+    //             "type": "box",
+    //             "layout": "horizontal",
+    //             "contents": [
+    //               {
+    //                 "type": "text",
+    //                 "text": goppar,
+    //                 "size": "sm",
+    //                 "color": "#555555"
+    //               },
+    //               {
+    //                 "type": "text",
+    //                 "text": "867",
+    //                 "size": "sm",
+    //                 "color": "#145CFA",
+    //                 "align": "end"
+    //               }
+    //             ]
+    //           }
+    //         ]
+    //       },
+    //       {
+    //         "type": "separator",
+    //         "margin": "xxl"
+    //       },
+    //       {
+    //         "type": "box",
+    //         "layout": "horizontal",
+    //         "margin": "md",
+    //         "contents": [
+    //           {
+    //             "type": "button",
+    //             "action": {
+    //               "type": "uri",
+    //               "label": "ดูเพิ่มเติม",
+    //               "uri": "http://linecorp.com/"
+    //             }
+    //           }
+    //         ]
+    //       }
+    //     ]
+    //   },
+    //   "styles": {
+    //     "footer": {
+    //       "separator": true
+    //     }
+    //   }
+    // };
 
     const flexMessage = {
       "type": "bubble",
@@ -108,7 +238,7 @@ export default function Financial() {
           },
           {
             "type": "text",
-            "text": month,
+            "text": "โรงแรมลิงกังกู",
             "weight": "bold",
             "size": "xxl",
             "margin": "md"
@@ -136,15 +266,55 @@ export default function Financial() {
                 "contents": [
                   {
                     "type": "text",
-                    "text": "ทำนายอัตราการเข้าพัก",
-                    "size": "xl",
+                    "text": "รายได้รวม (ทั้งปี)",
+                    "size": "sm",
                     "color": "#555555",
                     "flex": 0
                   },
                   {
                     "type": "text",
-                    "text": occ,
-                    "size": "xl",
+                    "text": "8,082,993 ฿",
+                    "size": "sm",
+                    "color": "#1DB446",
+                    "align": "end"
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "รายจ่ายรวม (ทั้งปี)",
+                    "size": "sm",
+                    "color": "#555555",
+                    "flex": 0
+                  },
+                  {
+                    "type": "text",
+                    "text": "5,736,450 ฿",
+                    "size": "sm",
+                    "color": "#DC143C",
+                    "align": "end"
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "กำไร (EBITDA)",
+                    "size": "sm",
+                    "color": "#555555",
+                    "flex": 0
+                  },
+                  {
+                    "type": "text",
+                    "text": "2,346,543 ฿",
+                    "size": "sm",
                     "color": "#1DB446",
                     "align": "end"
                   }
@@ -167,7 +337,7 @@ export default function Financial() {
                   },
                   {
                     "type": "text",
-                    "text": revpar,
+                    "text": "2383",
                     "size": "sm",
                     "color": "#145CFA",
                     "align": "end"
@@ -180,7 +350,7 @@ export default function Financial() {
                 "contents": [
                   {
                     "type": "text",
-                    "text": goppar,
+                    "text": "GOPPAR",
                     "size": "sm",
                     "color": "#555555"
                   },
@@ -234,14 +404,15 @@ export default function Financial() {
 
       console.log("Response:", response.data);
 
-      await liff.init({ liffId: "2007306544-8nvWdZ1v" });
-      setTimeout(() => {
-        liff.closeWindow();
-      }, 1000);
-
     } catch (error) {
       console.error("Error:", error);
     }
+
+    await liff.init({ liffId: "2007306544-8nvWdZ1v" });
+    setTimeout(() => {
+      liff.closeWindow();
+    }, 1000);
+
   };
 
   return (
@@ -249,6 +420,9 @@ export default function Financial() {
       <div className="w-full max-w-2xl mx-auto bg-white rounded-md shadow overflow-hidden p-10 items-center text-center flex flex-col">
         <div className="flex flex-col items-center">
           <FaHouseCircleCheck size={100} className="text-blue-500 mb-4" />
+          {userId && (
+            <p className="font-bold mb-3 text-blue-600 text-2xl">ยินดีต้อนรับ {userId}</p>
+            )}
           <p className="font-bold mb-3 text-blue-600 text-2xl">เลือกเดือนที่ต้องการ</p>
           <select
             className="border border-gray-300 rounded-md py-2 px-4 mb-4 w-1/2"
