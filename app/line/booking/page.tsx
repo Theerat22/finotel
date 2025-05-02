@@ -28,8 +28,6 @@ const defaultUserData: UserData = {
   isLoggedIn: false,
 };
 
-
-
 export default function Financial() {
   const [value, setValue] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -57,7 +55,7 @@ export default function Financial() {
       revpar: 2000,
       occ: 50
     },
-    กุมภาพันธ์: { // Fixed typo: removed ุ
+    กุมภาพันธ์: {
       month: "February",
       goppar: 1200,
       revpar: 2200,
@@ -83,47 +81,43 @@ export default function Financial() {
     },
   };
 
-  // Move localStorage operations inside useEffect to prevent server-side errors
+  // Initialize LIFF and get user data
   useEffect(() => {
-      const initializeLiff = async (): Promise<void> => {
-        try {
-          await liff.init({ liffId: "2007306544-8nvWdZ1v" });
-          
-          if (liff.isLoggedIn()) {
-            const profile = await liff.getProfile();
-            setUserData({
-              userId: profile.userId,
-              displayName: profile.displayName,
-              pictureUrl: profile.pictureUrl || '',
-              isLoggedIn: true,
-            });
-  
-            setIsLoading(false);
-            // const userId = localStorage.setItem('userId', JSON.stringify(profile.userId));
-            // console.log('userId:', userId);
-          } else {
-            console.log('ยังไม่ได้ login');
-            liff.login();
-          }
-        } catch (error) {
-          console.error('LIFF initialization failed', error);
-        }
-      };
+    const initializeLiff = async (): Promise<void> => {
+      try {
+        await liff.init({ liffId: "2007306544-8nvWdZ1v" });
+        
+        if (liff.isLoggedIn()) {
+          const profile = await liff.getProfile();
+          setUserData({
+            userId: profile.userId,
+            displayName: profile.displayName,
+            pictureUrl: profile.pictureUrl || '',
+            isLoggedIn: true,
+          });
 
-      initializeLiff();
+          setIsLoading(false);
+          // const userId = localStorage.setItem('userId', JSON.stringify(profile.userId));
+          // console.log('userId:', userId);
+        } else {
+          console.log('ยังไม่ได้ login');
+          liff.login();
+        }
+      } catch (error) {
+        console.error('LIFF initialization failed', error);
+      }
+    };
+
+    initializeLiff();
   }, []);
 
-  const userId = userData.userId;
-  console.log("userId:", userId);
-
-  const selectedMonth = mockMonth[value];
-
-  const month = selectedMonth.month;
-  const goppar = selectedMonth.goppar;
-  const revpar = selectedMonth.revpar;
-  const occ = selectedMonth.occ;
-
-    const flexMessage = {
+  // Create flex message based on selected month (only when a month is selected)
+  const getFlexMessage = () => {
+    if (!value || !mockMonth[value]) return null;
+    
+    const selectedMonth = mockMonth[value];
+    
+    return {
       "type": "bubble",
       "body": {
         "type": "box",
@@ -138,7 +132,7 @@ export default function Financial() {
           },
           {
             "type": "text",
-            "text": month,
+            "text": selectedMonth.month,
             "weight": "bold",
             "size": "xxl",
             "margin": "md"
@@ -173,7 +167,7 @@ export default function Financial() {
                   },
                   {
                     "type": "text",
-                    "text": occ,
+                    "text": `${selectedMonth.occ}%`,
                     "size": "xl",
                     "color": "#1DB446",
                     "align": "end"
@@ -197,7 +191,7 @@ export default function Financial() {
                   },
                   {
                     "type": "text",
-                    "text": revpar,
+                    "text": `฿${selectedMonth.revpar}`,
                     "size": "sm",
                     "color": "#145CFA",
                     "align": "end"
@@ -210,13 +204,13 @@ export default function Financial() {
                 "contents": [
                   {
                     "type": "text",
-                    "text": goppar,
+                    "text": "GOPPAR",
                     "size": "sm",
                     "color": "#555555"
                   },
                   {
                     "type": "text",
-                    "text": "867",
+                    "text": `฿${selectedMonth.goppar}`,
                     "size": "sm",
                     "color": "#145CFA",
                     "align": "end"
@@ -252,32 +246,34 @@ export default function Financial() {
         }
       }
     };
+  };
 
   const sendFlexMessage = async () => {
-    const selectedMonth = mockMonth[value];
-
-    if (!selectedMonth) {
+    if (!value || !mockMonth[value]) {
       console.log("No month selected");
+      return;
     }
 
+    const flexMessage = getFlexMessage();
+    
     try {
-      console.log("Sending message:", selectedMonth, userId);
+      console.log("Sending message to:", userData.userId);
 
       const response = await axios.post("/api/sendFlexMessage", {
-        userId,
+        userId: userData.userId,
         flexMessage
       });
 
       console.log("Response:", response.data);
 
+      // Close LIFF window after sending message
+      setTimeout(() => {
+        liff.closeWindow();
+      }, 1000);
+      
     } catch (error) {
       console.error("Error:", error);
     }
-
-    await liff.init({ liffId: "2007306544-8nvWdZ1v" });
-    setTimeout(() => {
-      liff.closeWindow();
-    }, 1000);
   };
 
   if (isLoading) return (
@@ -294,13 +290,14 @@ export default function Financial() {
       <div className="w-full max-w-2xl mx-auto bg-white rounded-md shadow overflow-hidden p-10 items-center text-center flex flex-col">
         <div className="flex flex-col items-center">
           <FaHouseCircleCheck size={100} className="text-blue-500 mb-4" />
-          {/* {userId && (
-            <p className="font-bold mb-3 text-blue-600 text-2xl">ยินดีต้อนรับ {userId}</p>
-            )} */}
+          {userData.displayName && (
+            <p className="font-bold mb-3 text-blue-600 text-xl">ยินดีต้อนรับ {userData.displayName}</p>
+          )}
           <p className="font-bold mb-3 text-blue-600 text-2xl">เลือกเดือนที่ต้องการ</p>
           <select
             className="border border-gray-300 rounded-md py-2 px-4 mb-4 w-1/2"
             onChange={(e) => setValue(e.target.value)}
+            value={value}
           >
             <option value="" >เลือกเดือน</option>
             {months.map((month) => (
@@ -322,4 +319,3 @@ export default function Financial() {
     </section>
   );
 }
-
