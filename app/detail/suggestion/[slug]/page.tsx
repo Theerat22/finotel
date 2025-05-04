@@ -1,5 +1,5 @@
 import React from "react";
-import StartNav from "@/app/components/StartNav";
+// import StartNav from "@/app/components/StartNav";
 import {
   DollarSign,
   Users,
