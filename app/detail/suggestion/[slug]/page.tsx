@@ -8,6 +8,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 
+
 interface Month {
   income: number;
   outcome: number;

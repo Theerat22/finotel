@@ -1,298 +1,317 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import React, { useEffect, useState } from 'react';
-import liff from '@line/liff';
-// import { CiCircleCheck } from "react-icons/ci";
-import { useUser } from '@/app/components/UserContext';
-import { IoHome } from "react-icons/io5";
-import axios from 'axios';
-import StartNav from '@/app/components/StartNav';
+import React, { useState, useEffect } from "react";
+import { FaHouseCircleCheck } from "react-icons/fa6";
+import liff from "@line/liff";
+import axios from "axios";
 
-const Complete: React.FC = () => {
+type MonthData = {
+  month: string;
+  goppar: number;
+  revpar: number;
+  occ: number;
+};
+type MonthsRecord = {
+  [key: string]: MonthData;
+};
 
-    const months = [
-      'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.',
-      'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'
-    ];
-    const [status, setStatus] = useState<{
-        loading: boolean;
-        error?: string;
-        success?: boolean;
-      }>({ loading: false });
+interface UserData {
+  userId: string;
+  displayName: string;
+  pictureUrl: string;
+  isLoggedIn: boolean;
+}
 
-    const flexMessage = {
-        "type": "bubble",
-        "body": {
-          "type": "box",
-          "layout": "vertical",
-          "contents": [
-            {
-              "type": "text",
-              "text": "สรุปการเงินโรงแรม",
-              "weight": "bold",
-              "color": "#1DB446",
-              "size": "sm"
-            },
-            {
-              "type": "text",
-              "text": "โรงแรมลิงกังกู",
-              "weight": "bold",
-              "size": "xxl",
-              "margin": "md"
-            },
-            {
-              "type": "text",
-              "size": "xs",
-              "color": "#aaaaaa",
-              "wrap": true,
-              "text": "Nan, Thailand"
-            },
-            {
-              "type": "separator",
-              "margin": "xxl"
-            },
-            {
-              "type": "box",
-              "layout": "vertical",
-              "margin": "xxl",
-              "spacing": "sm",
-              "contents": [
-                {
-                  "type": "box",
-                  "layout": "horizontal",
-                  "contents": [
-                    {
-                      "type": "text",
-                      "text": "รายได้รวม (ทั้งปี)",
-                      "size": "sm",
-                      "color": "#555555",
-                      "flex": 0
-                    },
-                    {
-                      "type": "text",
-                      "text": "8,082,993 ฿",
-                      "size": "sm",
-                      "color": "#1DB446",
-                      "align": "end"
-                    }
-                  ]
-                },
-                {
-                  "type": "box",
-                  "layout": "horizontal",
-                  "contents": [
-                    {
-                      "type": "text",
-                      "text": "รายจ่ายรวม (ทั้งปี)",
-                      "size": "sm",
-                      "color": "#555555",
-                      "flex": 0
-                    },
-                    {
-                      "type": "text",
-                      "text": "5,736,450 ฿",
-                      "size": "sm",
-                      "color": "#DC143C",
-                      "align": "end"
-                    }
-                  ]
-                },
-                {
-                  "type": "box",
-                  "layout": "horizontal",
-                  "contents": [
-                    {
-                      "type": "text",
-                      "text": "กำไร (EBITDA)",
-                      "size": "sm",
-                      "color": "#555555",
-                      "flex": 0
-                    },
-                    {
-                      "type": "text",
-                      "text": "2,346,543 ฿",
-                      "size": "sm",
-                      "color": "#1DB446",
-                      "align": "end"
-                    }
-                  ]
-                },
-                {
-                  "type": "separator",
-                  "margin": "xxl"
-                },
-                {
-                  "type": "box",
-                  "layout": "horizontal",
-                  "margin": "xxl",
-                  "contents": [
-                    {
-                      "type": "text",
-                      "text": "RevPAR",
-                      "size": "sm",
-                      "color": "#555555"
-                    },
-                    {
-                      "type": "text",
-                      "text": "2383",
-                      "size": "sm",
-                      "color": "#145CFA",
-                      "align": "end"
-                    }
-                  ]
-                },
-                {
-                  "type": "box",
-                  "layout": "horizontal",
-                  "contents": [
-                    {
-                      "type": "text",
-                      "text": "GOPPAR",
-                      "size": "sm",
-                      "color": "#555555"
-                    },
-                    {
-                      "type": "text",
-                      "text": "867",
-                      "size": "sm",
-                      "color": "#145CFA",
-                      "align": "end"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "separator",
-              "margin": "xxl"
-            },
-            {
-              "type": "box",
-              "layout": "horizontal",
-              "margin": "md",
-              "contents": [
-                {
-                  "type": "button",
-                  "action": {
-                    "type": "uri",
-                    "label": "ดูเพิ่มเติม",
-                    "uri": "http://linecorp.com/"
+const defaultUserData: UserData = {
+  userId: '',
+  displayName: '',
+  pictureUrl: '',
+  isLoggedIn: false,
+};
+
+export default function Financial() {
+  const [value, setValue] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [userData, setUserData] = useState<UserData>(defaultUserData);
+
+  const months = [
+    "มกราคม",
+    "กุมภาพันธ์",
+    "มีนาคม",
+    "เมษายน",
+    "พฤษภาคม",
+    "มิถุนายน",
+    "กรกฎาคม",
+    "สิงหาคม",
+    "กันยายน",
+    "ตุลาคม",
+    "พฤศจิกายน",
+    "ธันวาคม",
+  ];
+
+  const mockMonth: MonthsRecord = {
+    มกราคม: {
+      month: "January",
+      goppar: 1000,
+      revpar: 2000,
+      occ: 50
+    },
+    กุมภาพันธ์: {
+      month: "February",
+      goppar: 1200,
+      revpar: 2200,
+      occ: 50
+    },
+    มีนาคม: {
+      month: "March",
+      goppar: 1300,
+      revpar: 2300,
+      occ: 50
+    },
+    เมษายน: {
+      month: "April",
+      goppar: 1400,
+      revpar: 2400,
+      occ: 50
+    },
+    พฤษภาคม: {
+      month: "May",
+      goppar: 1500,
+      revpar: 2500,
+      occ: 50
+    },
+  };
+
+  // Initialize LIFF and get user data
+  useEffect(() => {
+    const initializeLiff = async (): Promise<void> => {
+      try {
+        await liff.init({ liffId: "2007306544-8nvWdZ1v" });
+        
+        if (liff.isLoggedIn()) {
+          const profile = await liff.getProfile();
+          setUserData({
+            userId: profile.userId,
+            displayName: profile.displayName,
+            pictureUrl: profile.pictureUrl || '',
+            isLoggedIn: true,
+          });
+
+          setIsLoading(false);
+          // const userId = localStorage.setItem('userId', JSON.stringify(profile.userId));
+          // console.log('userId:', userId);
+        } else {
+          console.log('ยังไม่ได้ login');
+          liff.login();
+        }
+      } catch (error) {
+        console.error('LIFF initialization failed', error);
+      }
+    };
+
+    initializeLiff();
+  }, []);
+
+  // Create flex message based on selected month (only when a month is selected)
+  const getFlexMessage = () => {
+    if (!value || !mockMonth[value]) return null;
+    
+    const selectedMonth = mockMonth[value];
+    
+    return {
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "ทำนายอัตราการเข้าพัก",
+            "weight": "bold",
+            "color": "#1DB446",
+            "size": "sm"
+          },
+          {
+            "type": "text",
+            "text": selectedMonth.month,
+            "weight": "bold",
+            "size": "xxl",
+            "margin": "md"
+          },
+          {
+            "type": "text",
+            "size": "xs",
+            "color": "#aaaaaa",
+            "wrap": true,
+            "text": "Nan, Thailand"
+          },
+          {
+            "type": "separator",
+            "margin": "xxl"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "margin": "xxl",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "ทำนายอัตราการเข้าพัก",
+                    "size": "md",
+                    "color": "#555555",
+                    "flex": 0
+                  },
+                  {
+                    "type": "text",
+                    "text": `${selectedMonth.occ}%`,
+                    "size": "xl",
+                    "color": "#1DB446",
+                    "align": "end"
                   }
+                ]
+              },
+              {
+                "type": "separator",
+                "margin": "xxl"
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "margin": "xxl",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "RevPAR",
+                    "size": "sm",
+                    "color": "#555555"
+                  },
+                  {
+                    "type": "text",
+                    "text": `${selectedMonth.revpar}฿`,
+                    "size": "sm",
+                    "color": "#145CFA",
+                    "align": "end"
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "GOPPAR",
+                    "size": "sm",
+                    "color": "#555555"
+                  },
+                  {
+                    "type": "text",
+                    "text": `${selectedMonth.goppar}฿`,
+                    "size": "sm",
+                    "color": "#145CFA",
+                    "align": "end"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "separator",
+            "margin": "xxl"
+          },
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "margin": "md",
+            "contents": [
+              {
+                "type": "button",
+                "action": {
+                  "type": "uri",
+                  "label": "ดูเพิ่มเติม",
+                  "uri": "http://linecorp.com/"
                 }
-              ]
-            }
-          ]
-        },
-        "styles": {
-          "footer": {
-            "separator": true
+              }
+            ]
           }
+        ]
+      },
+      "styles": {
+        "footer": {
+          "separator": true
         }
-      };
-    const message = 'เริ่มต้นกับ Finotel เสร็จเรียบร้อยแล้ว! \n\nยินดีต้อนรับ "โรงแรมลิงกังกู" ที่มาเป็นส่วนนึงของครอบครัว Finotel';
-    const { userData } = useUser();
-    const userId = userData.userId;
-
-    const sendMessage = async () => {
-        if (!message) {
-            setStatus({ loading: false, error: 'Message cannot be empty' });
-            return;
-        }
-    
-        try {
-            setStatus({ loading: true });
-            console.log('Sending message:', message);
-            
-            const response = await axios.post('/api/sendMessage', {
-            userId,
-            message
-            });
-
-            sendFlexMessage()
-            
-            console.log('Response:', response.data);
-            setStatus({ loading: false, success: true });
-
-            setTimeout(() => {
-            setStatus({ loading: false });
-            }, 4000);
-        } catch (error) {
-            console.error("Error:", error);
-        };
+      }
     };
+  };
 
-    const sendFlexMessage = async () => {
-        if (!flexMessage) {
-            setStatus({ loading: false, error: 'Message cannot be empty' });
-            return;
-        }
+  const sendFlexMessage = async () => {
+    if (!value || !mockMonth[value]) {
+      console.log("No month selected");
+      return;
+    }
+
+    const flexMessage = getFlexMessage();
     
-        try {
-            setStatus({ loading: true });
-            console.log('Sending message:', flexMessage);
-            
-            const response = await axios.post('/api/sendFlexMessage', {
-            userId,
-            flexMessage
-            });
-            
-            console.log('Response:', response.data);
-            setStatus({ loading: false, success: true });
+    try {
+      console.log("Sending message to:", userData.userId);
 
-            setTimeout(() => {
-            setStatus({ loading: false });
-            }, 4000);
-        } catch (error) {
-            console.error("Error:", error);
-        };
-    };
+      const response = await axios.post("/api/sendFlexMessage", {
+        userId: userData.userId,
+        flexMessage
+      });
 
+      console.log("Response:", response.data);
 
-    useEffect(() => {
-        const initializeLiff = async () => {
-          try {
-            await liff.init({ liffId: "2007306544-Oyvzorbv" });
-            sendMessage();
-            setTimeout(() => {
-              liff.closeWindow();
-            }, 2000);
-          } catch (error) {
-            console.error('LIFF initialization failed', error);
-          }
-        };
-    
-        initializeLiff();
-      }, []);
-
-
-  return (
-    <div className="bg-gray-50 min-h-screen flex items-center justify-center">
-     <StartNav />
-      <div className="w-full max-w-4xl mx-auto bg-white rounded-md shadow overflow-hidden p-10 items-center text-center flex flex-col">
-        <IoHome size={35} className='text-green-600' />
-        <h1 className='font-bold text-xl text-blue-600 mt-4'>เลือกช่วงเดือนที่ต้องการ</h1>
-        <select>
-          <option>--เลือกเดือน--</option>
-          {months.map((month) => (
-            <option key={month} value={month}>
-              {month}
-            </option>
-          ))}
-        </select>
-
-        <button onClick={sendFlexMessage}>ยืนยัน</button>
-        {status.error && (
-        <div className="text-red-500 text-sm">{status.error}</div>
-      )}
+      setTimeout(() => {
+        liff.closeWindow();
+      }, 1000);
       
-      {status.success && (
-        <div className="text-green-500 text-sm"></div>
-      )}
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  if (isLoading) return (
+    <div className="bg-gray-50 min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <div className="spinner-border text-primary mb-3" role="status"></div>
+        <p className="text-gray-600">กำลังโหลด...</p>
       </div>
     </div>
   );
-};
 
-export default Complete;
-
-
+  return (
+    <section className="min-h-screen bg-gray-50 flex flex-col justify-center items-center">
+      <div className="w-full max-w-2xl mx-auto bg-white rounded-md shadow overflow-hidden p-10 items-center text-center flex flex-col">
+        <div className="flex flex-col items-center">
+          <FaHouseCircleCheck size={100} className="text-blue-500 mb-4" />
+          <p className="font-bold mb-3 text-blue-600 text-2xl">เลือกเดือนที่ต้องการ</p>
+          <select
+            className="border border-gray-300 rounded-md py-2 px-4 mb-4 w-1/2"
+            onChange={(e) => setValue(e.target.value)}
+            value={value}
+          >
+            <option value="" >เลือกเดือน</option>
+            {months.map((month) => (
+              <option key={month} value={month}>
+                {month}
+              </option>
+            ))}
+          </select>
+          {value && (
+            <button
+              onClick={sendFlexMessage}
+              className="font-bold text-white bg-blue-600 hover:bg-blue-700 py-2 px-4 rounded-lg"
+            >
+              เลือก
+            </button>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
