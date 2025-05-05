@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 
 interface Month {
-  // month: string;
   income: number;
   outcome: number;
   occupancyRate: number;
@@ -57,15 +56,27 @@ const monthData: MonthData = {
   },
 };
 
-export default function RoomDetails({ params }: { params: { slug: string } }) {
-  const month = monthData[params.slug as keyof typeof monthData];
+// ส่วนที่แก้ไข: ใช้ type definition ที่ถูกต้องสำหรับ Next.js v15
+interface PageProps {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
+
+export default async function RoomDetails({ params, searchParams }: PageProps) {
+  // ต้องใช้ await เพื่อรอให้ params และ searchParams ถูก resolve
+  const resolvedParams = await params;
+  await searchParams; // ต้อง await searchParams ด้วยถึงแม้จะไม่ได้ใช้
+  const month = monthData[resolvedParams.slug as keyof typeof monthData];
   console.log(month);
 
   if (!month) {
-    <div className="min-h-screen items-center justify-center">
-      <p className="">Not Found</p>
-    </div>;
+    return (
+      <div className="min-h-screen items-center justify-center">
+        <p className="">Not Found</p>
+      </div>
+    );
   }
+  
   return (
     <>
       <div className="min-h-screen bg-gray-50">
