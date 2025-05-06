@@ -233,7 +233,7 @@ export default function Financial() {
                 "action": {
                   "type": "uri",
                   "label": "ดูเพิ่มเติม",
-                  "uri": "http://linecorp.com/"
+                  "uri": "https://finotel.vercel.app/detail/suggestion/January2025"
                 }
               }
             ]
