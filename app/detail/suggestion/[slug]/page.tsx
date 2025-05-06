@@ -16,6 +16,7 @@ interface Month {
   income: number;
   outcome: number;
   occupancyRate: number;
+  event: string[];
 }
 
 interface MonthData {
@@ -23,13 +24,13 @@ interface MonthData {
 }
 
 const monthData: MonthData = {
-  January: { income: 2000, outcome: 0, occupancyRate: 0 },
-  February: { income: 0, outcome: 0, occupancyRate: 0 },
-  March: { income: 0, outcome: 0, occupancyRate: 0 },
-  April: { income: 0, outcome: 0, occupancyRate: 86 }, // ยกตัวอย่างเพิ่มค่า
-  May: { income: 0, outcome: 0, occupancyRate: 0 },
-  June: { income: 0, outcome: 0, occupancyRate: 0 },
-  July: { income: 0, outcome: 0, occupancyRate: 0 },
+  January2025: { income: 2000, outcome: 0, occupancyRate: 0, event: ["Event 1", "Event 2", "Event 3"] },
+  February2025: { income: 0, outcome: 0, occupancyRate: 0, event: ["Event 1", "Event 2", "Event 3"] },
+  March2025: { income: 0, outcome: 0, occupancyRate: 0, event: ["Event 1", "Event 2", "Event 3"] },
+  April2025: { income: 0, outcome: 0, occupancyRate: 86, event: ["Event 1", "Event 2", "Event 3"] }, // ยกตัวอย่างเพิ่มค่า
+  May2025: { income: 0, outcome: 0, occupancyRate: 0, event: ["Event 1", "Event 2", "Event 3"] },
+  June2025: { income: 0, outcome: 0, occupancyRate: 0, event: ["Event 1", "Event 2", "Event 3"] },
+  July2025: { income: 0, outcome: 0, occupancyRate: 0, event: ["Event 1", "Event 2", "Event 3"] },
 };
 
 type PageProps = {
@@ -41,10 +42,17 @@ export default function RoomDetails({ params }: PageProps) {
   const [showMore, setShowMore] = useState(false);
   const month = monthData[slug as keyof typeof monthData];
 
+  const match = slug.match(/^([A-Za-z]+)(\d+)$/);
+
+  const month_name = match ? match[1] : '';
+  const year = match ? match[2] : '';
+
+  console.log(month);
+
   if (!month) {
     return (
-      <div className="min-h-screen items-center justify-center">
-        <p>Not Found</p>
+      <div className="min-h-screen flex flex-col items-center justify-center text-center">
+        <p className="text-2xl text-white">Data Not Found</p>
       </div>
     );
   }
@@ -55,7 +63,7 @@ export default function RoomDetails({ params }: PageProps) {
       <div className="container mx-auto px-4 py-6 max-w-5xl">
         {/* Header Section with gradient background */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-5 rounded-4xl shadow-lg mb-6 text-white">
-          <h1 className="text-2xl md:text-3xl font-bold text-center">ข้อมูลเดือนเมษายน 2025</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-center">ข้อมูลเดือน {month_name} {year}</h1>
           <p className="text-blue-100 text-sm text-center mt-1">อัพเดทล่าสุด: 23 เมษายน 2025</p>
         </div>
 
@@ -77,7 +85,7 @@ export default function RoomDetails({ params }: PageProps) {
                   <p className="text-gray-600">อัตราเข้าพัก</p>
                 </div>
                 <div className="flex items-center">
-                  <p className="text-xl font-bold text-blue-600">86%</p>
+                  <p className="text-xl font-bold text-blue-600">{month.occupancyRate}%</p>
                   <TrendingUp className="text-green-500 ml-1" size={16} />
                 </div>
               </div>
