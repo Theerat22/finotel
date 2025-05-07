@@ -1,15 +1,15 @@
 "use client";
 import React, { use } from "react";
 import {
-  // DollarSign,
-  // Users,
-  // TrendingUp,
-  // Calendar,
-  AlertCircle,
-  // TrendingDown,
-  // BarChart3,
-  Info,
-  ChevronRight
+  DollarSign,
+  Users,
+  TrendingUp,
+  Calendar,
+  // AlertCircle,
+  TrendingDown,
+  BarChart3
+  // Info,
+  // ChevronRight
 } from "lucide-react";
 import StartNav from "@/app/components/StartNav";
 
@@ -71,10 +71,61 @@ export default function RoomDetails({ params }: PageProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           {/* KPI Cards - In a row on desktop, stacked on mobile */}
-          
+          <div className="bg-white p-5 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-bold text-gray-700">สถิติหลัก</h3>
+              <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">+4.2% จากเดือนก่อน</span>
+            </div>
+            
+            <div className="space-y-4">
+              {/* อัตราการเข้าพัก */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="bg-blue-100 p-2 rounded-lg mr-3">
+                    <Users className="text-blue-600" size={18} />
+                  </div>
+                  <p className="text-gray-600">อัตราเข้าพัก</p>
+                </div>
+                <div className="flex items-center">
+                  <p className="text-xl font-bold text-blue-600">{month.occupancyRate}%</p>
+                  <TrendingUp className="text-green-500 ml-1" size={16} />
+                </div>
+              </div>
+              <div className="h-px bg-gray-100"></div>
+              
+              {/* RevPAR */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="bg-green-100 p-2 rounded-lg mr-3">
+                    <DollarSign className="text-green-600" size={18} />
+                  </div>
+                  <p className="text-gray-600">RevPAR</p>
+                </div>
+                <div className="flex items-center">
+                  <p className="text-xl font-bold text-green-600">3,871</p>
+                  <TrendingUp className="text-green-500 ml-1" size={16} />
+                </div>
+              </div>
+              <div className="h-px bg-gray-100"></div>
+              
+              {/* GOPPAR */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="bg-purple-100 p-2 rounded-lg mr-3">
+                    <BarChart3 className="text-purple-600" size={18} />
+                  </div>
+                  <p className="text-gray-600">GOPPAR</p>
+                </div>
+                <div className="flex items-center">
+                  <p className="text-xl font-bold text-purple-600">1,243</p>
+                  <TrendingDown className="text-red-500 ml-1" size={16} />
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Events Card */}
-          {/* <div className="bg-white p-5 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl">
+          <div className="bg-white p-5 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl">
 
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-gray-700">วันหยุดและเทศกาล</h3>
@@ -88,7 +139,7 @@ export default function RoomDetails({ params }: PageProps) {
                 <div>
                   <h3 className="font-semibold text-gray-800">วันจักรี</h3>
                   <p className="text-gray-600 text-sm">6 เมษายน</p>
-                  <p className="text-red-600 text-xs mt-1">อัตราเข้าพัก 98%</p>
+                  {/* <p className="text-red-600 text-xs mt-1">อัตราเข้าพัก 98%</p> */}
                 </div>
               </li>
               <li className="flex items-start bg-red-50 p-3 rounded-xl">
@@ -98,7 +149,7 @@ export default function RoomDetails({ params }: PageProps) {
                 <div>
                   <h3 className="font-semibold text-gray-800">สงกรานต์</h3>
                   <p className="text-gray-600 text-sm">13-15 เมษายน</p>
-                  <p className="text-red-600 text-xs mt-1">อัตราเข้าพัก 98%</p>
+                  {/* <p className="text-red-600 text-xs mt-1">อัตราเข้าพัก 98%</p> */}
                 </div>
               </li>
               <li className="flex items-start bg-blue-50 p-3 rounded-xl">
@@ -108,14 +159,14 @@ export default function RoomDetails({ params }: PageProps) {
                 <div>
                   <h3 className="font-semibold text-gray-800">น่าน นันทบุรี สุขสรีปีใหม่เมือง 2568</h3>
                   <p className="text-gray-600 text-sm">13-15 เมษายน</p>
-                  <p className="text-blue-600 text-xs mt-1">กิจกรรมชุมชน</p>
+                  {/* <p className="text-blue-600 text-xs mt-1">กิจกรรมชุมชน</p> */}
                 </div>
               </li>
             </ul>
-          </div> */}
+          </div>
 
           {/* RAG Recommendations */}
-          <div className="bg-white p-5 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl">
+          {/* <div className="bg-white p-5 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-gray-700">คำแนะนำการจัดการ</h3>
               <AlertCircle className="text-amber-500" size={18} />
@@ -123,30 +174,43 @@ export default function RoomDetails({ params }: PageProps) {
             <div className="bg-amber-50 p-4 rounded-xl border border-amber-200">
               <div className="flex items-center mb-2">
                 <Info className="text-amber-600 mr-2" size={16} />
-                <h3 className="font-semibold text-amber-800">ช่วงที่มีลูกค้าลดลงกว่าปกติ</h3>
+                <h3 className="font-semibold text-amber-800">ช่วงที่มีลูกค้าเยอะกว่าปกติ</h3>
               </div>
-              <ul className="text-amber-700 space-y-4 text-sm pl-2">
+              <ul className="text-amber-700 space-y-2 text-sm pl-2">
                 <li className="flex items-start">
                   <ChevronRight className="text-amber-500 mr-1 flex-shrink-0 mt-1" size={14} />
-                  <span>ลดค่าน้ำจาก 8,000 บาท เหลือ 5,500 บาท เพราะจำนวนนักท่องเท่าลดลง การใช้น้ำในห้องพักและบริการต่างๆ ก็จะลดลงตาม</span>
+                  <span>พิจารณาปรับราคาห้องพักแบบ dynamic pricing</span>
                 </li>
                 <li className="flex items-start">
                   <ChevronRight className="text-amber-500 mr-1 flex-shrink-0 mt-1" size={14} />
-                  <span>ลดค่าไฟฟ้าจาก 25,000 บาท เหลือ 17,000 บาท เพราะสามารถปิดระบบแสงสว่างและแอร์ในห้องที่ไม่มีผู้เข้าพักได้
-                  </span>
+                  <span>เพิ่มสัดส่วนพนักงานชั่วคราวเฉพาะช่วงพีค</span>
                 </li>
+                {showMore && (
+                  <>
                     <li className="flex items-start">
                       <ChevronRight className="text-amber-500 mr-1 flex-shrink-0 mt-1" size={14} />
-                      <span>ลดค่าอาหารและของใช้จาก 30,000 บาท เหลือ 18,000 บาท เพราะจำนวนลูกค้าลดลง จึงไม่จำเป็นต้องสต็อกของในปริมาณเท่าเดิม</span>
+                      <span>วิเคราะห์ต้นทุนต่อแขก 1 คน</span>
                     </li>
                     <li className="flex items-start">
                       <ChevronRight className="text-amber-500 mr-1 flex-shrink-0 mt-1" size={14} />
-                      <span>โดยปรับเวลาทำงานให้เหมาะสมกับภาระงานที่น้อยลง เช่น ใช้ระบบกะหมุนเวียนหรือจ้างรายวันเฉพาะวันหยุดสุดสัปดาห์
-                      </span>
+                      <span>ตรวจสอบ ROI ของแต่ละ upsell package</span>
                     </li>
+                    <li className="flex items-start">
+                      <ChevronRight className="text-amber-500 mr-1 flex-shrink-0 mt-1" size={14} />
+                      <span>ใช้ระบบ forecast เพื่อคาดการณ์วัตถุดิบล่วงหน้า</span>
+                    </li>
+                  </>
+                )}
               </ul>
+              <button 
+                className="mt-3 text-amber-700 text-sm font-medium flex items-center"
+                onClick={() => setShowMore(!showMore)}
+              >
+                {showMore ? 'แสดงน้อยลง' : 'ดูเพิ่มเติม'}
+                <ChevronRight className={`ml-1 transition-transform duration-300 ${showMore ? 'rotate-90' : ''}`} size={16} />
+              </button>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Financial Stats - Wide card at the bottom */}
