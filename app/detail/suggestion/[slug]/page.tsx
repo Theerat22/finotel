@@ -125,23 +125,23 @@ export default function RoomDetails({ params }: PageProps) {
                 <Info className="text-amber-600 mr-2" size={16} />
                 <h3 className="font-semibold text-amber-800">ช่วงที่มีลูกค้าลดลงกว่าปกติ</h3>
               </div>
-              <ul className="text-amber-700 space-y-4 text-sm pl-2">
+              <ul className="text-amber-700 space-y-6 text-base pl-2">
                 <li className="flex items-start">
                   <ChevronRight className="text-amber-500 mr-1 flex-shrink-0 mt-1" size={14} />
-                  <span>ลดค่าน้ำจาก 8,000 บาท เหลือ 5,500 บาท เพราะจำนวนนักท่องเท่าลดลง การใช้น้ำในห้องพักและบริการต่างๆ ก็จะลดลงตาม</span>
+                  <span className="font-medium leading-relaxed">ลดค่าน้ำจาก 8,000 บาท เหลือ 5,500 บาท เพราะจำนวนนักท่องเท่าลดลง การใช้น้ำในห้องพักและบริการต่างๆ ก็จะลดลงตาม</span>
                 </li>
                 <li className="flex items-start">
                   <ChevronRight className="text-amber-500 mr-1 flex-shrink-0 mt-1" size={14} />
-                  <span>ลดค่าไฟฟ้าจาก 25,000 บาท เหลือ 17,000 บาท เพราะสามารถปิดระบบแสงสว่างและแอร์ในห้องที่ไม่มีผู้เข้าพักได้
+                  <span className="font-medium leading-relaxed">ลดค่าไฟฟ้าจาก 25,000 บาท เหลือ 17,000 บาท เพราะสามารถปิดระบบแสงสว่างและแอร์ในห้องที่ไม่มีผู้เข้าพักได้
                   </span>
                 </li>
                     <li className="flex items-start">
                       <ChevronRight className="text-amber-500 mr-1 flex-shrink-0 mt-1" size={14} />
-                      <span>ลดค่าอาหารและของใช้จาก 30,000 บาท เหลือ 18,000 บาท เพราะจำนวนลูกค้าลดลง จึงไม่จำเป็นต้องสต็อกของในปริมาณเท่าเดิม</span>
+                      <span className="font-medium leading-relaxed">ลดค่าอาหารและของใช้จาก 30,000 บาท เหลือ 18,000 บาท เพราะจำนวนลูกค้าลดลง จึงไม่จำเป็นต้องสต็อกของในปริมาณเท่าเดิม</span>
                     </li>
                     <li className="flex items-start">
                       <ChevronRight className="text-amber-500 mr-1 flex-shrink-0 mt-1" size={14} />
-                      <span>โดยปรับเวลาทำงานให้เหมาะสมกับภาระงานที่น้อยลง เช่น ใช้ระบบกะหมุนเวียนหรือจ้างรายวันเฉพาะวันหยุดสุดสัปดาห์
+                      <span className="font-medium leading-relaxed">โดยปรับเวลาทำงานให้เหมาะสมกับภาระงานที่น้อยลง เช่น ใช้ระบบกะหมุนเวียนหรือจ้างรายวันเฉพาะวันหยุดสุดสัปดาห์
                       </span>
                     </li>
               </ul>

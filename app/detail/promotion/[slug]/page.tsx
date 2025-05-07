@@ -83,8 +83,8 @@ const monthData: MonthData = {
     occupancyRate: 86, 
     event: ["Event 1", "Event 2", "Event 3"],
     weeklyData: [
-      { weekNumber: 1, occupancyRate: 40, recommendation: "ลดราคาห้องพัก", recommendationType: "decrease", priceChange: "-10%", isPast: true, target: 45, actual: 42 },
-      { weekNumber: 2, occupancyRate: 50, recommendation: "รักษาระดับราคา", recommendationType: "maintain", priceChange: "0%", isPast: true, target: 55, actual: 53 },
+      { weekNumber: 1, occupancyRate: 40, recommendation: "ลดราคาห้องพัก", recommendationType: "decrease", priceChange: "-10%", isPast: true, target: 40, actual: 42 },
+      { weekNumber: 2, occupancyRate: 50, recommendation: "รักษาระดับราคา", recommendationType: "maintain", priceChange: "0%", isPast: true, target: 50, actual: 53 },
       { weekNumber: 3, occupancyRate: 80, recommendation: "เพิ่มราคาห้องพัก", recommendationType: "increase", priceChange: "+15%", isPast: false, target: 85 },
       { weekNumber: 4, occupancyRate: 85, recommendation: "เพิ่มราคาห้องพัก", recommendationType: "increase", priceChange: "+20%", isPast: false, target: 90 }
     ]
