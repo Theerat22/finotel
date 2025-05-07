@@ -64,7 +64,7 @@ export default function RoomDetails({ params }: PageProps) {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 pt-16 flex-grow">
       <div className="container mx-auto px-4 py-6 max-w-5xl">
         {/* Header Section with gradient background */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-5 rounded-4xl shadow-lg mb-6 text-white">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-5 rounded-2xl shadow-lg mb-6 text-white">
           <h1 className="text-2xl md:text-3xl font-bold text-center">ข้อมูลเดือน {month_name} {year}</h1>
           <p className="text-blue-100 text-sm text-center mt-1">อัพเดทล่าสุด: 11 พฤษภาคม 2025</p>
         </div>
