@@ -224,7 +224,7 @@ export default function RoomDetails({ params }: PageProps) {
                         <div className="flex justify-between items-center">
                           <h4 className="font-semibold text-white text-lg">สัปดาห์ที่ {week.weekNumber}</h4>
                           {week.isPast && (
-                            <span className="text-xs bg-white bg-opacity-20 text-white px-3 py-1 rounded-full text-center backdrop-blur-sm">
+                            <span className="text-xs bg-white bg-opacity-20 text-black px-3 py-1 rounded-full text-center backdrop-blur-sm">
                               ผ่านไปแล้ว
                             </span>
                           )}
