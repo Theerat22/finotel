@@ -4,18 +4,18 @@ import React, { useState } from 'react';
 import Navbar from '@/app/components/Navbar';
 import BookingTrend from './pages/BookingTrend';
 import DynamicPricing from './pages/DynamicPricing';
-// import ExpenseAnalysis from '@/app/dashboard/pages/ExpenseAnalysist';
+import ExpenseAnalysis from '@/app/dashboard/pages/ExpenseAnalysist';
 import { Analytics } from "@vercel/analytics/react";
-import Slug from './pages';
+// import Slug from './pages';
 const Dashboard: React.FC = () => {
   const [activePage, setActivePage] = useState('overview');
 
   const renderPage = () => {
     switch(activePage) {
-      // case 'financial': return <ExpenseAnalysis />;
+      case 'financial': return <ExpenseAnalysis />;
       case 'booking': return <BookingTrend />;
       case 'dynamic': return <DynamicPricing />;
-      default: return <Slug />;
+      default: return <ExpenseAnalysis />;
     }
   };
 

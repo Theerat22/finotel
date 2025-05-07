@@ -30,6 +30,7 @@ export default function PromptForm({ onSubmit, isLoading }: PromptFormProps) {
           setPrompt(e.target.value);
         }}
       />
+      {isLoading && <div>Loading...</div>}
       <input
         className="w-full p-2 border border-gray-300 rounded-md"
         type="submit"

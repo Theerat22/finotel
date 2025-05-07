@@ -1,16 +1,17 @@
 "use client";
-import React, { useState, use } from "react";
+import React, { use } from "react";
 import {
   DollarSign,
   Users,
   TrendingUp,
   Calendar,
-  AlertCircle,
+  // AlertCircle,
   TrendingDown,
-  BarChart3,
-  Info,
-  ChevronRight
+  BarChart3
+  // Info,
+  // ChevronRight
 } from "lucide-react";
+import StartNav from "@/app/components/StartNav";
 
 interface Month {
   income: number;
@@ -39,7 +40,7 @@ type PageProps = {
 
 export default function RoomDetails({ params }: PageProps) {
   const { slug } = use(params);
-  const [showMore, setShowMore] = useState(false);
+  // const [showMore, setShowMore] = useState(false);
   const month = monthData[slug as keyof typeof monthData];
 
   const match = slug.match(/^([A-Za-z]+)(\d+)$/);
@@ -59,12 +60,13 @@ export default function RoomDetails({ params }: PageProps) {
 
   return (
     <>
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+    <StartNav />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 pt-16 flex-grow">
       <div className="container mx-auto px-4 py-6 max-w-5xl">
         {/* Header Section with gradient background */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-5 rounded-4xl shadow-lg mb-6 text-white">
           <h1 className="text-2xl md:text-3xl font-bold text-center">ข้อมูลเดือน {month_name} {year}</h1>
-          <p className="text-blue-100 text-sm text-center mt-1">อัพเดทล่าสุด: 23 เมษายน 2025</p>
+          <p className="text-blue-100 text-sm text-center mt-1">อัพเดทล่าสุด: 11 พฤษภาคม 2025</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
@@ -124,11 +126,22 @@ export default function RoomDetails({ params }: PageProps) {
 
           {/* Events Card */}
           <div className="bg-white p-5 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl">
+
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-gray-700">เทศกาลและอีเวนท์</h3>
+              <h3 className="font-bold text-gray-700">วันหยุดและเทศกาล</h3>
               <Calendar className="text-red-500" size={18} />
             </div>
             <ul className="space-y-4">
+            <li className="flex items-start bg-red-50 p-3 rounded-xl">
+                <div className="flex-shrink-0 bg-red-100 p-2 rounded-lg mr-3">
+                  <span className="text-red-600 font-bold">6</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-800">วันจักรี</h3>
+                  <p className="text-gray-600 text-sm">6 เมษายน</p>
+                  {/* <p className="text-red-600 text-xs mt-1">อัตราเข้าพัก 98%</p> */}
+                </div>
+              </li>
               <li className="flex items-start bg-red-50 p-3 rounded-xl">
                 <div className="flex-shrink-0 bg-red-100 p-2 rounded-lg mr-3">
                   <span className="text-red-600 font-bold">13</span>
@@ -136,7 +149,7 @@ export default function RoomDetails({ params }: PageProps) {
                 <div>
                   <h3 className="font-semibold text-gray-800">สงกรานต์</h3>
                   <p className="text-gray-600 text-sm">13-15 เมษายน</p>
-                  <p className="text-red-600 text-xs mt-1">อัตราเข้าพัก 98%</p>
+                  {/* <p className="text-red-600 text-xs mt-1">อัตราเข้าพัก 98%</p> */}
                 </div>
               </li>
               <li className="flex items-start bg-blue-50 p-3 rounded-xl">
@@ -144,16 +157,16 @@ export default function RoomDetails({ params }: PageProps) {
                   <span className="text-blue-600 font-bold">13</span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800">ขนทรายเข้าวัด</h3>
-                  <p className="text-gray-600 text-sm">13-14 เมษายน</p>
-                  <p className="text-blue-600 text-xs mt-1">กิจกรรมชุมชน</p>
+                  <h3 className="font-semibold text-gray-800">น่าน นันทบุรี สุขสรีปีใหม่เมือง 2568</h3>
+                  <p className="text-gray-600 text-sm">13-15 เมษายน</p>
+                  {/* <p className="text-blue-600 text-xs mt-1">กิจกรรมชุมชน</p> */}
                 </div>
               </li>
             </ul>
           </div>
 
           {/* RAG Recommendations */}
-          <div className="bg-white p-5 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl">
+          {/* <div className="bg-white p-5 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-gray-700">คำแนะนำการจัดการ</h3>
               <AlertCircle className="text-amber-500" size={18} />
@@ -197,11 +210,11 @@ export default function RoomDetails({ params }: PageProps) {
                 <ChevronRight className={`ml-1 transition-transform duration-300 ${showMore ? 'rotate-90' : ''}`} size={16} />
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Financial Stats - Wide card at the bottom */}
-        <div className="bg-white p-5 rounded-2xl shadow-lg mb-6">
+        {/* <div className="bg-white p-5 rounded-2xl shadow-lg mb-6">
           <h3 className="font-bold text-gray-700 mb-4">ภาพรวมทางการเงิน</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="bg-green-50 p-3 rounded-xl text-center">
@@ -225,7 +238,7 @@ export default function RoomDetails({ params }: PageProps) {
               <p className="text-xs text-green-500">+2.3% YoY</p>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Footer with subtle branding */}
       </div>
