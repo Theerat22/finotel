@@ -50,31 +50,31 @@ export default function Financial() {
 
   const mockMonth: MonthsRecord = {
     มกราคม: {
-      month: "January",
+      month: "January2025",
       goppar: 1000,
       revpar: 2000,
       occ: 50
     },
     กุมภาพันธ์: {
-      month: "February",
+      month: "February2025",
       goppar: 1200,
       revpar: 2200,
       occ: 50
     },
     มีนาคม: {
-      month: "March",
+      month: "March2025",
       goppar: 1300,
       revpar: 2300,
       occ: 50
     },
     เมษายน: {
-      month: "April",
+      month: "April2025",
       goppar: 1400,
       revpar: 2400,
       occ: 50
     },
     พฤษภาคม: {
-      month: "May",
+      month: "May2025",
       goppar: 1500,
       revpar: 2500,
       occ: 50
@@ -233,7 +233,7 @@ export default function Financial() {
                 "action": {
                   "type": "uri",
                   "label": "ดูเพิ่มเติม",
-                  "uri": "https://finotel.vercel.app/detail/suggestion/January2025"
+                  "uri": `https://finotel.vercel.app/detail/booking/${selectedMonth.month}`
                 }
               }
             ]
@@ -289,9 +289,6 @@ export default function Financial() {
       <div className="w-full max-w-2xl mx-auto bg-white rounded-md shadow overflow-hidden p-10 items-center text-center flex flex-col">
         <div className="flex flex-col items-center">
           <FaHouseCircleCheck size={100} className="text-blue-500 mb-4" />
-          {/* {userData.displayName && (
-            <p className="font-bold mb-3 text-blue-600 text-xl">ยินดีต้อนรับ {userData.displayName}</p>
-          )} */}
           <p className="font-bold mb-3 text-blue-600 text-2xl">เลือกเดือนที่ต้องการ</p>
           <select
             className="border border-gray-300 rounded-md py-2 px-4 mb-4 w-1/2"
