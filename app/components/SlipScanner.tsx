@@ -11,10 +11,10 @@ export default function SlipScanner() {
 
   useEffect(() => {
     liff.init({ liffId: "2007306544-8XxGDdBx" }).then(() => {
-      if (!liff.isInClient()) {
-        alert("กรุณาเปิดใน LINE App");
-        return;
-      }
+    //   if (!liff.isInClient()) {
+    //     alert("กรุณาเปิดใน LINE App");
+    //     return;
+    //   }
 
       // ขออนุญาตเปิดกล้อง
       navigator.mediaDevices
