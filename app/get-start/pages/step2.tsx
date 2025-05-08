@@ -158,7 +158,7 @@ const Step2: React.FC<Step2Props> = ({ setActivePage }) => {
   }
   
   return (
-    <section className='relative min-h-screen overflow-hidden'>
+    <section className='relative min-h-screen overflow-hidden px-4'>
     <div className="bg-gray-50 min-h-screen flex flex-col items-center justify-center">
       <div className="w-full max-w-4xl mx-auto bg-white rounded-md shadow overflow-hidden">
         {/* สำหรับหน้าจอมือถือ (Mobile) - ย้ายส่วนสีน้ำเงินขึ้นด้านบน */}

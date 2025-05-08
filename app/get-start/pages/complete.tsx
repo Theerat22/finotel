@@ -259,7 +259,7 @@ const Complete: React.FC = () => {
 
 
   return (
-    <section className='relative min-h-screen overflow-hidden'>
+    <section className='relative min-h-screen overflow-hidden px-4'>
     <div className="bg-gray-50 min-h-screen flex flex-col items-center justify-center">
       <div className="w-full max-w-4xl mx-auto bg-white rounded-md shadow overflow-hidden p-10 items-center text-center flex flex-col">
         <CiCircleCheck size={100} className='text-green-600' />
