@@ -291,7 +291,7 @@ export default function Financial() {
   );
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 pt-16 flex flex-col justify-center items-center">
+    <section className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex flex-col justify-center items-center px-4">
       <div className="w-full max-w-2xl mx-auto bg-white rounded-md shadow overflow-hidden p-10 items-center text-center flex flex-col">
         <div className="flex flex-col items-center">
           <Calendar size={100} className="text-blue-500 mb-4" />
