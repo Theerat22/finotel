@@ -56,7 +56,7 @@ const Complete: React.FC = () => {
                   "contents": [
                     {
                       "type": "text",
-                      "text": "รายได้รวม (ทั้งปี)",
+                      "text": "รายได้รวม (April 2025)",
                       "size": "sm",
                       "color": "#555555",
                       "flex": 0
@@ -76,7 +76,7 @@ const Complete: React.FC = () => {
                   "contents": [
                     {
                       "type": "text",
-                      "text": "รายจ่ายรวม (ทั้งปี)",
+                      "text": "รายจ่ายรวม (April 2025)",
                       "size": "sm",
                       "color": "#555555",
                       "flex": 0
@@ -106,49 +106,6 @@ const Complete: React.FC = () => {
                       "text": "2,346,543 ฿",
                       "size": "sm",
                       "color": "#1DB446",
-                      "align": "end"
-                    }
-                  ]
-                },
-                {
-                  "type": "separator",
-                  "margin": "xxl"
-                },
-                {
-                  "type": "box",
-                  "layout": "horizontal",
-                  "margin": "xxl",
-                  "contents": [
-                    {
-                      "type": "text",
-                      "text": "RevPAR",
-                      "size": "sm",
-                      "color": "#555555"
-                    },
-                    {
-                      "type": "text",
-                      "text": "2383",
-                      "size": "sm",
-                      "color": "#145CFA",
-                      "align": "end"
-                    }
-                  ]
-                },
-                {
-                  "type": "box",
-                  "layout": "horizontal",
-                  "contents": [
-                    {
-                      "type": "text",
-                      "text": "GOPPAR",
-                      "size": "sm",
-                      "color": "#555555"
-                    },
-                    {
-                      "type": "text",
-                      "text": "867",
-                      "size": "sm",
-                      "color": "#145CFA",
                       "align": "end"
                     }
                   ]
