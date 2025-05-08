@@ -116,6 +116,11 @@ export default function Financial() {
     if (!value || !mockMonth[value]) return null;
     
     const selectedMonth = mockMonth[value];
+
+    const match = selectedMonth.month.match(/^([A-Za-z]+)(\d+)$/);
+
+    const month_name = match ? match[1] : '';
+    const year = match ? match[2] : '';
     
     return {
       "type": "bubble",
@@ -132,7 +137,7 @@ export default function Financial() {
           },
           {
             "type": "text",
-            "text": selectedMonth.month,
+            "text": `${month_name} ${year}`,
             "weight": "bold",
             "size": "xxl",
             "margin": "md"
