@@ -2,11 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import liff from "@line/liff";
-// import * as olmOCR from "olmocr";
+import Image from "next/image";
 
 export default function SlipScanner() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [result, setResult] = useState<string>("");
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     liff.init({ liffId: "2007306544-8XxGDdBx" }).then(() => {
@@ -26,42 +27,44 @@ export default function SlipScanner() {
         })
         .catch((err) => {
           console.error("เปิดกล้องไม่สำเร็จ:", err);
+          setError("ไม่สามารถเปิดกล้องได้");
         });
     });
   }, []);
 
-  const handleCaptureAndScan = async () => {
+  const handleCaptureAndScan = () => {
     if (!videoRef.current) return;
 
-    setResult("ใช้กล้องได้");
+    const canvas = document.createElement("canvas");
+    canvas.width = videoRef.current.videoWidth;
+    canvas.height = videoRef.current.videoHeight;
 
-    // แคปเจอร์ภาพจากวิดีโอ
-    // const canvas = document.createElement("canvas");
-    // canvas.width = videoRef.current.videoWidth;
-    // canvas.height = videoRef.current.videoHeight;
-    // const ctx = canvas.getContext("2d");
-    // if (ctx) {
-    //   ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-    //   const imageDataUrl = canvas.toDataURL("image/jpeg");
-
-    //   // ส่งให้ olmOCR วิเคราะห์
-    //   const result = await olmOCR.scanSlip(imageDataUrl);
-    //   setResult(JSON.stringify(result, null, 2));
-    // }
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+      const imageDataUrl = canvas.toDataURL("image/jpeg");
+      setCapturedImage(imageDataUrl);
+    }
   };
 
   return (
     <div className="p-4">
-      <video ref={videoRef} style={{ width: "100%", borderRadius: 10 }} />
+      <video ref={videoRef} style={{ width: "100%", borderRadius: 10 }} playsInline muted />
       <button
         onClick={handleCaptureAndScan}
         className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
       >
-        สแกนสลิป
+        ถ่ายรูป
       </button>
-      {result && (
-        <pre className="mt-4 bg-gray-100 p-2 text-sm rounded">{result}</pre>
+
+      {capturedImage && (
+        <div className="mt-4">
+          <h2 className="text-sm font-medium mb-2">ภาพที่ถ่าย:</h2>
+          <Image src={capturedImage} alt="Captured" className="rounded shadow-md w-full" />
+        </div>
       )}
+
+      {error && <p className="mt-4 text-red-500">{error}</p>}
     </div>
   );
 }
