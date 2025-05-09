@@ -14,7 +14,7 @@ export default function FinancialHomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
           <button
             className="mx-auto my-3 sm:m-7 w-full max-w-sm"
-            onClick={() => router.push("/line/financial/get-data")}
+            onClick={() => router.push("https://liff.line.me/2007306544-Z0Gq6kmG")}
           >
             <div className="bg-white shadow-xl sm:shadow-2xl rounded-2xl p-4 sm:p-5 w-full">
               <div className="flex flex-col items-center">
