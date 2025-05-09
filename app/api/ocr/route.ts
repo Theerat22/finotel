@@ -5,7 +5,7 @@ import axios from 'axios'
 export async function POST(request: NextRequest) {
   try {
     // รับ API Key จาก headers
-    const apiKey = request.headers.get('x-api-key')
+    const apiKey = process.env.OCR_API;
     
     if (!apiKey) {
       return NextResponse.json(
