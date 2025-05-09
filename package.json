@@ -19,6 +19,7 @@
     "formidable": "^3.5.2",
     "lucide-react": "^0.477.0",
     "next": "15.2.1",
+    "node-tesseract-ocr": "^2.2.1",
     "openai": "^4.97.0",
     "papaparse": "^5.5.2",
     "python": "^0.0.4",
@@ -28,6 +29,7 @@
     "react-liff": "^2.1.0",
     "react-markdown": "^10.1.0",
     "recharts": "^2.15.1",
+    "sharp": "^0.34.1",
     "stream": "^0.0.3"
   },
   "devDependencies": {
