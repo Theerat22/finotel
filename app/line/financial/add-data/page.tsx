@@ -133,7 +133,7 @@ const HotelFinanceForm = () => {
   useEffect(() => {
     const initializeLiff = async (): Promise<void> => {
       try {
-        await liff.init({ liffId: "2007306544-8nvWdZ1v" });
+        await liff.init({ liffId: "2007306544-8XxGDdBx" });
 
         if (liff.isLoggedIn()) {
           const profile = await liff.getProfile();
