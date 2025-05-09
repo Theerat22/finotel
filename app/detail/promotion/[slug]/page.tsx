@@ -196,7 +196,7 @@ export default function RoomDetails({ params }: PageProps) {
                 <h3 className="font-bold text-gray-700">คำแนะนำโปรโมชั่น</h3>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 bg-gray-50">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6 bg-gray-50">
                   {month.weeklyData.map((week) => (
                     <div 
                       key={week.weekNumber} 
