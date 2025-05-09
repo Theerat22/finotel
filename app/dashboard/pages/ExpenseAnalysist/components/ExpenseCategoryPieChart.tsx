@@ -34,6 +34,12 @@ const ExpenseCategoryPieChart: React.FC<ExpenseCategoryPieChartProps> = ({ categ
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [windowWidth, setWindowWidth] = useState<number>(typeof window !== 'undefined' ? window.innerWidth : 1200);
 
+  const match = period.match(/^([A-Za-z]+)(\d+)$/);
+
+  const month_name = match ? match[1] : "";
+  const year = match ? match[2] : "";
+
+  const full_month = `${month_name} ${year}`;
   // Add window resize listener for responsive adjustments
   useEffect(() => {
     const handleResize = () => {
@@ -154,7 +160,7 @@ const ExpenseCategoryPieChart: React.FC<ExpenseCategoryPieChartProps> = ({ categ
       <h2 className="text-base sm:text-lg md:text-xl font-semibold mb-2 sm:mb-4 text-gray-800 flex flex-wrap items-center">
         <PieChartIcon className="mr-2 text-blue-500" size={windowWidth <= 640 ? 16 : 20} />
         <span className="mr-1">สัดส่วนค่าใช้จ่ายตามหมวดหมู่</span>
-        <span className="text-blue-600 text-sm sm:text-base md:text-lg">- {period}</span>
+        <span className="text-blue-600 text-base sm:text-base md:text-lg">- {full_month}</span>
       </h2>
       
       {visibleData.length > 0 ? (

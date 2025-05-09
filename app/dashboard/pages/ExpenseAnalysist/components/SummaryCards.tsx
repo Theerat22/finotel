@@ -18,6 +18,13 @@ interface SummaryCardsProps {
 const SummaryCards: React.FC<SummaryCardsProps> = ({ summaryMetrics, period }) => {
   const { totalRevenue, totalExpense, avgRatio, ebitdar } = summaryMetrics;
 
+  const match = period.match(/^([A-Za-z]+)(\d+)$/);
+
+  const month_name = match ? match[1] : "";
+  const year = match ? match[2] : "";
+
+  const full_month = `${month_name} ${year}`;
+
   // สร้างสถานะการแสดงผลที่น่าสนใจยิ่งขึ้น
   const expenseStatus = avgRatio > 0.7 ? 'high' : avgRatio > 0.6 ? 'medium' : 'good';
   
@@ -34,7 +41,7 @@ const SummaryCards: React.FC<SummaryCardsProps> = ({ summaryMetrics, period }) =
             <TrendingUp className="text-white" size={22} />
           </div>
           <div className="flex-1">
-            <h2 className="text-xs font-semibold text-blue-600 uppercase tracking-wider mb-1">รายได้{period}</h2>
+            <h2 className="text-xs font-semibold text-blue-600 uppercase tracking-wider mb-1">รายได้ {full_month}</h2>
             <div className="flex items-baseline">
               <p className="text-2xl font-bold text-blue-700">{formatNumber(totalRevenue)}</p>
               <p className="ml-1 text-blue-500 text-sm">บาท</p>
@@ -54,7 +61,7 @@ const SummaryCards: React.FC<SummaryCardsProps> = ({ summaryMetrics, period }) =
             <TrendingDown className="text-white" size={22} />
           </div>
           <div className="flex-1">
-            <h2 className="text-xs font-semibold text-red-600 uppercase tracking-wider mb-1">รายจ่าย{period}</h2>
+            <h2 className="text-xs font-semibold text-red-600 uppercase tracking-wider mb-1">รายจ่าย {full_month}</h2>
             <div className="flex items-baseline">
               <p className="text-2xl font-bold text-red-700">{formatNumber(totalExpense)}</p>
               <p className="ml-1 text-red-500 text-sm">บาท</p>

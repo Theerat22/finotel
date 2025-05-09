@@ -2,8 +2,7 @@ import { MonthlyData, CategoryData, AnomalyReport } from './index';
 
 
 const thaiMonths = [
-  'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.',
-  'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'
+  'January2025', 'February2025', 'March2025', 'April2025', 'May2025', 'June2025', 'July2025', 'August2025', 'September2025', 'October2025', 'November2025', 'December2025'
 ];
 
 const expenseCategories = [
