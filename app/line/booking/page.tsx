@@ -123,133 +123,150 @@ export default function Financial() {
     const year = match ? match[2] : '';
     
     return {
-      "type": "bubble",
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [
+      type: "bubble",
+      size: "mega",
+      body: {
+        type: "box",
+        layout: "vertical",
+        backgroundColor: "#ffffff",
+        contents: [
           {
-            "type": "text",
-            "text": "ทำนายอัตราการเข้าพัก",
-            "weight": "bold",
-            "color": "#1DB446",
-            "size": "sm"
+            type: "text",
+            text: "ข้อมูลการเข้าพักโรงแรม",
+            weight: "bold",
+            color: "#1E3A8A", // dark blue
+            size: "sm",
           },
           {
-            "type": "text",
-            "text": `${month_name} ${year}`,
-            "weight": "bold",
-            "size": "xxl",
-            "margin": "md"
+            type: "text",
+            text: `เดือน ${month_name} ${year}`,
+            weight: "bold",
+            size: "xxl",
+            margin: "md",
+            color: "#1E3A8A",
           },
           {
-            "type": "text",
-            "size": "xs",
-            "color": "#aaaaaa",
-            "wrap": true,
-            "text": "Nan, Thailand"
+            type: "text",
+            size: "xs",
+            color: "#94a3b8", // light slate
+            wrap: true,
+            text: "โรงแรมลิงกังกู",
           },
           {
-            "type": "separator",
-            "margin": "xxl"
+            type: "separator",
+            margin: "xxl",
+            color: "#E0E7FF", // light blue
           },
           {
-            "type": "box",
-            "layout": "vertical",
-            "margin": "xxl",
-            "spacing": "sm",
-            "contents": [
+            type: "box",
+            layout: "vertical",
+            margin: "xxl",
+            spacing: "sm",
+            contents: [
               {
-                "type": "box",
-                "layout": "horizontal",
-                "contents": [
+                type: "box",
+                layout: "horizontal",
+                contents: [
                   {
-                    "type": "text",
-                    "text": "ทำนายอัตราการเข้าพัก",
-                    "size": "md",
-                    "color": "#555555",
-                    "flex": 0
+                    type: "text",
+                    text: "อัตราการเช้าพักเฉลี่ย",
+                    size: "md",
+                    color: "#475569",
+                    flex: 0,
                   },
                   {
-                    "type": "text",
-                    "text": `${selectedMonth.occ}%`,
-                    "size": "xl",
-                    "color": "#1DB446",
-                    "align": "end"
-                  }
-                ]
-              },
-              {
-                "type": "separator",
-                "margin": "xxl"
-              },
-              {
-                "type": "box",
-                "layout": "horizontal",
-                "margin": "xxl",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "RevPAR",
-                    "size": "sm",
-                    "color": "#555555"
+                    type: "text",
+                    text: `${selectedMonth.occ}%`,
+                    size: "md",
+                    color: "#1D4ED8", // dark blue
+                    align: "end",
                   },
-                  {
-                    "type": "text",
-                    "text": `${selectedMonth.revpar}฿`,
-                    "size": "sm",
-                    "color": "#145CFA",
-                    "align": "end"
-                  }
-                ]
+                ],
               },
-              {
-                "type": "box",
-                "layout": "horizontal",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": "GOPPAR",
-                    "size": "sm",
-                    "color": "#555555"
-                  },
-                  {
-                    "type": "text",
-                    "text": `${selectedMonth.goppar}฿`,
-                    "size": "sm",
-                    "color": "#145CFA",
-                    "align": "end"
-                  }
-                ]
-              }
-            ]
+            ],
           },
           {
-            "type": "separator",
-            "margin": "xxl"
+            type: "separator",
+            margin: "xxl",
+            color: "#E0E7FF",
           },
           {
-            "type": "box",
-            "layout": "horizontal",
-            "margin": "md",
-            "contents": [
+            type: "box",
+            layout: "vertical",
+            margin: "xxl",
+            spacing: "sm",
+            contents: [
               {
-                "type": "button",
-                "action": {
-                  "type": "uri",
-                  "label": "ดูเพิ่มเติม",
-                  "uri": `https://finotel.vercel.app/detail/booking/${selectedMonth.month}`
-                }
-              }
-            ]
-          }
-        ]
+                type: "box",
+                layout: "horizontal",
+                contents: [
+                  {
+                    type: "text",
+                    text: "RevPAR (รายได้เฉลี่ยต่อห้องพัก)",
+                    size: "sm",
+                    color: "#475569",
+                    flex: 0,
+                  },
+                  {
+                    type: "text",
+                    text: `${selectedMonth.revpar}`,
+                    size: "sm",
+                    color: "#1D4ED8", // dark blue
+                    align: "end",
+                  },
+                ],
+              },
+              {
+                type: "box",
+                layout: "horizontal",
+                contents: [
+                  {
+                    type: "text",
+                    text: "GOPPAR (กำไรเฉลี่ยต่อห้องพัก)",
+                    size: "sm",
+                    color: "#475569",
+                    flex: 0,
+                  },
+                  {
+                    type: "text",
+                    text: `${selectedMonth.goppar}`,
+                    size: "sm",
+                    color: "#1D4ED8", // dark blue
+                    align: "end",
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            type: "separator",
+            margin: "xxl",
+            color: "#E0E7FF", // light blue
+          },
+          {
+            type: "box",
+            layout: "horizontal",
+            margin: "md",
+            contents: [
+              {
+                type: "button",
+                style: "primary",
+                color: "#2563EB", // button blue
+                action: {
+                  type: "uri",
+                  label: "ดูเพิ่มเติม",
+                  uri: "http://linecorp.com/",
+                },
+              },
+            ],
+          },
+        ],
       },
-      "styles": {
-        "footer": {
-          "separator": true
-        }
-      }
+      styles: {
+        footer: {
+          separator: true,
+        },
+      },
     };
   };
 
