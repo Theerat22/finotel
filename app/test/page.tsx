@@ -70,7 +70,7 @@ export default function OCRPage() {
   const handleSubmit = async () => {
     if (!image) return setError("กรุณาเลือกรูปภาพใบเสร็จก่อน");
     // if (!apiKey) return setError('กรุณากรอก API Key')
-    const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+    const apiKey = process.env.OCR_API;
     try {
       setLoading(true);
       setError("");
