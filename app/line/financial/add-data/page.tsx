@@ -124,7 +124,7 @@ const HotelFinanceForm = () => {
       setImage(file);
       setReceiptData(null);
       setError("");
-      console.log("Upload File Complete")
+      console.log("Upload File Complete");
     }
   };
 
@@ -360,6 +360,26 @@ const HotelFinanceForm = () => {
     document.body.removeChild(link);
   };
 
+  const category = [
+    {
+      name: "income",
+      items: [
+        { name: "การขายห้องพัก" },
+        { name: "ขายอาหาร" },
+      ],
+    },
+    {
+      name: "expenses",
+      items: [
+        { name: "ค่าพนักงาน" },
+        { name: "ค่าไฟ" },
+        { name: "ค่าน้ำ" },
+        { name: "ค่าวัตถุดิบ" },
+      ],
+    },
+  ];
+  
+
   return (
     <section className="relative min-h-screen overflow-hidden px-4 py-8 bg-gray-50">
       <div className="flex flex-col items-center justify-center">
@@ -488,9 +508,7 @@ const HotelFinanceForm = () => {
                       className="flex items-center space-x-2 mb-2"
                     >
                       <div className="flex-1">
-                        <input
-                          type="text"
-                          placeholder="ชื่อรายการ"
+                        <select
                           value={item.name}
                           onChange={(e) =>
                             handleItemChange(
@@ -502,7 +520,16 @@ const HotelFinanceForm = () => {
                           }
                           className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                           required
-                        />
+                        >
+                          <option value="">เลือกประเภท</option>
+                          {category
+                            .find((c) => c.name === "income")
+                            ?.items.map((option, index) => (
+                              <option key={index} value={option.name}>
+                                {option.name}
+                              </option>
+                            ))}
+                        </select>
                       </div>
                       <div className="w-32">
                         <input
@@ -517,7 +544,7 @@ const HotelFinanceForm = () => {
                               e.target.value
                             )
                           }
-                          className="w-full px-1 py-2 text-sm border border-gray-300 rounded-md  focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full px-1 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                           min="0"
                           step="0.01"
                           required
@@ -537,6 +564,7 @@ const HotelFinanceForm = () => {
                       </button>
                     </div>
                   ))}
+
                   <div className="text-right text-sm font-medium mt-2">
                     รวมรายรับ:{" "}
                     <span className="text-green-600">
@@ -566,10 +594,7 @@ const HotelFinanceForm = () => {
                       key={item.id}
                       className="flex items-center space-x-2 mb-2"
                     >
-                      <div className="flex-1">
-                        <input
-                          type="text"
-                          placeholder="ชื่อรายการ"
+                      <select
                           value={item.name}
                           onChange={(e) =>
                             handleItemChange(
@@ -581,8 +606,16 @@ const HotelFinanceForm = () => {
                           }
                           className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                           required
-                        />
-                      </div>
+                        >
+                          <option value="">เลือกประเภท</option>
+                          {category
+                            .find((c) => c.name === "expenses")
+                            ?.items.map((option, index) => (
+                              <option key={index} value={option.name}>
+                                {option.name}
+                              </option>
+                            ))}
+                        </select>
                       <div className="w-32">
                         <input
                           type="number"
@@ -665,7 +698,6 @@ const HotelFinanceForm = () => {
                       </h2>
                     </div>
 
-
                     <div className="mb-4">
                       <h3 className="text-lg font-medium text-gray-700 mb-2">
                         รายการสินค้า
@@ -729,11 +761,8 @@ const HotelFinanceForm = () => {
                         </span>
                       </p>
                     </div>
-
                   </div>
                 )}
-
-
 
                 {/* Summary Section */}
                 <div className="bg-gray-50 p-4 rounded-md">
