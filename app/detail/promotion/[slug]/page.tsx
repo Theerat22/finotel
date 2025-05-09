@@ -186,7 +186,7 @@ export default function RoomDetails({ params }: PageProps) {
         {/* Header Section with gradient background */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-5 rounded-2xl shadow-lg mb-6 text-white">
           <h1 className="text-2xl md:text-3xl font-bold text-center">ข้อมูลเดือน {month_name} {year}</h1>
-          <p className="text-blue-100 text-sm text-center mt-1">อัพเดทล่าสุด: 7 พฤษภาคม 2025</p>
+          <p className="text-blue-100 text-sm text-center mt-1">อัพเดทล่าสุด: 11 พฤษภาคม 2025</p>
           
         </div>
 
@@ -200,9 +200,9 @@ export default function RoomDetails({ params }: PageProps) {
                   {month.weeklyData.map((week) => (
                     <div 
                       key={week.weekNumber} 
-                      className="rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 bg-white border border-gray-100"
+                      className="rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 bg-white border border-gray-100"
                     >
-                      <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
+                      <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-5 py-4">
                         <div className="flex justify-between items-center">
                           <h4 className="font-semibold text-white text-lg">สัปดาห์ที่ {week.weekNumber}</h4>
                           {week.isPast && (
