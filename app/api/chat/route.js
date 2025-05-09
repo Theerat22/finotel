@@ -40,7 +40,7 @@ Your task:
 -The format should be like this:
   -ลดค่าน้ำจาก 8,000 บาท เหลือ 5,500 บาท เพราะอัตราการเข้าพักลดลง ทำให้การใช้น้ำน้อยลง
   -ลดค่าไฟฟ้าจาก ... เหลือ ... เพราะอัตราการเข้าพักลดลง ทำให้การใช้ไฟลดลง...
-Make sure all 4 categories are covered and keep each point on a single line.
+Make sure all categories are covered and keep each point on a single line.
 .
 `
       },

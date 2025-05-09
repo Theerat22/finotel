@@ -1,8 +1,16 @@
 "use client";
 import React, { use, useEffect, useState } from "react";
-import { AlertCircle, ChevronRight } from "lucide-react";
+import {
+  DollarSign,
+  Users,
+  TrendingUp,
+  TrendingDown,
+  BarChart3,
+  AlertCircle,
+  ChevronRight,
+} from "lucide-react";
+
 import StartNav from "@/app/components/StartNav";
-// import PromptForm from "@/app/components/PromptForm";
 import ReactMarkdown from "react-markdown";
 
 interface Month {
@@ -99,7 +107,6 @@ export default function RoomDetails({ params }: PageProps) {
 
   console.log(month);
 
-
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -113,7 +120,7 @@ export default function RoomDetails({ params }: PageProps) {
             // prompt,
           }),
         });
-  
+
         const result: ChatGptResponse = await response.json();
         setChoices(result.choices);
       } catch (error) {
@@ -122,7 +129,7 @@ export default function RoomDetails({ params }: PageProps) {
         setIsLoading(false);
       }
     };
-  
+
     fetchData();
   }, []);
 
@@ -149,6 +156,63 @@ export default function RoomDetails({ params }: PageProps) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            {/* KPI Cards - In a row on desktop, stacked on mobile */}
+            <div className="bg-white p-5 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-bold text-gray-700">สถิติหลัก</h3>
+                <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">
+                  +4.2% จากเดือนก่อน
+                </span>
+              </div>
+
+              <div className="space-y-4">
+                {/* อัตราการเข้าพัก */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="bg-blue-100 p-2 rounded-lg mr-3">
+                      <Users className="text-blue-600" size={18} />
+                    </div>
+                    <p className="text-gray-600">อัตราเข้าพัก</p>
+                  </div>
+                  <div className="flex items-center">
+                    <p className="text-xl font-bold text-blue-600">
+                      {month.occupancyRate}%
+                    </p>
+                    <TrendingUp className="text-green-500 ml-1" size={16} />
+                  </div>
+                </div>
+                <div className="h-px bg-gray-100"></div>
+
+                {/* RevPAR */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="bg-green-100 p-2 rounded-lg mr-3">
+                      <DollarSign className="text-green-600" size={18} />
+                    </div>
+                    <p className="text-gray-600">RevPAR</p>
+                  </div>
+                  <div className="flex items-center">
+                    <p className="text-xl font-bold text-green-600">3,871</p>
+                    <TrendingUp className="text-green-500 ml-1" size={16} />
+                  </div>
+                </div>
+                <div className="h-px bg-gray-100"></div>
+
+                {/* GOPPAR */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="bg-purple-100 p-2 rounded-lg mr-3">
+                      <BarChart3 className="text-purple-600" size={18} />
+                    </div>
+                    <p className="text-gray-600">GOPPAR</p>
+                  </div>
+                  <div className="flex items-center">
+                    <p className="text-xl font-bold text-purple-600">1,243</p>
+                    <TrendingDown className="text-red-500 ml-1" size={16} />
+                  </div>
+                </div>
+              </div>
+            </div>
             {/* CHATGPT Recommendations */}
             <div className="bg-white p-5 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl">
               <div className="flex items-center justify-between mb-4">
@@ -156,41 +220,40 @@ export default function RoomDetails({ params }: PageProps) {
                 <AlertCircle className="text-amber-500" size={18} />
               </div>
 
-              {isLoading && 
-              <div className="bg-amber-50 p-4 rounded-xl border border-amber-200">
-                <div className="animate-pulse flex flex-col justify-center text-center space-x-4">
-                  <p className="font-medium text-amber-700">กำลังโหลดข้อมูล</p>
+              {isLoading && (
+                <div className="bg-amber-50 p-4 rounded-xl border border-amber-200">
+                  <div className="animate-pulse flex flex-col justify-center text-center space-x-4">
+                    <p className="font-medium text-amber-700">
+                      กำลังโหลดข้อมูล
+                    </p>
+                  </div>
                 </div>
-              </div>
-              }
-
+              )}
 
               {markdownText && (
-                  <div className=" bg-amber-50 p-4 rounded-xl border border-amber-200">
-                    <ReactMarkdown
-                      components={{
-                        li: ({ children }) => (
-                          <li className="flex items-start">
-                            <ChevronRight
-                              className="text-amber-500 mr-1 flex-shrink-0 mt-1"
-                              size={14}
-                            />
-                            <span className="font-medium leading-relaxed text-amber-700">
-                              {children}
-                            </span>
-                          </li>
-                        ),
-                        ul: ({ children }) => (
-                          <ul className="space-y-6 text-base pl-2">
+                <div className=" bg-amber-50 p-4 rounded-xl border border-amber-200">
+                  <ReactMarkdown
+                    components={{
+                      li: ({ children }) => (
+                        <li className="flex items-start">
+                          <ChevronRight
+                            className="text-amber-500 mr-1 flex-shrink-0 mt-1"
+                            size={14}
+                          />
+                          <span className="font-medium leading-relaxed text-amber-700">
                             {children}
-                          </ul>
-                        ),
-                      }}
-                    >
-                      {markdownText}
-                    </ReactMarkdown>
-                  </div>
-                )}
+                          </span>
+                        </li>
+                      ),
+                      ul: ({ children }) => (
+                        <ul className="space-y-6 text-base pl-2">{children}</ul>
+                      ),
+                    }}
+                  >
+                    {markdownText}
+                  </ReactMarkdown>
+                </div>
+              )}
             </div>
 
             {/* Try prompt */}
@@ -226,7 +289,6 @@ export default function RoomDetails({ params }: PageProps) {
                 />
               </div>
             </section> */}
-
           </div>
         </div>
       </div>

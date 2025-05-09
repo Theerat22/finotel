@@ -139,7 +139,6 @@ export default function RoomDetails({ params }: PageProps) {
                 <div>
                   <h3 className="font-semibold text-gray-800">วันจักรี</h3>
                   <p className="text-gray-600 text-sm">6 เมษายน</p>
-                  {/* <p className="text-red-600 text-xs mt-1">อัตราเข้าพัก 98%</p> */}
                 </div>
               </li>
               <li className="flex items-start bg-red-50 p-3 rounded-xl">
@@ -149,7 +148,6 @@ export default function RoomDetails({ params }: PageProps) {
                 <div>
                   <h3 className="font-semibold text-gray-800">สงกรานต์</h3>
                   <p className="text-gray-600 text-sm">13-15 เมษายน</p>
-                  {/* <p className="text-red-600 text-xs mt-1">อัตราเข้าพัก 98%</p> */}
                 </div>
               </li>
               <li className="flex items-start bg-blue-50 p-3 rounded-xl">
@@ -159,58 +157,11 @@ export default function RoomDetails({ params }: PageProps) {
                 <div>
                   <h3 className="font-semibold text-gray-800">น่าน นันทบุรี สุขสรีปีใหม่เมือง 2568</h3>
                   <p className="text-gray-600 text-sm">13-15 เมษายน</p>
-                  {/* <p className="text-blue-600 text-xs mt-1">กิจกรรมชุมชน</p> */}
                 </div>
               </li>
             </ul>
           </div>
 
-          {/* RAG Recommendations */}
-          {/* <div className="bg-white p-5 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-gray-700">คำแนะนำการจัดการ</h3>
-              <AlertCircle className="text-amber-500" size={18} />
-            </div>
-            <div className="bg-amber-50 p-4 rounded-xl border border-amber-200">
-              <div className="flex items-center mb-2">
-                <Info className="text-amber-600 mr-2" size={16} />
-                <h3 className="font-semibold text-amber-800">ช่วงที่มีลูกค้าเยอะกว่าปกติ</h3>
-              </div>
-              <ul className="text-amber-700 space-y-2 text-sm pl-2">
-                <li className="flex items-start">
-                  <ChevronRight className="text-amber-500 mr-1 flex-shrink-0 mt-1" size={14} />
-                  <span>พิจารณาปรับราคาห้องพักแบบ dynamic pricing</span>
-                </li>
-                <li className="flex items-start">
-                  <ChevronRight className="text-amber-500 mr-1 flex-shrink-0 mt-1" size={14} />
-                  <span>เพิ่มสัดส่วนพนักงานชั่วคราวเฉพาะช่วงพีค</span>
-                </li>
-                {showMore && (
-                  <>
-                    <li className="flex items-start">
-                      <ChevronRight className="text-amber-500 mr-1 flex-shrink-0 mt-1" size={14} />
-                      <span>วิเคราะห์ต้นทุนต่อแขก 1 คน</span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="text-amber-500 mr-1 flex-shrink-0 mt-1" size={14} />
-                      <span>ตรวจสอบ ROI ของแต่ละ upsell package</span>
-                    </li>
-                    <li className="flex items-start">
-                      <ChevronRight className="text-amber-500 mr-1 flex-shrink-0 mt-1" size={14} />
-                      <span>ใช้ระบบ forecast เพื่อคาดการณ์วัตถุดิบล่วงหน้า</span>
-                    </li>
-                  </>
-                )}
-              </ul>
-              <button 
-                className="mt-3 text-amber-700 text-sm font-medium flex items-center"
-                onClick={() => setShowMore(!showMore)}
-              >
-                {showMore ? 'แสดงน้อยลง' : 'ดูเพิ่มเติม'}
-                <ChevronRight className={`ml-1 transition-transform duration-300 ${showMore ? 'rotate-90' : ''}`} size={16} />
-              </button>
-            </div>
-          </div> */}
         </div>
 
         {/* Financial Stats - Wide card at the bottom */}
