@@ -1,9 +1,8 @@
 "use client";
-import React, { useState, useRef, ChangeEvent, useEffect } from "react";
+import React, { useState, useRef, ChangeEvent } from "react";
 import { FaArrowLeft, FaArrowRight, FaPlus, FaTrash } from "react-icons/fa";
 import Papa from "papaparse";
 import axios from "axios";
-import liff from "@line/liff";
 
 interface FinanceItem {
   id: string;
@@ -57,33 +56,6 @@ interface OCRResponse {
   process_ms: number;
 }
 
-interface UserData {
-  userId: string;
-  displayName: string;
-  pictureUrl: string;
-  isLoggedIn: boolean;
-}
-
-interface TransactionItem {
-  id: string;
-  name: string;
-  amount: number;
-}
-
-interface FinancialData {
-  month: string;
-  year: string;
-  income: TransactionItem[];
-  expenses: TransactionItem[];
-}
-
-const defaultUserData: UserData = {
-  userId: "",
-  displayName: "",
-  pictureUrl: "",
-  isLoggedIn: false,
-};
-
 const getDefaultFinanceData = (): FinanceData => ({
   month: new Date().toLocaleString("th-TH", { month: "long" }),
   year: new Date().getFullYear().toString(),
@@ -121,182 +93,11 @@ const currencyFormatter = new Intl.NumberFormat("th-TH", {
 });
 
 const HotelFinanceForm = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [userData, setUserData] = useState<UserData>(defaultUserData);
   const [financeData, setFinanceData] = useState<FinanceData>(
     getDefaultFinanceData()
   );
   const [formError, setFormError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Line LIFF Setup
-  useEffect(() => {
-    const initializeLiff = async (): Promise<void> => {
-      try {
-        await liff.init({ liffId: "2007306544-8XxGDdBx" });
-
-        if (liff.isLoggedIn()) {
-          const profile = await liff.getProfile();
-          setUserData({
-            userId: profile.userId,
-            displayName: profile.displayName,
-            pictureUrl: profile.pictureUrl || "",
-            isLoggedIn: true,
-          });
-
-          setIsLoading(false);
-          // const userId = localStorage.setItem('userId', JSON.stringify(profile.userId));
-          // console.log('userId:', userId);
-        } else {
-          console.log("ยังไม่ได้ login");
-          liff.login();
-        }
-      } catch (error) {
-        console.error("LIFF initialization failed", error);
-      }
-    };
-
-    initializeLiff();
-  }, []);
-
-  const getFlexMessage = (data: FinancialData) => {
-    const { month, year, income, expenses } = data;
-  
-    const incomeContents = income
-      .filter((item) => item.amount > 0)
-      .map((item) => ({
-        type: "box",
-        layout: "horizontal",
-        contents: [
-          {
-            type: "text",
-            text: item.name,
-            size: "sm",
-            color: "#475569",
-            flex: 0,
-          },
-          {
-            type: "text",
-            text: `${item.amount.toLocaleString()} ฿`,
-            size: "sm",
-            color: "#16A34A", // green
-            align: "end",
-          },
-        ],
-      }));
-  
-    const expenseContents = expenses
-      .filter((item) => item.amount > 0)
-      .map((item) => ({
-        type: "box",
-        layout: "horizontal",
-        contents: [
-          {
-            type: "text",
-            text: item.name,
-            size: "sm",
-            color: "#475569",
-            flex: 0,
-          },
-          {
-            type: "text",
-            text: `${item.amount.toLocaleString()} ฿`,
-            size: "sm",
-            color: "#DC2626", // red
-            align: "end",
-          },
-        ],
-      }));
-  
-    return {
-      type: "bubble",
-      size: "mega",
-      body: {
-        type: "box",
-        layout: "vertical",
-        backgroundColor: "#ffffff",
-        contents: [
-          {
-            type: "text",
-            text: "รายรับ-รายจ่าย",
-            weight: "bold",
-            color: "#1E3A8A",
-            size: "sm",
-          },
-          {
-            type: "text",
-            text: "เพิ่มข้อมูลสำเร็จ!",
-            weight: "bold",
-            size: "xxl",
-            margin: "md",
-            color: "#1E3A8A",
-          },
-          {
-            type: "text",
-            size: "xs",
-            color: "#94a3b8",
-            wrap: true,
-            text: "Nan, Thailand",
-          },
-          {
-            type: "separator",
-            margin: "xxl",
-            color: "#E0E7FF",
-          },
-          {
-            type: "text",
-            text: `รายรับ (${month} ${year})`,
-            weight: "bold",
-            size: "sm",
-            color: "#16A34A",
-            margin: "xxl",
-          },
-          ...incomeContents,
-          {
-            type: "text",
-            text: `รายจ่าย (${month} ${year})`,
-            weight: "bold",
-            size: "sm",
-            color: "#DC2626",
-            margin: "xxl",
-          },
-          ...expenseContents,
-        ],
-      },
-      styles: {
-        footer: {
-          separator: true,
-        },
-      },
-    };
-  };
-  
-
-  const sendFlexMessage = async () => {
-    // if (!value || !mockMonth[value]) {
-    //   console.log("No month selected");
-    //   return;
-    // }
-
-    const flexMessage = getFlexMessage(financeData);
-
-    try {
-      console.log("Sending message to:", userData.userId);
-
-      const response = await axios.post("/api/sendFlexMessage", {
-        userId: userData.userId,
-        flexMessage,
-      });
-
-      console.log("Response:", response.data);
-
-      setTimeout(() => {
-        liff.closeWindow();
-      }, 1000);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
 
   // Calculate totals
   const totalIncome = financeData.income.reduce(
@@ -535,12 +336,7 @@ const HotelFinanceForm = () => {
 
     // Submit form
     console.log("Submitting financial data:", financeData);
-    sendFlexMessage();
-
     
-    setTimeout(() => {
-      liff.closeWindow();
-    }, 1000);
   };
 
   const handleCsvTemplateDownload = () => {
@@ -568,7 +364,10 @@ const HotelFinanceForm = () => {
   const category = [
     {
       name: "income",
-      items: [{ name: "การขายห้องพัก" }, { name: "ขายอาหาร" }],
+      items: [
+        { name: "การขายห้องพัก" },
+        { name: "ขายอาหาร" },
+      ],
     },
     {
       name: "expenses",
@@ -581,15 +380,6 @@ const HotelFinanceForm = () => {
     },
   ];
 
-  if (isLoading)
-    return (
-      <div className="bg-gray-50 min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="spinner-border text-primary mb-3" role="status"></div>
-          <p className="text-gray-600">กำลังโหลด...</p>
-        </div>
-      </div>
-    );
 
   return (
     <section className="relative min-h-screen overflow-hidden px-4 py-8 bg-gray-50">
@@ -806,27 +596,27 @@ const HotelFinanceForm = () => {
                       className="flex items-center space-x-2 mb-2"
                     >
                       <select
-                        value={item.name}
-                        onChange={(e) =>
-                          handleItemChange(
-                            "expenses",
-                            item.id,
-                            "name",
-                            e.target.value
-                          )
-                        }
-                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                        required
-                      >
-                        <option value="">เลือกประเภท</option>
-                        {category
-                          .find((c) => c.name === "expenses")
-                          ?.items.map((option, index) => (
-                            <option key={index} value={option.name}>
-                              {option.name}
-                            </option>
-                          ))}
-                      </select>
+                          value={item.name}
+                          onChange={(e) =>
+                            handleItemChange(
+                              "expenses",
+                              item.id,
+                              "name",
+                              e.target.value
+                            )
+                          }
+                          className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                          required
+                        >
+                          <option value="">เลือกประเภท</option>
+                          {category
+                            .find((c) => c.name === "expenses")
+                            ?.items.map((option, index) => (
+                              <option key={index} value={option.name}>
+                                {option.name}
+                              </option>
+                            ))}
+                        </select>
                       <div className="w-32">
                         <input
                           type="number"
