@@ -269,10 +269,10 @@ export default function OCRPage() {
                           {item.itemUnit}
                         </td>
                         <td className="px-3 py-1 text-right">
-                          {item.itemUnitCost.toLocaleString()}
+                          {item.itemUnitCost}
                         </td>
                         <td className="px-3 py-1 text-right">
-                          {item.itemTotalCost.toLocaleString()}
+                          {item.itemTotalCost}
                         </td>
                       </tr>
                     ))}
@@ -284,19 +284,19 @@ export default function OCRPage() {
             <div className="text-sm bg-gray-50 p-4 rounded border border-gray-200">
               <p>
                 <strong>ยอดรวม:</strong>{" "}
-                {receiptData.totalCost.toLocaleString()} บาท
+                {receiptData.totalCost} บาท
               </p>
               <p>
-                <strong>ส่วนลด:</strong> {receiptData.discount.toLocaleString()}{" "}
+                <strong>ส่วนลด:</strong> {receiptData.discount}{" "}
                 บาท
               </p>
               <p>
                 <strong>ยอดหลังหักส่วนลด:</strong>{" "}
-                {receiptData.totalCostAfterDiscount.toLocaleString()} บาท
+                {receiptData.totalCostAfterDiscount} บาท
               </p>
               <p>
                 <strong>ภาษีมูลค่าเพิ่ม (VAT):</strong>{" "}
-                {receiptData.vat.toLocaleString()} บาท
+                {receiptData.vat} บาท
               </p>
               <p>
                 <strong>ยอดสุทธิ:</strong>{" "}
@@ -306,7 +306,7 @@ export default function OCRPage() {
               </p>
             </div>
 
-            <div className="mt-4">
+            {/* <div className="mt-4">
               <details>
                 <summary className="cursor-pointer text-blue-600 hover:text-blue-800">
                   แสดงข้อมูล JSON (สำหรับนักพัฒนา)
@@ -317,7 +317,7 @@ export default function OCRPage() {
                   </pre>
                 </div>
               </details>
-            </div>
+            </div> */}
           </div>
         )}
       </div>
