@@ -9,6 +9,8 @@ type MonthData = {
   goppar: number;
   revpar: number;
   occ: number;
+  income: number;
+  outcome: number;
 };
 type MonthsRecord = {
   [key: string]: MonthData;
@@ -53,31 +55,42 @@ export default function Financial() {
       month: "January2025",
       goppar: 1000,
       revpar: 2000,
-      occ: 50
+      occ: 50,
+      income: 2000,
+      outcome: 1000,
     },
     กุมภาพันธ์: {
       month: "February2025",
       goppar: 1200,
       revpar: 2200,
-      occ: 50
+      occ: 50,
+      income: 2000,
+      outcome: 1000,
+
     },
     มีนาคม: {
       month: "March2025",
       goppar: 1300,
       revpar: 2300,
-      occ: 50
+      occ: 50,
+      income: 2000,
+      outcome: 1000,
     },
     เมษายน: {
       month: "April2025",
       goppar: 1400,
       revpar: 2400,
-      occ: 50
+      occ: 50,
+      income: 2000,
+      outcome: 1000,
     },
     พฤษภาคม: {
       month: "May2025",
       goppar: 1500,
       revpar: 2500,
-      occ: 50
+      occ: 50,
+      income: 2000,
+      outcome: 1000,
     },
   };
 
@@ -132,7 +145,7 @@ export default function Financial() {
         contents: [
           {
             type: "text",
-            text: "ข้อมูลการเงินโรงแรม",
+            text: "สรุปการเงินโรงแรม",
             weight: "bold",
             color: "#1E3A8A", // dark blue
             size: "sm",
@@ -169,15 +182,55 @@ export default function Financial() {
                 contents: [
                   {
                     type: "text",
-                    text: "อัตราการเช้าพักเฉลี่ย",
-                    size: "md",
+                    text: `รายได้รวม`,
+                    size: "sm",
                     color: "#475569",
                     flex: 0,
                   },
                   {
                     type: "text",
-                    text: `${selectedMonth.occ}%`,
-                    size: "md",
+                    text: `${selectedMonth.income} ฿`,
+                    size: "sm",
+                    color: "#2563EB", // blue
+                    align: "end",
+                  },
+                ],
+              },
+              {
+                type: "box",
+                layout: "horizontal",
+                contents: [
+                  {
+                    type: "text",
+                    text: "รายจ่ายรวม",
+                    size: "sm",
+                    color: "#475569",
+                    flex: 0,
+                  },
+                  {
+                    type: "text",
+                    text: `${selectedMonth.outcome} ฿`,
+                    size: "sm",
+                    color: "#3B82F6", // light blue
+                    align: "end",
+                  },
+                ],
+              },
+              {
+                type: "box",
+                layout: "horizontal",
+                contents: [
+                  {
+                    type: "text",
+                    text: "กำไร (EBITDA)",
+                    size: "sm",
+                    color: "#475569",
+                    flex: 0,
+                  },
+                  {
+                    type: "text",
+                    text: `${selectedMonth.income - selectedMonth.outcome} ฿`,
+                    size: "sm",
                     color: "#1D4ED8", // dark blue
                     align: "end",
                   },
@@ -192,59 +245,6 @@ export default function Financial() {
           },
           {
             type: "box",
-            layout: "vertical",
-            margin: "xxl",
-            spacing: "sm",
-            contents: [
-              {
-                type: "box",
-                layout: "horizontal",
-                contents: [
-                  {
-                    type: "text",
-                    text: "RevPAR (รายได้เฉลี่ยต่อห้องพัก)",
-                    size: "sm",
-                    color: "#475569",
-                    flex: 0,
-                  },
-                  {
-                    type: "text",
-                    text: `${selectedMonth.revpar}`,
-                    size: "sm",
-                    color: "#1D4ED8", // dark blue
-                    align: "end",
-                  },
-                ],
-              },
-              {
-                type: "box",
-                layout: "horizontal",
-                contents: [
-                  {
-                    type: "text",
-                    text: "GOPPAR (กำไรเฉลี่ยต่อห้องพัก)",
-                    size: "sm",
-                    color: "#475569",
-                    flex: 0,
-                  },
-                  {
-                    type: "text",
-                    text: `${selectedMonth.goppar}`,
-                    size: "sm",
-                    color: "#1D4ED8", // dark blue
-                    align: "end",
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            type: "separator",
-            margin: "xxl",
-            color: "#E0E7FF", // light blue
-          },
-          {
-            type: "box",
             layout: "horizontal",
             margin: "md",
             contents: [
@@ -255,7 +255,7 @@ export default function Financial() {
                 action: {
                   type: "uri",
                   label: "ดูเพิ่มเติม",
-                  uri: "http://linecorp.com/",
+                  uri: `https://finotel.vercel.app/detail/financial/${selectedMonth.month}`,
                 },
               },
             ],
