@@ -159,7 +159,6 @@ const HotelFinanceForm = () => {
     initializeLiff();
   }, []);
 
-  // Create flex message based on selected month (only when a month is selected)
   const getFlexMessage = (data: FinancialData) => {
     const { month, year, income, expenses } = data;
   
@@ -271,6 +270,8 @@ const HotelFinanceForm = () => {
       },
     };
   };
+
+
 
   const sendFlexMessage = async () => {
     console.log("Send Flex Message");
@@ -532,9 +533,7 @@ const HotelFinanceForm = () => {
 
     // Submit form
     console.log("Submitting financial data:", financeData);
-    setTimeout(() => {
-      sendFlexMessage();
-    },1000);
+    sendFlexMessage();
   };
 
   const handleCsvTemplateDownload = () => {
