@@ -1,8 +1,8 @@
 "use client";
-import React, { use, useState } from "react";
-import { AlertCircle, Info, ChevronRight } from "lucide-react";
+import React, { use, useEffect, useState } from "react";
+import { AlertCircle, ChevronRight } from "lucide-react";
 import StartNav from "@/app/components/StartNav";
-import PromptForm from "@/app/components/PromptForm";
+// import PromptForm from "@/app/components/PromptForm";
 import ReactMarkdown from "react-markdown";
 
 interface Month {
@@ -92,12 +92,39 @@ export default function RoomDetails({ params }: PageProps) {
   const month_name = match ? match[1] : "";
   const year = match ? match[2] : "";
   const [choices, setChoices] = useState<Choice[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const markdownText = choices
     .map((choice) => choice.message.content)
     .join("\n\n\n");
 
   console.log(month);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch("/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            // prompt,
+          }),
+        });
+  
+        const result: ChatGptResponse = await response.json();
+        setChoices(result.choices);
+      } catch (error) {
+        console.error("Error fetching from API:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    fetchData();
+  }, []);
 
   if (!month) {
     return (
@@ -128,64 +155,50 @@ export default function RoomDetails({ params }: PageProps) {
                 <h3 className="font-bold text-gray-700">คำแนะนำการจัดการ</h3>
                 <AlertCircle className="text-amber-500" size={18} />
               </div>
+
+              {isLoading && 
               <div className="bg-amber-50 p-4 rounded-xl border border-amber-200">
-                <div className="flex items-center mb-2">
-                  <Info className="text-amber-600 mr-2" size={16} />
-                  <h3 className="font-semibold text-amber-800">
-                    ช่วงที่มีลูกค้าลดลงกว่าปกติ
-                  </h3>
+                <div className="animate-pulse flex flex-col justify-center text-center space-x-4">
+                  <p className="font-medium text-amber-700">กำลังโหลดข้อมูล</p>
                 </div>
-                <ul className="text-amber-700 space-y-6 text-base pl-2">
-                  <li className="flex items-start">
-                    <ChevronRight
-                      className="text-amber-500 mr-1 flex-shrink-0 mt-1"
-                      size={14}
-                    />
-                    <span className="font-medium leading-relaxed">
-                      ลดค่าน้ำจาก 8,000 บาท เหลือ 5,500 บาท
-                      เพราะจำนวนนักท่องเท่าลดลง การใช้น้ำในห้องพักและบริการต่างๆ
-                      ก็จะลดลงตาม
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <ChevronRight
-                      className="text-amber-500 mr-1 flex-shrink-0 mt-1"
-                      size={14}
-                    />
-                    <span className="font-medium leading-relaxed">
-                      ลดค่าไฟฟ้าจาก 25,000 บาท เหลือ 17,000 บาท
-                      เพราะสามารถปิดระบบแสงสว่างและแอร์ในห้องที่ไม่มีผู้เข้าพักได้
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <ChevronRight
-                      className="text-amber-500 mr-1 flex-shrink-0 mt-1"
-                      size={14}
-                    />
-                    <span className="font-medium leading-relaxed">
-                      ลดค่าอาหารและของใช้จาก 30,000 บาท เหลือ 18,000 บาท
-                      เพราะจำนวนลูกค้าลดลง
-                      จึงไม่จำเป็นต้องสต็อกของในปริมาณเท่าเดิม
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <ChevronRight
-                      className="text-amber-500 mr-1 flex-shrink-0 mt-1"
-                      size={14}
-                    />
-                    <span className="font-medium leading-relaxed">
-                      โดยปรับเวลาทำงานให้เหมาะสมกับภาระงานที่น้อยลง เช่น
-                      ใช้ระบบกะหมุนเวียนหรือจ้างรายวันเฉพาะวันหยุดสุดสัปดาห์
-                    </span>
-                  </li>
-                </ul>
               </div>
+              }
+
+
+              {markdownText && (
+                  <div className=" bg-amber-50 p-4 rounded-xl border border-amber-200">
+                    <ReactMarkdown
+                      components={{
+                        li: ({ children }) => (
+                          <li className="flex items-start">
+                            <ChevronRight
+                              className="text-amber-500 mr-1 flex-shrink-0 mt-1"
+                              size={14}
+                            />
+                            <span className="font-medium leading-relaxed text-amber-700">
+                              {children}
+                            </span>
+                          </li>
+                        ),
+                        ul: ({ children }) => (
+                          <ul className="space-y-6 text-base pl-2">
+                            {children}
+                          </ul>
+                        ),
+                      }}
+                    >
+                      {markdownText}
+                    </ReactMarkdown>
+                  </div>
+                )}
             </div>
 
             {/* Try prompt */}
-            <main className="min-h-screen bg-white">
-              <div className="mx-auto">
-                <p>Chat-GPT is thrilled to see you...</p>
+            {/* <section className="bg-white">
+              <div className="mx-auto flex flex-col justify-center items-center">
+                <p className="mt-4 mb-4 font-bold">
+                  Chat-GPT is thrilled to see you...
+                </p>
                 <PromptForm
                   isLoading={isLoading}
                   onSubmit={async () => {
@@ -211,27 +224,9 @@ export default function RoomDetails({ params }: PageProps) {
                     }
                   }}
                 />
-
-                {/* <div className="prose prose-sm max-w-none space-y-4 text-black">
-                  <ReactMarkdown>{markdownText}</ReactMarkdown>
-                </div> */}
-                
-                <div className="prose prose-sm sm:prose-base max-w-none text-black">
-                  <ReactMarkdown
-                    components={{
-                      li: ({ children }) => (
-                        <li className="mb-3">{children}</li>
-                      ),
-                      ul: ({ children }) => (
-                        <ul className="list-disc pl-6">{children}</ul>
-                      ),
-                    }}
-                  >
-                    {markdownText}
-                  </ReactMarkdown>
-                </div>
               </div>
-            </main>
+            </section> */}
+
           </div>
         </div>
       </div>
