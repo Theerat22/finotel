@@ -46,7 +46,7 @@ export async function GET(request: Request) {
     }
 
     const avgRatio = totalRevenue === 0 ? 0 : totalExpense / totalRevenue;
-    const ebitdar = totalRevenue * 0.4;
+    const ebitdar = totalRevenue - totalExpense;
 
     return NextResponse.json({
       totalRevenue,
