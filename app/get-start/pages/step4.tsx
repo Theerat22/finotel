@@ -380,7 +380,7 @@ const HotelOccupancyUpload: React.FC<Step1Props> = ({ setActivePage }) => {
                 <div className="flex justify-between pt-4">
                   <button
                     type="button"
-                    onClick={() => setActivePage("home")}
+                    onClick={() => setActivePage("hotel")}
                     className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-gray-700 bg-white border border-gray-300 hover:bg-gray-50"
                   >
                     <FaArrowLeft className="mr-2 h-4 w-4" />
@@ -431,28 +431,7 @@ const HotelOccupancyUpload: React.FC<Step1Props> = ({ setActivePage }) => {
                 </p>
                 <div className="space-y-3 text-left text-sm w-full">
                   <div className="flex items-start">
-                    <div className="flex-shrink-0 h-5 w-5 rounded-full bg-blue-400 flex items-center justify-center text-xs font-bold mr-2">
-                      1
-                    </div>
                     <p>อัปโหลดไฟล์ CSV ที่มีข้อมูลอัตราการเข้าพักรายวัน</p>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0 h-5 w-5 rounded-full bg-blue-400 flex items-center justify-center text-xs font-bold mr-2">
-                      2
-                    </div>
-                    <p>ตรวจสอบและยืนยันข้อมูลสรุปรายเดือน</p>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0 h-5 w-5 rounded-full bg-blue-300 flex items-center justify-center text-xs font-bold mr-2">
-                      3
-                    </div>
-                    <p>ตั้งค่าการจองห้องพักและราคา</p>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0 h-5 w-5 rounded-full bg-blue-300 flex items-center justify-center text-xs font-bold mr-2">
-                      4
-                    </div>
-                    <p>ดูผลการวิเคราะห์และคำแนะนำ</p>
                   </div>
                 </div>
               </div>
