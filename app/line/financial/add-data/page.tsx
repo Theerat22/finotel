@@ -9,6 +9,7 @@ interface FinanceItem {
   id: string;
   name: string;
   amount: number;
+  category_name: string;
 }
 
 interface FinanceData {
@@ -92,8 +93,8 @@ const defaultUserData: UserData = {
 const getDefaultFinanceData = (): FinanceData => ({
   month: new Date().toLocaleString("en-US", { month: "long" }),
   year: new Date().getFullYear().toString(),
-  income: [{ id: crypto.randomUUID(), name: "การขายห้องพัก", amount: 0 }],
-  expenses: [{ id: crypto.randomUUID(), name: "ค่าพนักงาน", amount: 0 }],
+  income: [{ id: crypto.randomUUID(), name: "การขายห้องพัก", amount: 0, category_name: "การขายห้องพัก" }],
+  expenses: [{ id: crypto.randomUUID(), name: "ค่าพนักงาน", amount: 0, category_name: "ค่าพนักงาน" }],
 });
 
 const monthNames = [
@@ -175,9 +176,15 @@ const HotelFinanceForm = () => {
     initializeLiff();
   }, []);
 
-  const getFlexMessage = (data: FinancialData) => {
+  const getFlexMessage = (data: FinancialData, categories: Category[]) => {
     const { month, year, income, expenses } = data;
-
+  
+    const getCategoryName = (idString: string) => {
+      const id = parseInt(idString);
+      const category = categories.find((c) => c.id === id);
+      return category ? category.name : idString;
+    };
+  
     const incomeContents = income
       .filter((item) => item.amount > 0)
       .map((item) => ({
@@ -186,7 +193,7 @@ const HotelFinanceForm = () => {
         contents: [
           {
             type: "text",
-            text: item.name,
+            text: getCategoryName(item.name),
             size: "sm",
             color: "#475569",
             flex: 0,
@@ -195,12 +202,12 @@ const HotelFinanceForm = () => {
             type: "text",
             text: `${item.amount.toLocaleString()} ฿`,
             size: "sm",
-            color: "#16A34A", // green
+            color: "#16A34A",
             align: "end",
           },
         ],
       }));
-
+  
     const expenseContents = expenses
       .filter((item) => item.amount > 0)
       .map((item) => ({
@@ -209,7 +216,7 @@ const HotelFinanceForm = () => {
         contents: [
           {
             type: "text",
-            text: item.name,
+            text: getCategoryName(item.name),
             size: "sm",
             color: "#475569",
             flex: 0,
@@ -218,12 +225,12 @@ const HotelFinanceForm = () => {
             type: "text",
             text: `${item.amount.toLocaleString()} ฿`,
             size: "sm",
-            color: "#DC2626", // red
+            color: "#DC2626",
             align: "end",
           },
         ],
       }));
-
+  
     return {
       type: "bubble",
       size: "mega",
@@ -290,7 +297,7 @@ const HotelFinanceForm = () => {
   const sendFlexMessage = async () => {
     console.log("Send Flex Message");
 
-    const flexMessage = getFlexMessage(financeData);
+    const flexMessage = getFlexMessage(financeData, categories);
 
     try {
       console.log("Sending message to:", userData.userId);
@@ -414,7 +421,11 @@ const HotelFinanceForm = () => {
       ...prev,
       [category]: prev[category].map((item) =>
         item.id === id
-          ? { ...item, [field]: field === "amount" ? Number(value) : value }
+          ? {
+              ...item,
+              [field]: field === "amount" ? Number(value) : value,
+              ...(field === "name" ? { category: value } : {})
+            }
           : item
       ),
     }));
@@ -425,7 +436,7 @@ const HotelFinanceForm = () => {
       ...prev,
       [category]: [
         ...prev[category],
-        { id: crypto.randomUUID(), name: "", amount: 0 },
+        { id: crypto.randomUUID(), name: "", amount: 0, category_name: "" },
       ],
     }));
   };
@@ -435,7 +446,7 @@ const HotelFinanceForm = () => {
       ...prev,
       [category]: [
         ...prev[category],
-        { id: crypto.randomUUID(), name: "", amount: amount },
+        { id: crypto.randomUUID(), name: "", amount: amount, category_name: "" },
       ],
     }));
   };
@@ -486,6 +497,8 @@ const HotelFinanceForm = () => {
                 name:
                   (item.name as string) || (item.description as string) || "",
                 amount: Number(item.amount) || 0,
+                category_name:
+                  (item.name as string) || (item.description as string) || "",
               }));
             }
 
@@ -499,6 +512,8 @@ const HotelFinanceForm = () => {
                 name:
                   (item.name as string) || (item.description as string) || "",
                 amount: Number(item.amount) || 0,
+                category_name:
+                  (item.name as string) || (item.description as string) || "",
               }));
             }
 
