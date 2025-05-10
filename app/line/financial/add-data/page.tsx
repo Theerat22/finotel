@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useRef, ChangeEvent, useEffect } from "react";
-import liff from "@line/liff";
 import { FaArrowLeft, FaArrowRight, FaPlus, FaTrash } from "react-icons/fa";
 import Papa from "papaparse";
 import axios from "axios";
+import liff from "@line/liff";
 
 interface FinanceItem {
   id: string;
@@ -70,41 +70,10 @@ interface OCRResponse {
   process_ms: number;
 }
 
-const getDefaultFinanceData = (): FinanceData => ({
-  month: new Date().toLocaleString("th-TH", { month: "long" }),
-  year: new Date().getFullYear().toString(),
-  income: [
-    { id: crypto.randomUUID(), name: "การขายห้องพัก", amount: 0 },
-    { id: crypto.randomUUID(), name: "ขายอาหาร", amount: 0 },
-  ],
-  expenses: [
-    { id: crypto.randomUUID(), name: "ค่าพนักงาน", amount: 0 },
-    { id: crypto.randomUUID(), name: "ค่าไฟ", amount: 0 },
-    { id: crypto.randomUUID(), name: "ค่าน้ำ", amount: 0 },
-    { id: crypto.randomUUID(), name: "ค่าวัตถุดิบ", amount: 0 },
-  ],
-});
-
-const monthNames = [
-  "มกราคม",
-  "กุมภาพันธ์",
-  "มีนาคม",
-  "เมษายน",
-  "พฤษภาคม",
-  "มิถุนายน",
-  "กรกฎาคม",
-  "สิงหาคม",
-  "กันยายน",
-  "ตุลาคม",
-  "พฤศจิกายน",
-  "ธันวาคม",
-];
-
-const currencyFormatter = new Intl.NumberFormat("th-TH", {
-  style: "currency",
-  currency: "THB",
-  minimumFractionDigits: 2,
-});
+interface Category {
+  id: number;
+  name: string;
+}
 
 interface UserData {
   userId: string;
@@ -120,16 +89,63 @@ const defaultUserData: UserData = {
   isLoggedIn: false,
 };
 
+const getDefaultFinanceData = (): FinanceData => ({
+  month: new Date().toLocaleString("en-US", { month: "long" }),
+  year: new Date().getFullYear().toString(),
+  income: [{ id: crypto.randomUUID(), name: "การขายห้องพัก", amount: 0 }],
+  expenses: [{ id: crypto.randomUUID(), name: "ค่าพนักงาน", amount: 0 }],
+});
+
+const monthNames = [
+  { label: "มกราคม", value: "January" },
+  { label: "กุมภาพันธ์", value: "February" },
+  { label: "มีนาคม", value: "March" },
+  { label: "เมษายน", value: "April" },
+  { label: "พฤษภาคม", value: "May" },
+  { label: "มิถุนายน", value: "June" },
+  { label: "กรกฎาคม", value: "July" },
+  { label: "สิงหาคม", value: "August" },
+  { label: "กันยายน", value: "September" },
+  { label: "ตุลาคม", value: "October" },
+  { label: "พฤศจิกายน", value: "November" },
+  { label: "ธันวาคม", value: "December" },
+];
+
+const currencyFormatter = new Intl.NumberFormat("th-TH", {
+  style: "currency",
+  currency: "THB",
+  minimumFractionDigits: 2,
+});
+
 const HotelFinanceForm = () => {
   const [financeData, setFinanceData] = useState<FinanceData>(
     getDefaultFinanceData()
   );
   const [formError, setFormError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [categoryName, setCategoryName] = useState("");
+  const [status, setStatus] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [userData, setUserData] = useState<UserData>(defaultUserData);
 
-  // Line LIFF
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("/api/database/category");
+        if (!response.ok) {
+          throw new Error("Failed to fetch categories");
+        }
+        const data = await response.json();
+        setCategories(data);
+      } catch {
+        // setError(error.message);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   useEffect(() => {
     const initializeLiff = async (): Promise<void> => {
       try {
@@ -161,7 +177,7 @@ const HotelFinanceForm = () => {
 
   const getFlexMessage = (data: FinancialData) => {
     const { month, year, income, expenses } = data;
-  
+
     const incomeContents = income
       .filter((item) => item.amount > 0)
       .map((item) => ({
@@ -184,7 +200,7 @@ const HotelFinanceForm = () => {
           },
         ],
       }));
-  
+
     const expenseContents = expenses
       .filter((item) => item.amount > 0)
       .map((item) => ({
@@ -207,7 +223,7 @@ const HotelFinanceForm = () => {
           },
         ],
       }));
-  
+
     return {
       type: "bubble",
       size: "mega",
@@ -271,8 +287,6 @@ const HotelFinanceForm = () => {
     };
   };
 
-
-
   const sendFlexMessage = async () => {
     console.log("Send Flex Message");
 
@@ -293,6 +307,19 @@ const HotelFinanceForm = () => {
       }, 1000);
     } catch (error) {
       console.error("Error:", error);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch("/api/database/category");
+      if (!response.ok) {
+        throw new Error("Failed to fetch categories");
+      }
+      const data = await response.json();
+      setCategories(data);
+    } catch {
+      // setError(error.message);
     }
   };
 
@@ -435,10 +462,10 @@ const HotelFinanceForm = () => {
             interface CsvRow {
               type?: string;
               category?: string;
-              name?: string;
+              name?: number | string;
               description?: string;
               amount?: number | string;
-              [key: string]: unknown; // For any other fields that might be present
+              [key: string]: unknown;
             }
 
             const csvData = results.data as CsvRow[];
@@ -515,15 +542,16 @@ const HotelFinanceForm = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validate form
     const incomeWithoutNames = financeData.income.some(
-      (item) => !item.name.trim()
+      (item) => !String(item.name).trim()
     );
+
     const expensesWithoutNames = financeData.expenses.some(
-      (item) => !item.name.trim()
+      (item) => !String(item.name).trim()
     );
 
     if (incomeWithoutNames || expensesWithoutNames) {
@@ -533,18 +561,36 @@ const HotelFinanceForm = () => {
 
     // Submit form
     console.log("Submitting financial data:", financeData);
-    sendFlexMessage();
+    const res = await fetch("/api/database/add-financial", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...financeData,
+      }),
+    });
+
+    if (res.ok) {
+      setStatus("✅ เพิ่มข้อมูลสำเร็จ");
+    } else {
+      setStatus("❌ เพิ่มข้อมูลไม่สำเร็จ");
+    }
+
+    setTimeout(() => {
+      sendFlexMessage();
+    }, 1000);
   };
 
   const handleCsvTemplateDownload = () => {
     const headers = "type,name,amount\n";
     const rows = [
-      "income,การขายห้องพัก,50000",
-      "income,ขายอาหาร,15000",
-      "expense,ค่าพนักงาน,20000",
-      "expense,ค่าไฟ,5000",
-      "expense,ค่าน้ำ,2000",
-      "expense,ค่าวัตถุดิบ,8000",
+      "income,1,50000",
+      "income,1,15000",
+      "expense,30002,20000",
+      "expense,30003,5000",
+      "expense,30004,2000",
+      "expense,30006,8000",
     ].join("\n");
 
     const csvContent = headers + rows;
@@ -558,21 +604,26 @@ const HotelFinanceForm = () => {
     document.body.removeChild(link);
   };
 
-  const category = [
-    {
-      name: "income",
-      items: [{ name: "การขายห้องพัก" }, { name: "ขายอาหาร" }],
-    },
-    {
-      name: "expenses",
-      items: [
-        { name: "ค่าพนักงาน" },
-        { name: "ค่าไฟ" },
-        { name: "ค่าน้ำ" },
-        { name: "ค่าวัตถุดิบ" },
-      ],
-    },
-  ];
+  const addCategory = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const res = await fetch("/api/database/category", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: categoryName,
+      }),
+    });
+
+    if (res.ok) {
+      setStatus("✅ เพิ่มข้อมูลสำเร็จ");
+      setCategoryName("");
+      fetchCategories();
+    } else {
+      setStatus("❌ เพิ่มข้อมูลไม่สำเร็จ");
+    }
+  };
 
   if (isLoading)
     return (
@@ -633,9 +684,9 @@ const HotelFinanceForm = () => {
                       onChange={handleMonthYearChange}
                       className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                     >
-                      {monthNames.map((month) => (
-                        <option key={month} value={month}>
-                          {month}
+                      {monthNames.map((month, index) => (
+                        <option key={index} value={month.value}>
+                          {month.label}
                         </option>
                       ))}
                     </select>
@@ -726,13 +777,11 @@ const HotelFinanceForm = () => {
                           required
                         >
                           <option value="">เลือกประเภท</option>
-                          {category
-                            .find((c) => c.name === "income")
-                            ?.items.map((option, index) => (
-                              <option key={index} value={option.name}>
-                                {option.name}
-                              </option>
-                            ))}
+                          {categories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                              {category.name}
+                            </option>
+                          ))}
                         </select>
                       </div>
                       <div className="w-32">
@@ -748,7 +797,7 @@ const HotelFinanceForm = () => {
                               e.target.value
                             )
                           }
-                          className="w-full px-1 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                           min="0"
                           step="0.01"
                           required
@@ -759,7 +808,7 @@ const HotelFinanceForm = () => {
                         onClick={() => removeItem("income", item.id)}
                         disabled={financeData.income.length <= 1}
                         className={`p-2 rounded-md ${
-                          financeData.income.length <= 1
+                          financeData.income.length <= 0
                             ? "text-gray-300 cursor-not-allowed"
                             : "text-red-500 hover:bg-red-50"
                         }`}
@@ -812,13 +861,12 @@ const HotelFinanceForm = () => {
                         required
                       >
                         <option value="">เลือกประเภท</option>
-                        {category
-                          .find((c) => c.name === "expenses")
-                          ?.items.map((option, index) => (
-                            <option key={index} value={option.name}>
-                              {option.name}
-                            </option>
-                          ))}
+                        <option value="">เลือกประเภท</option>
+                        {categories.map((category) => (
+                          <option key={category.id} value={category.id}>
+                            {category.name}
+                          </option>
+                        ))}
                       </select>
                       <div className="w-32">
                         <input
@@ -844,7 +892,7 @@ const HotelFinanceForm = () => {
                         onClick={() => removeItem("expenses", item.id)}
                         disabled={financeData.expenses.length <= 1}
                         className={`p-2 rounded-md ${
-                          financeData.expenses.length <= 1
+                          financeData.expenses.length <= 0
                             ? "text-gray-300 cursor-not-allowed"
                             : "text-red-500 hover:bg-red-50"
                         }`}
@@ -858,6 +906,31 @@ const HotelFinanceForm = () => {
                     <span className="text-red-600">
                       {currencyFormatter.format(totalExpenses)}
                     </span>
+                  </div>
+                </div>
+
+                <div className="flex flex-col mt-1 text-center">
+                  <div className="bg-white rounded-lg w-full py-2 px-4 border border-gray-300">
+                    {/* Header */}
+
+                    {/* Form */}
+                    <div className="mt-3 ">
+                      <input
+                        type="text"
+                        value={categoryName}
+                        onChange={(e) => setCategoryName(e.target.value)}
+                        placeholder="กรอกชื่อหมวดหมู่ใหม่"
+                        className="w-full border border-gray-300 rounded px-3 py-2 mb-3 text-sm"
+                      />
+                      <button
+                        type="submit"
+                        onClick={addCategory}
+                        className="w-full bg-blue-600 text-white px-4 py-2 text-sm rounded hover:bg-blue-700"
+                      >
+                        เพิ่มหมวดหมู่
+                      </button>
+                    </div>
+                    {status && <p className="text-sm mt-4">{status}</p>}
                   </div>
                 </div>
 
