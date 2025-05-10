@@ -9,7 +9,7 @@ import HotelFinanceForm from './pages/step3';
 import HotelOccupancyUpload from './pages/step4';
 import Step5 from './pages/step5';
 const StartPage: React.FC = () => {
-  const [activePage, setActivePage] = useState('room');
+  const [activePage, setActivePage] = useState('login');
   
   const renderPage = () => {
     switch (activePage) {

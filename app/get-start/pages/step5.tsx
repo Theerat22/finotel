@@ -20,11 +20,12 @@ const Step5: React.FC<Step1Props> = ({ setActivePage }) => {
   });
 
   const averagePrice =
-  formData.rooms.length > 0
-    ? formData.rooms.reduce((sum, room) => sum + parseFloat(room.price || "0"), 0) / formData.rooms.length
-    : 0;
-
-
+    formData.rooms.length > 0
+      ? formData.rooms.reduce(
+          (sum, room) => sum + parseFloat(room.price || "0"),
+          0
+        ) / formData.rooms.length
+      : 0;
 
   const handleRoomChange = (
     index: number,
@@ -66,7 +67,6 @@ const Step5: React.FC<Step1Props> = ({ setActivePage }) => {
       if (!res.ok) {
         throw new Error(data.error || "Something went wrong");
       }
-
     } catch (err) {
       console.error("Failed to fetch financial data:", err);
     }
@@ -77,8 +77,7 @@ const Step5: React.FC<Step1Props> = ({ setActivePage }) => {
     <section className="relative min-h-screen overflow-hidden px-4">
       <div className="bg-gray-50 min-h-screen flex flex-col items-center justify-center py-8">
         <div className="w-full max-w-4xl mx-auto bg-white rounded-md shadow overflow-hidden">
-
-        <div className="md:hidden bg-blue-600 flex flex-col items-center justify-center p-4 text-center">
+          <div className="md:hidden bg-blue-600 flex flex-col items-center justify-center p-4 text-center">
             <h1 className="text-xl font-bold text-white mb-2">
               อัตราการเข้าพักโรงแรม
             </h1>
@@ -107,7 +106,6 @@ const Step5: React.FC<Step1Props> = ({ setActivePage }) => {
             {/* Left Side - Form */}
             <div className="w-full md:w-2/3 p-6">
               <form onSubmit={handleSubmit} className="space-y-6">
-
                 {/* ห้องพัก */}
                 <div className="space-y-4">
                   <h3 className="text-md font-semibold text-gray-700">
@@ -116,9 +114,9 @@ const Step5: React.FC<Step1Props> = ({ setActivePage }) => {
                   {formData.rooms.map((room, index) => (
                     <div
                       key={index}
-                      className="flex flex-wrap items-center gap-2 mb-2"
+                      className="flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-2"
                     >
-                      <div className="flex-1 min-w-[140px]">
+                      <div className="flex-1 min-w-[140px] w-full">
                         <input
                           type="text"
                           placeholder={`ห้องพัก ${index + 1}`}
@@ -130,7 +128,7 @@ const Step5: React.FC<Step1Props> = ({ setActivePage }) => {
                           required
                         />
                       </div>
-                      <div className="flex-1 min-w-[140px]">
+                      <div className="flex-1 min-w-[140px] w-full">
                         <input
                           type="number"
                           placeholder="ราคาต่อคืน"
@@ -142,7 +140,7 @@ const Step5: React.FC<Step1Props> = ({ setActivePage }) => {
                           required
                         />
                       </div>
-                      <div className="w-auto">
+                      <div className="w-full sm:w-auto">
                         {formData.rooms.length > 1 && (
                           <button
                             type="button"
@@ -209,8 +207,6 @@ const Step5: React.FC<Step1Props> = ({ setActivePage }) => {
                 />
               </svg>
             </div>
-
-            
           </div>
         </div>
       </div>
