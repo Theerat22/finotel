@@ -15,16 +15,12 @@ interface Month {
   event: string[];
 }
 
-interface FinancialSummary {
-  totalRevenue: number;
-  totalExpense: number;
-  avgRatio: number;
-  ebitdar: number;
-}
-
-interface SummaryCardsProps {
-  summaryMetrics: FinancialSummary;
-  period: string;
+interface FinancialRecord {
+  id: number;
+  type: "income" | "outcome";
+  price: number;
+  timestamp: string;
+  month_id: number;
 }
 
 interface MonthData {
@@ -115,27 +111,15 @@ export default function RoomDetails({ params }: PageProps) {
 
   console.log(month);
 
-  const [summaryData, setData] = useState<SummaryCardsProps[]>([]);
+  const [data, setData] = useState<FinancialRecord[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchFinancialData = async () => {
       try {
         const res = await fetch(`/api/database/get-financial?month=${slug}`);
-        const data = await res.json();
-        const formattedData: SummaryCardsProps = {
-          summaryMetrics: {
-            totalRevenue: data.totalRevenue,
-            totalExpense: data.totalExpense,
-            avgRatio: data.avgRatio,
-            ebitdar: data.ebitdar,
-          },
-          period: slug,
-        };
-
-        console.log("Formatted data:", formattedData);
-
-        setData([formattedData]);
+        const json = await res.json();
+        setData(json);
       } catch (err) {
         console.error("Failed to fetch financial data:", err);
       } finally {
@@ -179,16 +163,6 @@ export default function RoomDetails({ params }: PageProps) {
           report.period.includes(selectedMonth)
         );
 
-  const firstSummaryData = summaryData[0]; // Get the first item
-
-  // Check if firstSummaryData exists before destructuring
-  if (!firstSummaryData) {
-    // Handle the case where there is no data
-    return <p>No financial data available for this period.</p>;
-  }
-
-  const { summaryMetrics, period } = firstSummaryData;
-
   const calculateSummaryMetrics = () => {
     const data = selectedMonth === "all" ? monthlyData : filteredMonthlyData;
 
@@ -205,12 +179,16 @@ export default function RoomDetails({ params }: PageProps) {
     return { totalRevenue, totalExpense, avgRatio, ebitdar };
   };
 
-  const summaryMetricsTest = calculateSummaryMetrics();
-  console.log(summaryMetricsTest);
+  const summaryMetrics = calculateSummaryMetrics();
 
   if (isLoading) {
     return <LoadingScreen />;
   }
+
+  // Get all available months for the selector
+  // const availableMonths = Array.from(
+  //   new Set(monthlyData.map((item) => item.month))
+  // );
 
   if (!month) {
     return (
@@ -221,10 +199,6 @@ export default function RoomDetails({ params }: PageProps) {
   }
 
   if (loading) return <p>Loading...</p>;
-
-  // console.log(summaryMetrics);
-  // console.log(categoryData)
-  // console.log("Database:", data);
 
   return (
     <>
@@ -242,7 +216,7 @@ export default function RoomDetails({ params }: PageProps) {
             onChange={setSelectedMonth} 
           />
         </div> */}
-          {/* <div>
+          <div>
             <h2>รายรับเดือน May2025</h2>
             <ul>
               {data.map((item) => (
@@ -252,7 +226,8 @@ export default function RoomDetails({ params }: PageProps) {
                 </li>
               ))}
             </ul>
-          </div> */}
+          </div>
+
 
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-5 rounded-2xl shadow-lg mb-6 text-white">
             <h1 className="text-2xl md:text-3xl font-bold text-center">
@@ -269,7 +244,10 @@ export default function RoomDetails({ params }: PageProps) {
           </div>
 
           {/* SUMMARY */}
-          <SummaryCards summaryMetrics={summaryMetrics} period={period} />
+          <SummaryCards
+            summaryMetrics={summaryMetrics}
+            period={selectedMonth === "all" ? "รวมทั้งปี" : selectedMonth}
+          />
 
           {/* CHART - Only show when 'all' is selected */}
           {selectedMonth === "all" && (
