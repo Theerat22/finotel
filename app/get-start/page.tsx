@@ -7,9 +7,9 @@ import Profile from './pages/profile';
 import Complete from './pages/complete';
 import HotelFinanceForm from './pages/step3';
 import HotelOccupancyUpload from './pages/step4';
-
+import Step5 from './pages/step5';
 const StartPage: React.FC = () => {
-  const [activePage, setActivePage] = useState('login');
+  const [activePage, setActivePage] = useState('room');
   
   const renderPage = () => {
     switch (activePage) {
@@ -25,6 +25,8 @@ const StartPage: React.FC = () => {
         return <HotelFinanceForm setActivePage={setActivePage} />;
       case "booking":
         return <HotelOccupancyUpload setActivePage={setActivePage} />;
+      case "room":
+        return <Step5 setActivePage={setActivePage} />;
       default:
         return <div>Overview Page</div>;
     }

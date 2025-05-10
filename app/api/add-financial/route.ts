@@ -5,16 +5,16 @@ import { ResultSetHeader } from "mysql2";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, detail } = body;
+    const { averagePrice } = body;
+    const adr = parseFloat(Number(averagePrice).toFixed(2));
 
-    // ตรวจสอบว่าข้อมูลมาครบ
-    if (!name || !detail) {
-      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+    if (isNaN(adr)) {
+      return NextResponse.json({ error: "Invalid price" }, { status: 400 });
     }
 
     const [result] = await mysqlPool.query<ResultSetHeader>(
-      "INSERT INTO attractions (name, detail, coverimage, latitude, longitude) VALUES (?, ?, ?, ?, ?)",
-      [name, detail, 'sffd', 133, 133]
+      "INSERT INTO general (name, owner, latitude, longitude, adr) VALUES (?, ?, ?, ?, ?)",
+      ["CD ลิงกังกู", "พวกเรา รักCEDT", 13.735631194823451, 100.53140989416192, adr]
     );
 
     return NextResponse.json({ message: "Data inserted", id: result.insertId });
@@ -26,3 +26,5 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+

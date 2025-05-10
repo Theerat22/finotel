@@ -204,7 +204,7 @@ const HotelOccupancyUpload: React.FC<Step1Props> = ({ setActivePage }) => {
 
     // Submit form
     console.log("Submitting occupancy data:", occupancySummary);
-    setActivePage("complete");
+    setActivePage("room");
   };
 
   const handleCsvTemplateDownload = () => {
