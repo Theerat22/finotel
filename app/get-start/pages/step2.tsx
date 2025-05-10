@@ -126,7 +126,7 @@ const Step2: React.FC<Step2Props> = ({ setActivePage }) => {
     // Navigate to next step
     // setActivePage('finance');
     // router.push('/dashboard');
-    setActivePage('finance');
+    setActivePage('booking');
     
   };
   
