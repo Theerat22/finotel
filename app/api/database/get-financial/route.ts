@@ -8,6 +8,7 @@ interface FinancialRecord {
   price: number;
   timestamp: string;
   month_id: number;
+  category_id: number;
 }
 
 export async function GET(request: Request) {
@@ -38,12 +39,14 @@ export async function GET(request: Request) {
     let totalExpense = 0;
 
     for (const record of financialRows) {
-      if (record.type === "income") {
-        totalRevenue += record.price;
-      } else if (record.type === "outcome") {
-        totalExpense += record.price;
+        const price = Number(record.price);
+        if (record.type === "income") {
+          totalRevenue += price;
+        } else if (record.type === "outcome") {
+          totalExpense += price;
+        }
       }
-    }
+      
 
     const avgRatio = totalRevenue === 0 ? 0 : totalExpense / totalRevenue;
     const ebitdar = totalRevenue - totalExpense;

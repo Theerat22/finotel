@@ -2,11 +2,8 @@
 import React, { use, useEffect, useState } from "react";
 import StartNav from "@/app/components/StartNav";
 import SummaryCards from "@/app/dashboard/pages/ExpenseAnalysist/components/SummaryCards";
-import MonthlyRevenueExpenseChart from "@/app/dashboard/pages/ExpenseAnalysist/components/MonthlyRevenueExpenseChart";
 import ExpenseCategoryPieChart from "@/app/dashboard/pages/ExpenseAnalysist/components/ExpenseCategoryPieChart";
-import AnomalyReports from "@/app/dashboard/pages/ExpenseAnalysist/components/AnomalyReports";
 import LoadingScreen from "@/app/dashboard/pages/ExpenseAnalysist/components/LoadingScreen";
-import { mockData } from "@/app/dashboard/pages/ExpenseAnalysist/mockData";
 
 interface FinancialSummary {
   totalRevenue: number;
@@ -56,9 +53,9 @@ export default function RoomDetails({ params }: PageProps) {
   const month_name = match ? match[1] : "";
   const year = match ? match[2] : "";
 
-  // console.log(month);
 
   const [summaryData, setData] = useState<SummaryCardsProps[]>([]);
+  const [categoryData, setCategoryData] = useState<CategoryData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -86,34 +83,25 @@ export default function RoomDetails({ params }: PageProps) {
       }
     };
 
+    const fetchCategoryData = async () => {
+      try {
+        const res = await fetch(`/api/database/get-financial-category?month=${slug}`);
+        const data = await res.json();
+        setCategoryData(data);
+      } catch (err) {
+        console.error("Failed to fetch financial data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchFinancialData();
+    fetchCategoryData();
   }, [slug]);
 
-  const [monthlyData, setMonthlyData] = useState<MonthlyData[]>([]);
-  const [categoryData, setCategoryData] = useState<CategoryData[]>([]);
-  const [anomalyReports, setAnomalyReports] = useState<AnomalyReport[]>([]);
   const [selectedMonth] = useState<string | "all">(slug);
 
-  useEffect(() => {
-    const { mockMonthlyData, mockCategoryData, mockAnomalyReports } = mockData;
 
-    setMonthlyData(mockMonthlyData);
-    setCategoryData(mockCategoryData);
-    setAnomalyReports(mockAnomalyReports);
-  }, []);
-
-  // Filter data based on selected month
-  const filteredCategoryData =
-    selectedMonth === "all"
-      ? categoryData
-      : categoryData.filter((item) => item.month === selectedMonth);
-
-  const filteredAnomalyReports =
-    selectedMonth === "all"
-      ? anomalyReports
-      : anomalyReports.filter((report) =>
-          report.period.includes(selectedMonth)
-        );
 
   const firstSummaryData = summaryData[0];
 
@@ -126,7 +114,7 @@ export default function RoomDetails({ params }: PageProps) {
   if (loading) {
     return <LoadingScreen />;
   }
-
+  console.log("Category data:", categoryData);
 
 
   return (
@@ -148,29 +136,12 @@ export default function RoomDetails({ params }: PageProps) {
             {/* SUMMARY */}
             <SummaryCards summaryMetrics={summaryMetrics} period={period} />
 
-            {/* CHART - Only show when 'all' is selected */}
-            {selectedMonth === "all" && (
-              <div className="mb-6">
-                <MonthlyRevenueExpenseChart
-                  monthlyData={monthlyData}
-                  highlightMonth={undefined}
-                />
-              </div>
-            )}
 
             {/* CATEGORY & ANOMALY */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
               <ExpenseCategoryPieChart
-                categoryData={filteredCategoryData}
-                period={selectedMonth === "all" ? "ทั้งปี" : selectedMonth}
-              />
-              <AnomalyReports
-                anomalyReports={filteredAnomalyReports}
-                noDataMessage={
-                  selectedMonth !== "all"
-                    ? `ไม่พบความผิดปกติในเดือน ${selectedMonth}`
-                    : "ไม่พบความผิดปกติ"
-                }
+                categoryData={categoryData}
+                period={selectedMonth}
               />
             </div>
           </div>
