@@ -23,14 +23,14 @@ const Complete: React.FC = () => {
       contents: [
         {
           type: "text",
-          text: "สรุปการเงินโรงแรม",
+          text: "โรงแรมลิงกังกู",
           weight: "bold",
           color: "#1E3A8A", // dark blue
           size: "sm",
         },
         {
           type: "text",
-          text: "โรงแรมลิงกังกู",
+          text: "ยินดีต้อนรับ!",
           weight: "bold",
           size: "xxl",
           margin: "md",
@@ -38,105 +38,11 @@ const Complete: React.FC = () => {
         },
         {
           type: "text",
-          size: "xs",
-          color: "#94a3b8", // light slate
-          wrap: true,
-          text: "Nan, Thailand",
-        },
-        {
-          type: "separator",
-          margin: "xxl",
-          color: "#E0E7FF", // light blue
-        },
-        {
-          type: "box",
-          layout: "vertical",
-          margin: "xxl",
-          spacing: "sm",
-          contents: [
-            {
-              type: "box",
-              layout: "horizontal",
-              contents: [
-                {
-                  type: "text",
-                  text: "รายได้รวม (April 2025)",
-                  size: "sm",
-                  color: "#475569",
-                  flex: 0,
-                },
-                {
-                  type: "text",
-                  text: "8,082,993 ฿",
-                  size: "sm",
-                  color: "#2563EB", // blue
-                  align: "end",
-                },
-              ],
-            },
-            {
-              type: "box",
-              layout: "horizontal",
-              contents: [
-                {
-                  type: "text",
-                  text: "รายจ่ายรวม (April 2025)",
-                  size: "sm",
-                  color: "#475569",
-                  flex: 0,
-                },
-                {
-                  type: "text",
-                  text: "5,736,450 ฿",
-                  size: "sm",
-                  color: "#3B82F6", // light blue
-                  align: "end",
-                },
-              ],
-            },
-            {
-              type: "box",
-              layout: "horizontal",
-              contents: [
-                {
-                  type: "text",
-                  text: "กำไร (EBITDA)",
-                  size: "sm",
-                  color: "#475569",
-                  flex: 0,
-                },
-                {
-                  type: "text",
-                  text: "2,346,543 ฿",
-                  size: "sm",
-                  color: "#1D4ED8", // dark blue
-                  align: "end",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          type: "separator",
-          margin: "xxl",
-          color: "#E0E7FF",
-        },
-        {
-          type: "box",
-          layout: "horizontal",
+          text: "ขอบคุณที่มาเป็นส่วนหนึ่งของครอบครัว Finotel",
+          weight: "bold",
+          size: "sm",
           margin: "md",
-          contents: [
-            {
-              type: "button",
-              style: "primary",
-              color: "#2563EB", // button blue
-              action: {
-                type: "uri",
-                label: "ดูเพิ่มเติม",
-                uri: "http://linecorp.com/",
-              },
-            },
-          ],
+          color: "#1E3A8A",
         },
       ],
     },
@@ -147,38 +53,38 @@ const Complete: React.FC = () => {
     },
   };
   
-  const message =
-    'เริ่มต้นกับ Finotel เสร็จเรียบร้อยแล้ว! \n\nยินดีต้อนรับ "โรงแรมลิงกังกู" ที่มาเป็นส่วนนึงของครอบครัว Finotel';
+  // const message =
+  //   'เริ่มต้นกับ Finotel เสร็จเรียบร้อยแล้ว! \n\nยินดีต้อนรับ "โรงแรมลิงกังกู" ที่มาเป็นส่วนนึงของครอบครัว Finotel';
   const { userData } = useUser();
   const userId = userData.userId;
 
-  const sendMessage = async () => {
-    if (!message) {
-      setStatus({ loading: false, error: "Message cannot be empty" });
-      return;
-    }
+  // const sendMessage = async () => {
+  //   if (!message) {
+  //     setStatus({ loading: false, error: "Message cannot be empty" });
+  //     return;
+  //   }
 
-    try {
-      setStatus({ loading: true });
-      console.log("Sending message:", message);
+  //   try {
+  //     setStatus({ loading: true });
+  //     console.log("Sending message:", message);
 
-      const response = await axios.post("/api/sendMessage", {
-        userId,
-        message,
-      });
+  //     const response = await axios.post("/api/sendMessage", {
+  //       userId,
+  //       message,
+  //     });
 
-      sendFlexMessage();
+  //     sendFlexMessage();
 
-      console.log("Response:", response.data);
-      setStatus({ loading: false, success: true });
+  //     console.log("Response:", response.data);
+  //     setStatus({ loading: false, success: true });
 
-      setTimeout(() => {
-        setStatus({ loading: false });
-      }, 4000);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+  //     setTimeout(() => {
+  //       setStatus({ loading: false });
+  //     }, 4000);
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
 
   const sendFlexMessage = async () => {
     if (!flexMessage) {
@@ -210,7 +116,7 @@ const Complete: React.FC = () => {
     const initializeLiff = async () => {
       try {
         await liff.init({ liffId: "2007306544-Oyvzorbv" });
-        sendMessage();
+        sendFlexMessage();
         setTimeout(() => {
           liff.closeWindow();
         }, 2000);
