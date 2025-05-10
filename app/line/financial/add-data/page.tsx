@@ -806,7 +806,7 @@ const HotelFinanceForm = () => {
                       <button
                         type="button"
                         onClick={() => removeItem("income", item.id)}
-                        disabled={financeData.income.length <= 1}
+                        disabled={financeData.income.length <= 0}
                         className={`p-2 rounded-md ${
                           financeData.income.length <= 0
                             ? "text-gray-300 cursor-not-allowed"
@@ -890,7 +890,7 @@ const HotelFinanceForm = () => {
                       <button
                         type="button"
                         onClick={() => removeItem("expenses", item.id)}
-                        disabled={financeData.expenses.length <= 1}
+                        disabled={financeData.expenses.length <= 0}
                         className={`p-2 rounded-md ${
                           financeData.expenses.length <= 0
                             ? "text-gray-300 cursor-not-allowed"
