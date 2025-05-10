@@ -23,7 +23,7 @@ export default function Financial() {
   const [value, setValue] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [userData, setUserData] = useState<UserData>(defaultUserData);
-  const [monthsData, setMonthsData] = useState<number>(0);
+  const [monthsData, setMonthsData] = useState<number | null>(null);
 
   const months = [
     { th: "มกราคม", en: "January2025" },
@@ -55,7 +55,6 @@ export default function Financial() {
     };
 
     fetchFinancialData();
-
 
     const initializeLiff = async (): Promise<void> => {
       try {
