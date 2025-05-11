@@ -5,8 +5,8 @@ import {
   Users,
   TrendingUp,
   Calendar,
-  TrendingDown,
-  BarChart3,
+  // TrendingDown,
+  // BarChart3,
 } from "lucide-react";
 import StartNav from "@/app/components/StartNav";
 import LoadingScreen from "@/app/dashboard/pages/ExpenseAnalysist/components/LoadingScreen";
@@ -148,14 +148,14 @@ export default function RoomDetails({ params }: PageProps) {
                     <p className="text-gray-600">RevPAR</p>
                   </div>
                   <div className="flex items-center">
-                    <p className="text-xl font-bold text-green-600">3,871</p>
+                    <p className="text-xl font-bold text-green-600">{data ? calculateAverageOccupancy(data.occupancy)/100 * 2000 : "-"}</p>
                     <TrendingUp className="text-green-500 ml-1" size={16} />
                   </div>
                 </div>
                 <div className="h-px bg-gray-100"></div>
 
                 {/* GOPPAR */}
-                <div className="flex items-center justify-between">
+                {/* <div className="flex items-center justify-between">
                   <div className="flex items-center">
                     <div className="bg-purple-100 p-2 rounded-lg mr-3">
                       <BarChart3 className="text-purple-600" size={18} />
@@ -166,7 +166,7 @@ export default function RoomDetails({ params }: PageProps) {
                     <p className="text-xl font-bold text-purple-600">1,243</p>
                     <TrendingDown className="text-red-500 ml-1" size={16} />
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
 

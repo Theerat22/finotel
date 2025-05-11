@@ -388,6 +388,15 @@ const HotelOccupancyUpload: React.FC<Step1Props> = ({ setActivePage }) => {
                   </button>
 
                   <button
+                    type="button"
+                    onClick={() => setActivePage("room")}
+                    className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-gray-700 bg-white border border-gray-300 hover:bg-gray-50"
+                  >
+                    <FaArrowRight className="mr-2 h-4 w-4" />
+                    ข้าม
+                  </button>
+
+                  <button
                     type="submit"
                     disabled={occupancySummary.months.length === 0}
                     className={`inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-white 
