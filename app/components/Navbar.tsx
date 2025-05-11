@@ -7,7 +7,7 @@ import {
   Home, 
   BarChart, 
   Settings, 
-  // BadgeDollarSign,
+  BadgeDollarSign,
   Menu, 
   X
 } from 'lucide-react';
@@ -26,7 +26,8 @@ const Navbar: React.FC<NavbarProps> = ({ activePage, setActivePage }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems: NavItem[] = [
-    // { icon: BadgeDollarSign, label: 'วิเคราะห์การเงิน', page: 'financial' },
+    { icon: BadgeDollarSign, label: 'วิเคราะห์การเงิน', page: 'financial' },
+    // { icon: Home, label: 'การเงิน', page: 'booking' },
     { icon: Home, label: 'อัตราการจอง', page: 'booking' },
     { icon: BarChart, label: 'การกำหนดราคา', page: 'dynamic' },
     { icon: Settings, label: 'Settings', page: 'settings' }
