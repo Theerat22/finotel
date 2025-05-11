@@ -41,13 +41,11 @@ export default function RoomDetails({ params }: PageProps) {
   const month_name = match ? match[1] : "";
   const year = match ? match[2] : "";
   const [choices, setChoices] = useState<Choice[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  // const [isLoading, setIsLoading] = useState<boolean>(true);
   const [expenseList, setExpenseList] = useState<string>("");
   const [incomeList, setIncomeList] = useState<string>("");
 
-  const markdownText = choices
-    .map((choice) => choice.message.content)
-    .join("\n\n\n");
+  
 
   const generateExpenseList = (categoryData: CategoryData[]): string => {
     let expenseList = "";
@@ -75,7 +73,7 @@ export default function RoomDetails({ params }: PageProps) {
       } catch (err) {
         console.error("Failed to fetch financial data:", err);
       } finally {
-        setIsLoading(false);
+        // setIsLoading(false);
       }
     };
     const fetchCategoryIncomeData = async () => {
@@ -87,7 +85,7 @@ export default function RoomDetails({ params }: PageProps) {
       } catch (err) {
         console.error("Failed to fetch financial data:", err);
       } finally {
-        setIsLoading(false);
+        // setIsLoading(false);
       }
     };
 
@@ -112,7 +110,7 @@ Your task:
 Make sure all categories are covered and keep each point on a single line.`;
 
     const fetchData = async () => {
-      setIsLoading(true);
+      // setIsLoading(true);
       try {
         const response = await fetch("/api/chat", {
           method: "POST",
@@ -130,12 +128,16 @@ Make sure all categories are covered and keep each point on a single line.`;
       } catch (error) {
         console.error("Error fetching from API:", error);
       } finally {
-        setIsLoading(false);
+        // setIsLoading(false);
       }
     };
 
     fetchData();
   }, [slug, expenseList, incomeList]);
+
+  const markdownText = choices
+    .map((choice) => choice.message.content)
+    .join("\n\n\n");
 
   if (!slug) {
     return (
@@ -167,7 +169,7 @@ Make sure all categories are covered and keep each point on a single line.`;
                 <AlertCircle className="text-amber-500" size={18} />
               </div>
 
-              {isLoading && (
+              {/* {isLoading && (
                 <div className="bg-amber-50 p-4 rounded-xl border border-amber-200">
                   <div className="animate-pulse flex flex-col justify-center text-center space-x-4">
                     <p className="font-medium text-amber-700">
@@ -175,7 +177,7 @@ Make sure all categories are covered and keep each point on a single line.`;
                     </p>
                   </div>
                 </div>
-              )}
+              )} */}
 
               {markdownText && (
                 <div className=" bg-amber-50 p-4 rounded-xl border border-amber-200">
