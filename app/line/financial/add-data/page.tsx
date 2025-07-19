@@ -10,6 +10,7 @@ interface FinanceItem {
   name: string;
   amount: number;
   category_name: string;
+  description: string;
 }
 
 interface FinanceData {
@@ -93,8 +94,24 @@ const defaultUserData: UserData = {
 const getDefaultFinanceData = (): FinanceData => ({
   month: new Date().toLocaleString("en-US", { month: "long" }),
   year: new Date().getFullYear().toString(),
-  income: [{ id: crypto.randomUUID(), name: "การขายห้องพัก", amount: 0, category_name: "การขายห้องพัก" }],
-  expenses: [{ id: crypto.randomUUID(), name: "ค่าพนักงาน", amount: 0, category_name: "ค่าพนักงาน" }],
+  income: [
+    {
+      id: crypto.randomUUID(),
+      name: "การขายห้องพัก",
+      amount: 0,
+      category_name: "การขายห้องพัก",
+      description: "",
+    },
+  ],
+  expenses: [
+    {
+      id: crypto.randomUUID(),
+      name: "ค่าพนักงาน",
+      amount: 0,
+      category_name: "ค่าพนักงาน",
+      description: "",
+    },
+  ],
 });
 
 const monthNames = [
@@ -178,13 +195,13 @@ const HotelFinanceForm = () => {
 
   const getFlexMessage = (data: FinancialData, categories: Category[]) => {
     const { month, year, income, expenses } = data;
-  
+
     const getCategoryName = (idString: string) => {
       const id = parseInt(idString);
       const category = categories.find((c) => c.id === id);
       return category ? category.name : idString;
     };
-  
+
     const incomeContents = income
       .filter((item) => item.amount > 0)
       .map((item) => ({
@@ -207,7 +224,7 @@ const HotelFinanceForm = () => {
           },
         ],
       }));
-  
+
     const expenseContents = expenses
       .filter((item) => item.amount > 0)
       .map((item) => ({
@@ -230,7 +247,7 @@ const HotelFinanceForm = () => {
           },
         ],
       }));
-  
+
     return {
       type: "bubble",
       size: "mega",
@@ -424,7 +441,7 @@ const HotelFinanceForm = () => {
           ? {
               ...item,
               [field]: field === "amount" ? Number(value) : value,
-              ...(field === "name" ? { category: value } : {})
+              ...(field === "name" ? { category: value } : {}),
             }
           : item
       ),
@@ -446,7 +463,12 @@ const HotelFinanceForm = () => {
       ...prev,
       [category]: [
         ...prev[category],
-        { id: crypto.randomUUID(), name: "", amount: amount, category_name: "" },
+        {
+          id: crypto.randomUUID(),
+          name: "",
+          amount: amount,
+          category_name: "",
+        },
       ],
     }));
   };
@@ -499,6 +521,8 @@ const HotelFinanceForm = () => {
                 amount: Number(item.amount) || 0,
                 category_name:
                   (item.name as string) || (item.description as string) || "",
+                description:
+                  (item.name as string) || (item.description as string) || "",
               }));
             }
 
@@ -513,6 +537,8 @@ const HotelFinanceForm = () => {
                   (item.name as string) || (item.description as string) || "",
                 amount: Number(item.amount) || 0,
                 category_name:
+                  (item.name as string) || (item.description as string) || "",
+                description:
                   (item.name as string) || (item.description as string) || "",
               }));
             }
@@ -883,6 +909,7 @@ const HotelFinanceForm = () => {
                           </option>
                         ))}
                       </select>
+                      
                       <div className="w-32">
                         <input
                           type="number"

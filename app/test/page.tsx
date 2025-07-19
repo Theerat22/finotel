@@ -1,1119 +1,346 @@
 "use client";
-import React, { useState, useRef, ChangeEvent, useEffect } from "react";
-import { FaArrowLeft, FaArrowRight, FaPlus, FaTrash } from "react-icons/fa";
-import Papa from "papaparse";
-import axios from "axios";
-import liff from "@line/liff";
+import React, { useEffect, useState } from "react";
+import {
+  DollarSign,
+  Users,
+  TrendingUp,
+  // Calendar,
+} from "lucide-react";
+// import StartNav from "@/app/components/StartNav";
+import LoadingScreen from "@/app/dashboard/pages/ExpenseAnalysist/components/LoadingScreen";
+// import Image from "next/image";
+import { format, parseISO, startOfMonth, endOfMonth,  isSameDay, addMonths, subMonths } from 'date-fns';
+import { th } from 'date-fns/locale';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, X } from 'lucide-react';
 
-interface FinanceItem {
+
+interface CalendarEvent {
   id: string;
-  name: string;
-  amount: number;
-}
-
-interface FinanceData {
-  month: string;
-  year: string;
-  income: FinanceItem[];
-  expenses: FinanceItem[];
-}
-
-interface TransactionItem {
-  id: string;
-  name: string;
-  amount: number;
-}
-
-interface FinancialData {
-  month: string;
-  year: string;
-  income: TransactionItem[];
-  expenses: TransactionItem[];
-}
-
-interface OCRResponse {
-  message: string;
-  raw?: {
-    image?: string;
-    text?: string;
+  summary: string;
+  description?: string;
+  start: {
+    dateTime: string;
+    timeZone: string;
   };
-  processed?: {
-    invoiceType: string;
-    invoiceBook: string;
-    invoiceID: string;
-    invoiceDate: string;
-    purchaseOrderID: string;
-    issuerName: string;
-    issuerAddress: string;
-    issuerTaxID: string;
-    issuerPhone: string;
-    customerName: string;
-    customerAddress: string;
-    customerTaxID: string;
-    customerPhone: string;
-    items: {
-      itemNo: string;
-      itemCode: string;
-      itemName: string;
-      itemUnit: number;
-      itemUnitCost: number;
-      itemTotalCost: number;
-    }[];
-    totalCost: number;
-    discount: number;
-    totalCostAfterDiscount: number;
-    vat: number;
-    grandTotal: number;
+  end: {
+    dateTime: string;
+    timeZone: string;
   };
-  template: string;
-  iapp: string;
-  process_ms: number;
+  location?: string;
 }
 
-interface Category {
-  id: number;
-  name: string;
-}
-
-interface UserData {
-  userId: string;
-  displayName: string;
-  pictureUrl: string;
-  isLoggedIn: boolean;
-}
-
-const defaultUserData: UserData = {
-  userId: "",
-  displayName: "",
-  pictureUrl: "",
-  isLoggedIn: false,
-};
-
-const getDefaultFinanceData = (): FinanceData => ({
-  month: new Date().toLocaleString("en-US", { month: "long" }),
-  year: new Date().getFullYear().toString(),
-  income: [{ id: crypto.randomUUID(), name: "การขายห้องพัก", amount: 0 }],
-  expenses: [{ id: crypto.randomUUID(), name: "ค่าพนักงาน", amount: 0 }],
-});
-
-const monthNames = [
-  { label: "มกราคม", value: "January" },
-  { label: "กุมภาพันธ์", value: "February" },
-  { label: "มีนาคม", value: "March" },
-  { label: "เมษายน", value: "April" },
-  { label: "พฤษภาคม", value: "May" },
-  { label: "มิถุนายน", value: "June" },
-  { label: "กรกฎาคม", value: "July" },
-  { label: "สิงหาคม", value: "August" },
-  { label: "กันยายน", value: "September" },
-  { label: "ตุลาคม", value: "October" },
-  { label: "พฤศจิกายน", value: "November" },
-  { label: "ธันวาคม", value: "December" },
-];
-
-const currencyFormatter = new Intl.NumberFormat("th-TH", {
-  style: "currency",
-  currency: "THB",
-  minimumFractionDigits: 2,
-});
-
-const HotelFinanceForm = () => {
-  const [financeData, setFinanceData] = useState<FinanceData>(
-    getDefaultFinanceData()
-  );
-  const [formError, setFormError] = useState("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [categoryName, setCategoryName] = useState("");
-  const [status, setStatus] = useState("");
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [userData, setUserData] = useState<UserData>(defaultUserData);
+export default function RoomDetails() {
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState("");
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchEvents = async () => {
       try {
-        const response = await fetch("/api/database/category");
+        setLoading(true);
+        
+        const start = startOfMonth(currentDate);
+        const end = endOfMonth(currentDate);
+        
+        const response = await fetch(`/api/calendar?startDate=${start.toISOString()}&endDate=${end.toISOString()}`);
+        
         if (!response.ok) {
-          throw new Error("Failed to fetch categories");
+          throw new Error('Failed to fetch events');
         }
+        
         const data = await response.json();
-        setCategories(data);
-      } catch {
-        // setError(error.message);
+        setEvents(data.events);
+      } catch (err) {
+        console.error('Error fetching events:', err);
+        // setError("ไม่สามารถดึงข้อมูลกิจกรรมได้ โปรดลองอีกครั้งในภายหลัง");
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchCategories();
-  }, []);
+    fetchEvents();
+  }, [currentDate]);
 
-  useEffect(() => {
-    const initializeLiff = async (): Promise<void> => {
-      try {
-        await liff.init({ liffId: "2007306544-a750okE5" });
+  const nextMonth = () => setCurrentDate(addMonths(currentDate, 1));
+  const prevMonth = () => setCurrentDate(subMonths(currentDate, 1));
 
-        if (liff.isLoggedIn()) {
-          const profile = await liff.getProfile();
-          setUserData({
-            userId: profile.userId,
-            displayName: profile.displayName,
-            pictureUrl: profile.pictureUrl || "",
-            isLoggedIn: true,
-          });
+  // const days = eachDayOfInterval({
+  //   start: startOfMonth(currentDate),
+  //   end: endOfMonth(currentDate)
+  // });
 
-          setIsLoading(false);
-          // const userId = localStorage.setItem('userId', JSON.stringify(profile.userId));
-          // console.log('userId:', userId);
-        } else {
-          console.log("ยังไม่ได้ login");
-          liff.login();
-        }
-      } catch (error) {
-        console.error("LIFF initialization failed", error);
-      }
-    };
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-    initializeLiff();
-  }, []);
-
-  const getFlexMessage = (data: FinancialData) => {
-    const { month, year, income, expenses } = data;
-
-    const incomeContents = income
-      .filter((item) => item.amount > 0)
-      .map((item) => ({
-        type: "box",
-        layout: "horizontal",
-        contents: [
-          {
-            type: "text",
-            text: item.name,
-            size: "sm",
-            color: "#475569",
-            flex: 0,
-          },
-          {
-            type: "text",
-            text: `${item.amount.toLocaleString()} ฿`,
-            size: "sm",
-            color: "#16A34A", // green
-            align: "end",
-          },
-        ],
-      }));
-
-    const expenseContents = expenses
-      .filter((item) => item.amount > 0)
-      .map((item) => ({
-        type: "box",
-        layout: "horizontal",
-        contents: [
-          {
-            type: "text",
-            text: item.name,
-            size: "sm",
-            color: "#475569",
-            flex: 0,
-          },
-          {
-            type: "text",
-            text: `${item.amount.toLocaleString()} ฿`,
-            size: "sm",
-            color: "#DC2626", // red
-            align: "end",
-          },
-        ],
-      }));
-
-    return {
-      type: "bubble",
-      size: "mega",
-      body: {
-        type: "box",
-        layout: "vertical",
-        backgroundColor: "#ffffff",
-        contents: [
-          {
-            type: "text",
-            text: "รายรับ-รายจ่าย",
-            weight: "bold",
-            color: "#1E3A8A",
-            size: "sm",
-          },
-          {
-            type: "text",
-            text: "เพิ่มข้อมูลสำเร็จ!",
-            weight: "bold",
-            size: "xxl",
-            margin: "md",
-            color: "#1E3A8A",
-          },
-          {
-            type: "text",
-            size: "xs",
-            color: "#94a3b8",
-            wrap: true,
-            text: "โรงแรมลิงกังกู",
-          },
-          {
-            type: "separator",
-            margin: "xxl",
-            color: "#E0E7FF",
-          },
-          {
-            type: "text",
-            text: `รายรับ (${month} ${year})`,
-            weight: "bold",
-            size: "sm",
-            color: "#16A34A",
-            margin: "xxl",
-          },
-          ...incomeContents,
-          {
-            type: "text",
-            text: `รายจ่าย (${month} ${year})`,
-            weight: "bold",
-            size: "sm",
-            color: "#DC2626",
-            margin: "xxl",
-          },
-          ...expenseContents,
-        ],
-      },
-      styles: {
-        footer: {
-          separator: true,
-        },
-      },
-    };
-  };
-
-  const sendFlexMessage = async () => {
-    console.log("Send Flex Message");
-
-    const flexMessage = getFlexMessage(financeData);
-
-    try {
-      console.log("Sending message to:", userData.userId);
-
-      const response = await axios.post("/api/sendFlexMessage", {
-        userId: userData.userId,
-        flexMessage,
-      });
-
-      console.log("Response:", response.data);
-
-      setTimeout(() => {
-        liff.closeWindow();
-      }, 1000);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const response = await fetch("/api/database/category");
-      if (!response.ok) {
-        throw new Error("Failed to fetch categories");
-      }
-      const data = await response.json();
-      setCategories(data);
-    } catch {
-      // setError(error.message);
-    }
-  };
-
-  // Calculate totals
-  const totalIncome = financeData.income.reduce(
-    (sum, item) => sum + (Number(item.amount) || 0),
-    0
-  );
-  const totalExpenses = financeData.expenses.reduce(
-    (sum, item) => sum + (Number(item.amount) || 0),
-    0
-  );
-  const netProfit = totalIncome - totalExpenses;
-
-  // OCR
-  const [image, setImage] = useState<File | null>(null);
-  const [receiptData, setReceiptData] = useState<
-    OCRResponse["processed"] | null
-  >(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
-
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImage(file);
-      setReceiptData(null);
-      setError("");
-      console.log("Upload File Complete");
-    }
-  };
-
-  const handleSubmitSlip = async () => {
-    if (!image) return setError("กรุณาเลือกรูปภาพใบเสร็จก่อน");
-    // if (!apiKey) return setError('กรุณากรอก API Key')
-    const apiKey = "";
-    try {
-      setLoading(true);
-      setError("");
-
-      const formData = new FormData();
-      formData.append("file", image);
-      formData.append("return_image", "false");
-      formData.append("return_ocr", "false");
-
-      const response = await axios.post("/api/ocr", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          "X-API-KEY": apiKey,
-        },
-      });
-
-      const data = response.data as OCRResponse;
-
-      if (!data.processed) {
-        setError("ไม่พบข้อมูลในใบเสร็จ");
-      } else {
-        setReceiptData(data.processed);
-        addNewItemSlip("income", data.processed.totalCost);
-        addNewItemSlip("expenses", data.processed.totalCost);
-      }
-    } catch (err: unknown) {
-      let errorMessage = "เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ";
-      if (axios.isAxiosError(err)) {
-        errorMessage = err.response?.data?.message || err.message;
-      } else if (err instanceof Error) {
-        errorMessage = err.message;
-      }
-      setError(`เกิดข้อผิดพลาด: ${errorMessage}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleMonthYearChange = (
-    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
-  ) => {
-    const { name, value } = e.target;
-    setFinanceData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleItemChange = (
-    category: "income" | "expenses",
-    id: string,
-    field: "name" | "amount",
-    value: string
-  ) => {
-    setFinanceData((prev) => ({
-      ...prev,
-      [category]: prev[category].map((item) =>
-        item.id === id
-          ? { ...item, [field]: field === "amount" ? Number(value) : value }
-          : item
-      ),
-    }));
-  };
-
-  const addNewItem = (category: "income" | "expenses") => {
-    setFinanceData((prev) => ({
-      ...prev,
-      [category]: [
-        ...prev[category],
-        { id: crypto.randomUUID(), name: "", amount: 0 },
-      ],
-    }));
-  };
-
-  const addNewItemSlip = (category: "income" | "expenses", amount: number) => {
-    setFinanceData((prev) => ({
-      ...prev,
-      [category]: [
-        ...prev[category],
-        { id: crypto.randomUUID(), name: "", amount: amount },
-      ],
-    }));
-  };
-
-  const removeItem = (category: "income" | "expenses", id: string) => {
-    setFinanceData((prev) => ({
-      ...prev,
-      [category]: prev[category].filter((item) => item.id !== id),
-    }));
-  };
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    Papa.parse(file, {
-      header: true,
-      dynamicTyping: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        if (results.data && results.data.length > 0) {
-          try {
-            // Define a more specific type for CSV rows
-            interface CsvRow {
-              type?: string;
-              category?: string;
-              name?: number | string;
-              description?: string;
-              amount?: number | string;
-              [key: string]: unknown;
-            }
-
-            const csvData = results.data as CsvRow[];
-            const newFinanceData = {
-              month: financeData.month,
-              year: financeData.year,
-              income: [] as FinanceItem[],
-              expenses: [] as FinanceItem[],
-            };
-
-            // Process income items
-            const incomeItems = csvData.filter(
-              (row) => row.type === "income" || row.category === "income"
-            );
-            if (incomeItems.length > 0) {
-              newFinanceData.income = incomeItems.map((item) => ({
-                id: crypto.randomUUID(),
-                name:
-                  (item.name as string) || (item.description as string) || "",
-                amount: Number(item.amount) || 0,
-              }));
-            }
-
-            // Process expense items
-            const expenseItems = csvData.filter(
-              (row) => row.type === "expense" || row.category === "expenses"
-            );
-            if (expenseItems.length > 0) {
-              newFinanceData.expenses = expenseItems.map((item) => ({
-                id: crypto.randomUUID(),
-                name:
-                  (item.name as string) || (item.description as string) || "",
-                amount: Number(item.amount) || 0,
-              }));
-            }
-
-            // If we have valid data, update the state
-            if (
-              newFinanceData.income.length > 0 ||
-              newFinanceData.expenses.length > 0
-            ) {
-              setFinanceData((prev) => ({
-                ...prev,
-                income:
-                  newFinanceData.income.length > 0
-                    ? newFinanceData.income
-                    : prev.income,
-                expenses:
-                  newFinanceData.expenses.length > 0
-                    ? newFinanceData.expenses
-                    : prev.expenses,
-              }));
-              setFormError("");
-            } else {
-              setFormError(
-                "ไม่พบข้อมูลที่ถูกต้องในไฟล์ CSV โปรดตรวจสอบรูปแบบไฟล์"
-              );
-            }
-          } catch (error) {
-            console.error("Error processing CSV:", error);
-            setFormError("เกิดข้อผิดพลาดในการอ่านไฟล์ CSV");
-          }
-        }
-      },
-      error: (error) => {
-        console.error("Error parsing CSV:", error);
-        setFormError("เกิดข้อผิดพลาดในการอ่านไฟล์ CSV");
-      },
+  const getEventsForDay = (day: Date) => {
+    return events.filter(event => {
+      const eventDate = parseISO(event.start.dateTime);
+      return isSameDay(eventDate, day);
     });
-
-    // Reset the file input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Validate form
-    const incomeWithoutNames = financeData.income.some(
-      (item) => !String(item.name).trim()
-    );
-
-    const expensesWithoutNames = financeData.expenses.some(
-      (item) => !String(item.name).trim()
-    );
-
-    if (incomeWithoutNames || expensesWithoutNames) {
-      setFormError("กรุณากรอกชื่อรายการให้ครบทุกรายการ");
-      return;
-    }
-
-    // Submit form
-    console.log("Submitting financial data:", financeData);
-    const res = await fetch("/api/database/add-financial", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ...financeData,
-      }),
-    });
-
-    if (res.ok) {
-      setStatus("✅ เพิ่มข้อมูลสำเร็จ");
-    } else {
-      setStatus("❌ เพิ่มข้อมูลไม่สำเร็จ");
-    }
-
-    setTimeout(() => {
-      sendFlexMessage();
-    }, 1000);
+  const openEventDetails = (event: CalendarEvent) => {
+    setSelectedEvent(event);
   };
 
-  const handleCsvTemplateDownload = () => {
-    const headers = "type,name,amount\n";
-    const rows = [
-      "income,1,50000",
-      "income,1,15000",
-      "expense,30002,20000",
-      "expense,30003,5000",
-      "expense,30004,2000",
-      "expense,30006,8000",
-    ].join("\n");
 
-    const csvContent = headers + rows;
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "hotel_finance_template.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const addCategory = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const res = await fetch("/api/database/category", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: categoryName,
-      }),
-    });
-
-    if (res.ok) {
-      setStatus("✅ เพิ่มข้อมูลสำเร็จ");
-      setCategoryName("");
-      fetchCategories();
-    } else {
-      setStatus("❌ เพิ่มข้อมูลไม่สำเร็จ");
+  const MonthlyCalendar = () => {
+    // Get first day of the month and calculate grid
+    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+    
+    // Get all days in the month
+    const daysInMonth = [];
+    for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
+      daysInMonth.push(new Date(currentDate.getFullYear(), currentDate.getMonth(), day));
     }
-  };
-
-  if (isLoading)
+    
+    // Calculate empty cells at the beginning (Sunday = 0, Monday = 1, etc.)
+    const firstDayWeekday = firstDayOfMonth.getDay();
+    
     return (
-      <div className="bg-gray-50 min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="spinner-border text-primary mb-3" role="status"></div>
-          <p className="text-gray-600">กำลังโหลด...</p>
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className="bg-blue-900 text-white p-4 flex items-center justify-between">
+          <button
+            onClick={prevMonth}
+            className="p-2 rounded-full hover:bg-blue-800 transition"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <h2 className="text-xl font-semibold">
+            {format(currentDate, 'MMMM yyyy', { locale: th })}
+          </h2>
+          <button
+            onClick={nextMonth}
+            className="p-2 rounded-full hover:bg-blue-800 transition"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </div>
+        
+        {/* วันในสัปดาห์ */}
+        <div className="grid grid-cols-7 bg-blue-50">
+          {['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'].map(day => (
+            <div key={day} className="text-center py-2 font-semibold text-blue-800">
+              {day}
+            </div>
+          ))}
+        </div>
+        
+        <div className="grid grid-cols-7">
+          {/* Empty cells for days before the first day of month */}
+          {Array.from({ length: firstDayWeekday }).map((_, index) => (
+            <div key={`empty-${index}`} className="h-24 border border-gray-100 bg-gray-50"></div>
+          ))}
+          
+          {/* Days of the month */}
+          {daysInMonth.map(day => {
+            const dayEvents = getEventsForDay(day);
+            const isToday = isSameDay(day, today);
+            return (
+              <div
+                key={day.toString()}
+                className={`h-24 border border-gray-100 p-1 overflow-hidden ${
+                  isToday ? 'bg-yellow-50 border-yellow-400' : ''
+                }`}
+              >
+                <div className={`text-right mb-1 ${isToday ? 'text-yellow-600 font-bold' : 'text-gray-700'}`}>
+                  {format(day, 'd')}
+                </div>
+                <div className="overflow-y-auto h-16">
+                  {dayEvents.map(event => (
+                    <div
+                      key={event.id}
+                      className="text-xs p-1 mb-1 rounded bg-blue-100 text-blue-800 truncate cursor-pointer hover:bg-blue-200 transition"
+                      title={event.summary}
+                      onClick={() => openEventDetails(event)}
+                    >
+                      {event.summary}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     );
+  };
+
+  const closeEventDetails = () => {
+    setSelectedEvent(null);
+  };
+  
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
-    <section className="relative min-h-screen overflow-hidden px-4 py-8 bg-gray-50">
-      <div className="flex flex-col items-center justify-center">
-        <div className="w-full max-w-4xl mx-auto bg-white rounded-md shadow overflow-hidden">
-          {/* Mobile Header */}
-          <div className="md:hidden bg-blue-600 flex flex-col items-center justify-center p-4 text-center">
-            <h1 className="text-xl font-bold text-white mb-2">
-              ข้อมูลการเงินโรงแรม
+    <>
+      {/* <StartNav /> */}
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50  flex-grow">
+        <div className="container mx-auto px-4 py-6 max-w-5xl">
+          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-5 rounded-2xl shadow-lg mb-6 text-white">
+            <h1 className="text-2xl md:text-3xl font-bold text-center">
+              ข้อมูลเดือน 2222
             </h1>
-            <p className="text-blue-100 mb-3 text-sm">
-              กรอกข้อมูลรายรับ-รายจ่ายประจำเดือน
+            <p className="text-blue-100 text-sm text-center mt-1">
+              อัพเดทล่าสุด: 11 พฤษภาคม 2025
             </p>
-            <div className="mb-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-12 w-12 text-white opacity-80"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
-                />
-              </svg>
-            </div>
           </div>
 
-          <div className="flex flex-col md:flex-row">
-            <div className="w-full md:w-2/3 p-6">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Month/Year Selection */}
-                <div className="flex flex-wrap gap-4">
-                  <div className="w-full md:w-5/12">
-                    <label
-                      htmlFor="month"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      เดือน
-                    </label>
-                    <select
-                      id="month"
-                      name="month"
-                      value={financeData.month}
-                      onChange={handleMonthYearChange}
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                    >
-                      {monthNames.map((month, index) => (
-                        <option key={index} value={month.value}>
-                          {month.label}
-                        </option>
-                      ))}
-                    </select>
+          <div className="grid grid-cols-1 gap-6 mb-6">
+            <div className="bg-white p-5 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-bold text-gray-700">สถิติหลัก</h3>
+                <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">
+                  +4.2% จากเดือนก่อน
+                </span>
+              </div>
+
+              <div className="space-y-4">
+                {/* อัตราการเข้าพัก */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="bg-blue-100 p-2 rounded-lg mr-3">
+                      <Users className="text-blue-600" size={18} />
+                    </div>
+                    <p className="text-gray-600">อัตราเข้าพัก</p>
                   </div>
-                  <div className="w-full md:w-5/12">
-                    <label
-                      htmlFor="year"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      ปี
-                    </label>
-                    <input
-                      type="number"
-                      id="year"
-                      name="year"
-                      value={financeData.year}
-                      onChange={handleMonthYearChange}
-                      min="2000"
-                      max="2100"
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                    />
+                  <div className="flex items-center">
+                    <p className="text-xl font-bold text-blue-600">
+                      {/* {data
+                        ? calculateAverageOccupancy(data.occupancy).toFixed(2) +
+                          "%"
+                        : "-"} */}
+                        200%
+                    </p>
+                    <TrendingUp className="text-green-500 ml-1" size={16} />
                   </div>
                 </div>
+                <div className="h-px bg-gray-100"></div>
 
-                {/* CSV Upload Section */}
-                <div className="bg-gray-50 p-4 rounded-md border border-dashed border-gray-300">
-                  <h3 className="text-sm font-medium text-gray-700 mb-2">
-                    นำเข้าข้อมูลจากไฟล์ CSV
-                  </h3>
-                  <div className="flex flex-wrap items-center gap-3">
-                    <div className="flex-1">
-                      <input
-                        type="file"
-                        id="csvFile"
-                        name="csvFile"
-                        accept=".csv"
-                        ref={fileInputRef}
-                        onChange={handleFileUpload}
-                        className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                      />
+                {/* RevPAR */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="bg-green-100 p-2 rounded-lg mr-3">
+                      <DollarSign className="text-green-600" size={18} />
                     </div>
-                    <button
-                      type="button"
-                      onClick={handleCsvTemplateDownload}
-                      className="text-xs px-3 py-2 text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
-                    >
-                      ดาวน์โหลดเทมเพลต
-                    </button>
+                    <p className="text-gray-600">RevPAR</p>
                   </div>
-                  <p className="text-xs text-gray-500 mt-2">
-                    รองรับไฟล์ CSV ที่มีคอลัมน์ type, name, amount
-                  </p>
-                </div>
-
-                {/* Income Section */}
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <h3 className="text-lg font-semibold text-gray-800">
-                      รายรับ
-                    </h3>
-                    <button
-                      type="button"
-                      onClick={() => addNewItem("income")}
-                      className="flex items-center text-xs space-x-1 px-2 py-1 rounded-md text-blue-600 bg-blue-50 hover:bg-blue-100 transition duration-200"
-                    >
-                      <FaPlus className="h-3 w-3" />
-                      <span>เพิ่มรายการ</span>
-                    </button>
-                  </div>
-
-                  {financeData.income.map((item) => (
-                    <div
-                      key={item.id}
-                      className="flex items-center space-x-2 mb-2"
-                    >
-                      <div className="flex-1">
-                        <select
-                          value={item.name}
-                          onChange={(e) =>
-                            handleItemChange(
-                              "income",
-                              item.id,
-                              "name",
-                              e.target.value
-                            )
-                          }
-                          className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                          required
-                        >
-                          <option value="">เลือกประเภท</option>
-                          {categories.map((category) => (
-                            <option key={category.id} value={category.id}>
-                              {category.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="w-32">
-                        <input
-                          type="number"
-                          placeholder="จำนวนเงิน"
-                          value={item.amount}
-                          onChange={(e) =>
-                            handleItemChange(
-                              "income",
-                              item.id,
-                              "amount",
-                              e.target.value
-                            )
-                          }
-                          className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                          min="0"
-                          step="0.01"
-                          required
-                        />
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => removeItem("income", item.id)}
-                        disabled={financeData.income.length <= 1}
-                        className={`p-2 rounded-md ${
-                          financeData.income.length <= 1
-                            ? "text-gray-300 cursor-not-allowed"
-                            : "text-red-500 hover:bg-red-50"
-                        }`}
-                      >
-                        <FaTrash className="h-3 w-3" />
-                      </button>
-                    </div>
-                  ))}
-
-                  <div className="text-right text-sm font-medium mt-2">
-                    รวมรายรับ:{" "}
-                    <span className="text-green-600">
-                      {currencyFormatter.format(totalIncome)}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Expenses Section */}
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <h3 className="text-lg font-semibold text-gray-800">
-                      รายจ่าย
-                    </h3>
-                    <button
-                      type="button"
-                      onClick={() => addNewItem("expenses")}
-                      className="flex items-center text-xs space-x-1 px-2 py-1 rounded-md text-blue-600 bg-blue-50 hover:bg-blue-100 transition duration-200"
-                    >
-                      <FaPlus className="h-3 w-3" />
-                      <span>เพิ่มรายการ</span>
-                    </button>
-                  </div>
-
-                  {financeData.expenses.map((item) => (
-                    <div
-                      key={item.id}
-                      className="flex items-center space-x-2 mb-2"
-                    >
-                      <select
-                        value={item.name}
-                        onChange={(e) =>
-                          handleItemChange(
-                            "expenses",
-                            item.id,
-                            "name",
-                            e.target.value
-                          )
-                        }
-                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                        required
-                      >
-                        <option value="">เลือกประเภท</option>
-                        <option value="">เลือกประเภท</option>
-                        {categories.map((category) => (
-                          <option key={category.id} value={category.id}>
-                            {category.name}
-                          </option>
-                        ))}
-                      </select>
-                      <div className="w-32">
-                        <input
-                          type="number"
-                          placeholder="จำนวนเงิน"
-                          value={item.amount}
-                          onChange={(e) =>
-                            handleItemChange(
-                              "expenses",
-                              item.id,
-                              "amount",
-                              e.target.value
-                            )
-                          }
-                          className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                          min="0"
-                          step="0.01"
-                          required
-                        />
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => removeItem("expenses", item.id)}
-                        disabled={financeData.expenses.length <= 1}
-                        className={`p-2 rounded-md ${
-                          financeData.expenses.length <= 1
-                            ? "text-gray-300 cursor-not-allowed"
-                            : "text-red-500 hover:bg-red-50"
-                        }`}
-                      >
-                        <FaTrash className="h-3 w-3" />
-                      </button>
-                    </div>
-                  ))}
-                  <div className="text-right text-sm font-medium mt-2">
-                    รวมรายจ่าย:{" "}
-                    <span className="text-red-600">
-                      {currencyFormatter.format(totalExpenses)}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex flex-col mt-1 text-center">
-                  <div className="bg-white rounded-lg w-full py-2 px-4 border border-gray-300">
-                    {/* Header */}
-
-                    {/* Form */}
-                    <div className="mt-3 ">
-                      <input
-                        type="text"
-                        value={categoryName}
-                        onChange={(e) => setCategoryName(e.target.value)}
-                        placeholder="กรอกชื่อหมวดหมู่ใหม่"
-                        className="w-full border border-gray-300 rounded px-3 py-2 mb-3 text-sm"
-                      />
-                      <button
-                        type="submit"
-                        onClick={addCategory}
-                        className="w-full bg-blue-600 text-white px-4 py-2 text-sm rounded hover:bg-blue-700"
-                      >
-                        เพิ่มหมวดหมู่
-                      </button>
-                    </div>
-                    {status && <p className="text-sm mt-4">{status}</p>}
-                  </div>
-                </div>
-
-                {/* Slip Upload */}
-                <div className="bg-gray-50 p-4 rounded-md border border-dashed border-gray-300">
-                  <h3 className="text-sm font-medium text-gray-700 mb-2">
-                    เลือกรูปภาพใบเสร็จ
-                  </h3>
-                  <div className="flex flex-wrap items-center gap-3">
-                    <div className="flex-1">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                      />
-                    </div>
-                  </div>
-                  <button
-                    onClick={handleSubmitSlip}
-                    disabled={loading || !image}
-                    className={`w-full py-2 px-4 mt-4 rounded font-medium  ${
-                      loading || !image
-                        ? "bg-gray-400 text-white font-bold cursor-not-allowed"
-                        : "bg-blue-600 text-white font-bold hover:bg-blue-700"
-                    }`}
-                  >
-                    {loading ? "กำลังวิเคราะห์..." : "วิเคราะห์ใบเสร็จ"}
-                  </button>
-                </div>
-                {error && (
-                  <div className="bg-red-50 border border-red-200 p-4 rounded-lg mb-6">
-                    <p className="text-red-600">{error}</p>
-                  </div>
-                )}
-
-                {receiptData && (
-                  <div className="bg-white p-6 rounded-lg shadow-md">
-                    <div className="flex justify-between items-center mb-4">
-                      <h2 className="text-lg font-semibold text-gray-800">
-                        ผลลัพธ์:
-                      </h2>
-                    </div>
-
-                    <div className="mb-4">
-                      <h3 className="text-lg font-medium text-gray-700 mb-2">
-                        รายการสินค้า
-                      </h3>
-                      <div className="overflow-x-auto">
-                        <table className="min-w-full text-sm text-left border">
-                          <thead>
-                            <tr className="bg-gray-100 border-b">
-                              <th className="px-3 py-2">#</th>
-                              <th className="px-3 py-2">ชื่อสินค้า</th>
-                              <th className="px-3 py-2 text-right">จำนวน</th>
-                              <th className="px-3 py-2 text-right">
-                                ราคาต่อหน่วย
-                              </th>
-                              <th className="px-3 py-2 text-right">ราคารวม</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {receiptData.items.map((item, index) => (
-                              <tr
-                                key={index}
-                                className={index % 2 === 0 ? "" : "bg-gray-50"}
-                              >
-                                <td className="px-3 py-1">{item.itemNo}</td>
-                                <td className="px-3 py-1">{item.itemName}</td>
-                                <td className="px-3 py-1 text-right">
-                                  {item.itemUnit}
-                                </td>
-                                <td className="px-3 py-1 text-right">
-                                  {item.itemUnitCost}
-                                </td>
-                                <td className="px-3 py-1 text-right">
-                                  {item.itemTotalCost}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-
-                    <div className="text-sm bg-gray-50 p-4 rounded border border-gray-200">
-                      <p>
-                        <strong>ยอดรวม:</strong> {receiptData.totalCost} บาท
+                  <div className="flex items-center">
+                    <p className="text-xl font-bold text-green-600">
+                      {/* {data ? calculateAverageOccupancy(data.occupancy)/100 * 2000 : "-"} */}
+                      200
                       </p>
-                      <p>
-                        <strong>ส่วนลด:</strong> {receiptData.discount} บาท
-                      </p>
-                      <p>
-                        <strong>ยอดหลังหักส่วนลด:</strong>{" "}
-                        {receiptData.totalCostAfterDiscount} บาท
-                      </p>
-                      <p>
-                        <strong>ภาษีมูลค่าเพิ่ม (VAT):</strong>{" "}
-                        {receiptData.vat} บาท
-                      </p>
-                      <p>
-                        <strong>ยอดสุทธิ:</strong>{" "}
-                        <span className="font-semibold text-blue-700">
-                          {receiptData.grandTotal.toLocaleString()} บาท
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Summary Section */}
-                <div className="bg-gray-50 p-4 rounded-md">
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-md font-medium text-gray-700">
-                      กำไร/ขาดทุนสุทธิ
-                    </h3>
-                    <span
-                      className={`text-lg font-bold ${
-                        netProfit >= 0 ? "text-green-600" : "text-red-600"
-                      }`}
-                    >
-                      {currencyFormatter.format(netProfit)}
-                    </span>
+                    <TrendingUp className="text-green-500 ml-1" size={16} />
                   </div>
                 </div>
-
-                {/* Error Message */}
-                {formError && (
-                  <div className="text-red-500 text-sm">{formError}</div>
-                )}
-
-                {/* Form Actions */}
-                <div className="flex justify-between mt-6">
-                  <button
-                    type="button"
-                    // onClick={() => setActivePage('login')}
-                    className="flex items-center text-sm space-x-1 px-4 py-2 rounded-md text-gray-700 bg-gray-200 hover:bg-gray-300 transition duration-200"
-                  >
-                    <FaArrowLeft className="h-3 w-3" />
-                    <span>ย้อนกลับ</span>
-                  </button>
-
-                  <button
-                    type="submit"
-                    className="flex items-center text-sm space-x-1 px-4 py-2 rounded-md text-white font-medium bg-blue-600 hover:bg-blue-700 transition duration-200"
-                  >
-                    <span>บันทึกข้อมูล</span>
-                    <FaArrowRight className="h-3 w-3" />
-                  </button>
-                </div>
-              </form>
+                <div className="h-px bg-gray-100"></div>
+              </div>
             </div>
 
-            {/* Desktop Sidebar */}
-            <div className="hidden md:flex md:w-1/3 bg-blue-600 flex-col items-center justify-center p-6 text-center">
-              <h1 className="text-2xl font-bold text-white mb-4">
-                ข้อมูลการเงินโรงแรม
-              </h1>
-              <p className="text-blue-100 mb-6">
-                กรอกข้อมูลรายรับ-รายจ่ายของโรงแรมในแต่ละเดือนเพื่อติดตามสถานะทางการเงิน
-              </p>
-              <div className="mt-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-16 w-16 text-white opacity-80"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
+            {/* Events Card */}
+            {/* <div className="bg-white p-5 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-bold text-gray-700">วันหยุดและเทศกาล</h3>
+                <Calendar className="text-red-500" size={18} />
               </div>
+
+              <ul className="space-y-4">
+                {events.map((event) => (
+                  <li
+                    key={event.id}
+                    className="flex items-start bg-red-50 p-3 rounded-xl"
+                  >
+                    <Image
+                      src={event.thumbnail_url || ""}
+                      alt={event.name}
+                      width={48}
+                      height={48}
+                      className="rounded-lg object-cover mr-3"
+                    />
+
+                    <div>
+                      <h3 className="font-semibold text-gray-800">
+                        {event.name}
+                      </h3>
+                      <p className="text-gray-600 text-sm">
+                        {event.introduction}
+                      </p>
+                      <p className="text-gray-600 text-sm">
+                        {event.start_date &&
+                          new Date(event.start_date).toLocaleString("th-TH", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+             */}
+             
+          </div>
+
+          <div className=" lg:w-2/3">
+            <MonthlyCalendar />
+          </div>
+
+          {selectedEvent && (
+        <div className="fixed inset-0 backdrop-blur-sm bg-white/30 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full overflow-hidden">
+            <div className="bg-blue-800 text-white p-4 flex justify-between items-center">
+              <h3 className="font-semibold text-lg truncate">{selectedEvent.summary}</h3>
+              <button 
+                onClick={closeEventDetails}
+                className="text-white hover:bg-blue-700 rounded-full p-1"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="p-4">
+              <div className="mb-4">
+                <div className="flex items-center mb-2">
+                  <CalendarIcon size={16} className="text-blue-600 mr-2" />
+                  <div>
+                    <div>{format(parseISO(selectedEvent.start.dateTime), 'EEEE d MMMM yyyy', { locale: th })}</div>
+                    <div className="text-gray-600">
+                      {format(parseISO(selectedEvent.start.dateTime), 'HH:mm')} - {format(parseISO(selectedEvent.end.dateTime), 'HH:mm')}
+                    </div>
+                  </div>
+                </div>
+                
+                {selectedEvent.location && (
+                  <div className="flex items-start mb-2">
+                    <span className="text-blue-600 mr-2">📍</span>
+                    <div className="text-gray-700">{selectedEvent.location}</div>
+                  </div>
+                )}
+              </div>
+              
+              {selectedEvent.description && (
+                <div className="border-t border-gray-100 pt-4">
+                  <h4 className="font-medium mb-2 text-blue-800">รายละเอียด</h4>
+                  <div className="text-gray-700 whitespace-pre-line">
+                    {selectedEvent.description}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  );
-};
+      )}
 
-export default HotelFinanceForm;
+        </div>
+      </div>
+
+    </>
+  );
+}
