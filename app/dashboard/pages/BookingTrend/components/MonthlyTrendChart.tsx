@@ -18,8 +18,8 @@ const MonthlyTrendChart: React.FC<MonthlyTrendChartProps> = ({ data }) => {
           <Tooltip formatter={(value) => [`${value}%`, 'อัตราการเข้าพัก']} />
           <Legend />
           <Bar dataKey="actualOccupancy" name="2024 (จริง)" fill="#8884d8" />
-          <Bar dataKey="forecastOccupancy" name="2025 (คาดการณ์)" fill="#82ca9d" />
-          <Line type="monotone" dataKey="forecastOccupancy" name="แนวโน้ม 2025" stroke="#ff7300" dot={false} />
+          <Bar dataKey="forecastOccupancy" name="2024 (คาดการณ์)" fill="#82ca9d" />
+          <Line type="monotone" dataKey="forecastOccupancy" name="แนวโน้ม 2024 (คาดการณ์)" stroke="#ff7300" dot={false} />
         </ComposedChart>
       </ResponsiveContainer>
     </div>
